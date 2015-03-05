@@ -6,21 +6,28 @@
         <meta name="author" content="David Peter">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-
         <style>
         html, body {
             margin: 0;
             padding: 0;
             overflow: hidden;
         }
-        canvas {
+        #container {
+            margin: 50px auto;
+            width: 800px;
+            height: 600px;
+        }
+        #canvas {
+            margin: auto;
             width: 800px;
             height: 600px;
         }
         </style>
     </head>
     <body>
-        <canvas id="canvas" resize width="1600" height="1200"></canvas>
+        <div id="container">
+            <canvas id="canvas" resize width="1600" height="1200"></canvas>
+        </div>
         <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
         <script type="text/javascript" src="bower_components/isomer/dist/isomer.min.js"></script>
         <script type="text/javascript" src="js/main.js"> </script>

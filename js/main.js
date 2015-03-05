@@ -33,24 +33,32 @@
     var Game = function() {
         this.canvas = document.getElementById("canvas");
         this.iso = new Isomer(this.canvas);
-        this.iso.scale = 60;
-        this.ymax = 10;
+        this.iso.scale = 54;
+        this.ymax = 13;
 
         _.bindAll(this);
     };
 
-    Game.prototype.renderBlock = function(z, x, value, y) {
+    Game.prototype.renderBlock = function(x, y, value, z) {
         this.iso.add(
             new Shape.Prism(
-                new Point(2.2 * x, this.ymax - y, z),
+                new Point(3.2 * x, this.ymax - y, z),
                 1, 1, 1
             ),
             colorLine[value]
         );
     };
 
+    Game.prototype.renderBlocks = function(x, value, y) {
+        if (_.isArray(value)) {
+            _.each(value, _.partial(this.renderBlock, x, y));
+        } else {
+            this.renderBlock(x, y, value, 0);
+        }
+    };
+
     Game.prototype.renderLine = function(line, x) {
-        _.each(line, _.partial(this.renderBlock, 0, x));
+        _.each(line, _.partial(this.renderBlocks, x));
     };
 
     Game.prototype.renderLines = function(lines) {
@@ -61,8 +69,9 @@
         var game = new Game();
 
         // var isOrange = function(x) { return x === 0; };
-        // var isBlue = function(x) { return x === 4; };
-        var isDark = function(x) { return x === 1; };
+        var isNotBlue = function(x) { return x !== 4; };
+        // var isDark = function(x) { return x === 1; };
+        // var isNotDark = function(x) { return x !== 1; };
         var blueToBD = function(x) { return (x === 4) ? [4, 1] : [x]; };
         var clone = function(x) { return [x, x]; };
 
@@ -74,10 +83,12 @@
             _flatmap(blueToBD),
             _flatmap(clone),
             _flatmap(blueToBD),
-            _filter(isDark),
+            _.tail,
+            _map(blueToBD),
+            _filter(isNotBlue),
         ];
 
-        var initial = [4, 4];
+        var initial = [1, 1, 4];
 
         var lines = _.reduce(queue, function(ls, f) {
             ls.push(f(_.last(ls)));
