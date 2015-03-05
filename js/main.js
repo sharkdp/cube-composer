@@ -4,6 +4,11 @@
 (function () {
     "use strict";
 
+    // flatMap = flatten . map (aka concatMap)
+    _.mixin({
+        flatMap: _.compose(_.flatten, _.map)
+    });
+
     var Shape = Isomer.Shape;
     var Point = Isomer.Point;
     var Color = Isomer.Color;
@@ -30,17 +35,55 @@
         this.iso = new Isomer(this.canvas);
         this.iso.scale = 60;
         this.ymax = 10;
+
+        _.bindAll(this);
     };
 
-    Game.prototype.renderLine = function(data, x) {
-        _.map(data, function(p, y) {
-            this.iso.add(new Shape.Prism(new Point(x, this.ymax - y, 0), 1, 1, 1), colorLine[p]);
-        }, this);
+    Game.prototype.renderBlock = function(z, x, value, y) {
+        this.iso.add(
+            new Shape.Prism(
+                new Point(2.2 * x, this.ymax - y, z),
+                1, 1, 1
+            ),
+            colorLine[value]
+        );
+    };
+
+    Game.prototype.renderLine = function(line, x) {
+        _.each(line, _.partial(this.renderBlock, 0, x));
+    };
+
+    Game.prototype.renderLines = function(lines) {
+        _.each(lines, this.renderLine);
     };
 
     window.onload = function() {
         var game = new Game();
 
-        game.renderLine([0, 1, 2, 3, 2, 1, 4], 0);
+        // var isOrange = function(x) { return x === 0; };
+        // var isBlue = function(x) { return x === 4; };
+        var isDark = function(x) { return x === 1; };
+        var blueToBD = function(x) { return (x === 4) ? [4, 1] : [x]; };
+        var clone = function(x) { return [x, x]; };
+
+        var _map = _.curryRight(_.map, 2);
+        var _flatmap = _.curryRight(_.flatMap, 2);
+        var _filter = _.curryRight(_.filter, 2);
+
+        var queue = [
+            _flatmap(blueToBD),
+            _flatmap(clone),
+            _flatmap(blueToBD),
+            _filter(isDark),
+        ];
+
+        var initial = [4, 4];
+
+        var lines = _.reduce(queue, function(ls, f) {
+            ls.push(f(_.last(ls)));
+            return ls;
+        }, [initial]);
+
+        game.renderLines(lines);
     };
 }());
