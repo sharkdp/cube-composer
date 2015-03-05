@@ -17,15 +17,30 @@
         blue: new Color(50, 153, 187)
     };
 
-    window.onload = function() {
-        var canvas = document.getElementById("canvas");
-        var iso = new Isomer(canvas);
-        iso.scale = 60;
+    var colorLine = [
+        colors.orange,
+        colors.dark,
+        colors.light,
+        colors.gray,
+        colors.blue
+    ];
 
-        iso.add(new Shape.Prism(Point.ORIGIN, 4, 5, 1), colors.dark);
-        iso.add(new Shape.Prism(new Point(1, 1, 1), 2, 3, 1), colors.light);
-        iso.add(new Shape.Prism(new Point(1, 1, 2), 2, 3, 1), colors.gray);
-        iso.add(Shape.Prism(new Point(2, 1, 3)), colors.orange);
-        iso.add(Shape.Pyramid(new Point(1, 3, 3)), colors.blue);
+    var Game = function() {
+        this.canvas = document.getElementById("canvas");
+        this.iso = new Isomer(this.canvas);
+        this.iso.scale = 60;
+        this.ymax = 10;
+    };
+
+    Game.prototype.renderLine = function(data, x) {
+        _.map(data, function(p, y) {
+            this.iso.add(new Shape.Prism(new Point(x, this.ymax - y, 0), 1, 1, 1), colorLine[p]);
+        }, this);
+    };
+
+    window.onload = function() {
+        var game = new Game();
+
+        game.renderLine([0, 1, 2, 3, 2, 1, 4], 0);
     };
 }());
