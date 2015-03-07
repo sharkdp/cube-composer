@@ -4,7 +4,7 @@
 (function () {
     "use strict";
 
-    // flatMap = flatten . map (aka concatMap)
+    // flatMap (aka concatMap)
     _.mixin({
         flatMap: _.compose(_.flatten, _.map)
     });
@@ -12,22 +12,24 @@
     var Shape = Isomer.Shape;
     var Point = Isomer.Point;
     var Color = Isomer.Color;
+    var Path = Isomer.Path;
 
     // http://www.colourlovers.com/palette/148712/Gamebookers
-    var colors = {
-        orange: new Color(255, 153, 0),
-        dark: new Color(66, 66, 66),
-        light: new Color(233, 233, 233),
-        gray: new Color(188, 188, 188),
-        blue: new Color(50, 153, 187)
-    };
+    // var colorLine = [
+    //     new Color(255, 153, 0),
+    //     new Color(66, 66, 66),
+    //     new Color(233, 233, 233),
+    //     new Color(188, 188, 188),
+    //     new Color(50, 153, 187)
+    // ];
 
+    // http://www.colourlovers.com/palette/1473/Ocean_Five
     var colorLine = [
-        colors.orange,
-        colors.dark,
-        colors.light,
-        colors.gray,
-        colors.blue
+        new Color(0, 160, 176),
+        new Color(106, 74, 60),
+        new Color(204, 51, 63),
+        new Color(235, 104, 65),
+        new Color(237, 201, 81)
     ];
 
     var Game = function() {
@@ -68,32 +70,57 @@
     window.onload = function() {
         var game = new Game();
 
-        // var isOrange = function(x) { return x === 0; };
-        var isNotBlue = function(x) { return x !== 4; };
-        // var isDark = function(x) { return x === 1; };
-        // var isNotDark = function(x) { return x !== 1; };
-        var blueToBD = function(x) { return (x === 4) ? [4, 1] : [x]; };
+        var BL = 0;
+        var BR = 1;
+        var RE = 2;
+        var OR = 3;
+        var YE = 4;
+
+        var equal = _.curry(function(x, y) { return x === y; });
+        var notEqual = _.curry(function(x, y) { return x !== y; });
+
+        var a2b = _.curry(function(a, b, x) {
+            return (x === a) ? b : x;
+        });
+        var a2bc = _.curry(function(a, b, c, x) {
+            return (x === a) ? [b, c] : x;
+        });
+
         var clone = function(x) { return [x, x]; };
 
         var _map = _.curryRight(_.map, 2);
         var _flatmap = _.curryRight(_.flatMap, 2);
         var _filter = _.curryRight(_.filter, 2);
 
+        var cleanup = _map(function(x) {
+            if (_.isArray(x)) {
+                if (x.length === 1) {
+                    return x[0];
+                }
+                return _.flattenDeep(x);
+            }
+            return x;
+        });
+
         var queue = [
-            _flatmap(blueToBD),
-            _flatmap(clone),
-            _flatmap(blueToBD),
-            _.tail,
-            _map(blueToBD),
-            _filter(isNotBlue),
+            // _flatmap(blueToBD),
+            // _flatmap(clone),
+            _flatmap(a2bc(YE, YE, BR)),
+            _map(a2bc(BR, BR, YE)),
+            // _flatmap(blueToBD),
+            // _filter(notEqual(1)),
+            _map(clone),
         ];
 
-        var initial = [1, 1, 4];
+        var initial = [BR, YE, YE];
 
-        var lines = _.reduce(queue, function(ls, f) {
-            ls.push(f(_.last(ls)));
+        var lines = _.reduce(queue, function(ls, func) {
+            var newLine = cleanup(func(_.last(ls)));
+            ls.push(newLine);
             return ls;
         }, [initial]);
+
+        _.each(lines, function(l) {console.log(l);});
 
         game.renderLines(lines);
     };
