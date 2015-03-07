@@ -36,6 +36,7 @@
         this.canvas = document.getElementById("canvas");
         this.iso = new Isomer(this.canvas);
         this.iso.scale = 54;
+        this.xmax = 4;
         this.ymax = 13;
 
         _.bindAll(this);
@@ -44,7 +45,7 @@
     Game.prototype.renderBlock = function(x, y, value, z) {
         this.iso.add(
             new Shape.Prism(
-                new Point(3.2 * x, this.ymax - y, z),
+                new Point(4.2 * (this.xmax - x), this.ymax - y, z),
                 1, 1, 1
             ),
             colorLine[value]
@@ -64,7 +65,7 @@
     };
 
     Game.prototype.renderLines = function(lines) {
-        _.each(lines, this.renderLine);
+        _.each(lines.reverse(), this.renderLine);
     };
 
     window.onload = function() {
@@ -92,6 +93,33 @@
         var _flatmap = _.curryRight(_.flatMap, 2);
         var _filter = _.curryRight(_.filter, 2);
 
+        var _deepmap = _.curry(function(f, xs) {
+            return _.map(xs, function(x) {
+                if (_.isArray(x)) {
+                    return _.map(x, f);
+                }
+                return f(x);
+            });
+        });
+        var _deepflatmap = _.curry(function(f, xs) {
+            return _.flatten(_deepmap(f)(xs));
+        });
+        var _deepfilter = _.curry(function(f, xs) {
+            return _.reduce(xs, function(ys, x) {
+                if (_.isArray(x)) {
+                    var xf = _.filter(x, f);
+                    if (xf.length > 0) {
+                        ys.push(xf);
+                    }
+                } else {
+                    if (f(x)) {
+                        ys.push(x);
+                    }
+                }
+                return ys;
+            }, []);
+        });
+
         var cleanup = _map(function(x) {
             if (_.isArray(x)) {
                 if (x.length === 1) {
@@ -102,17 +130,54 @@
             return x;
         });
 
+        var randInt = function(range) {
+            return Math.floor(range * Math.random());
+        };
+
+        var randomColor = function() {
+            return _.sample([BL, RE]);
+        };
+
+        var randomArgs = function(f, nArgs) {
+            var arg = randomColor();
+            if (nArgs === 1) {
+                return f(arg);
+            }
+            return randomArgs(f(arg), nArgs - 1);
+        };
+
+        var randomF = function() {
+            var i1, f1, f2;
+            i1 = randInt(10);
+            if (i1 < 8) { // map or flatmap
+                f1 = _.sample([_deepmap, _deepflatmap]);
+                f2 = _.sample([
+                    randomArgs(a2b, 2),
+                    randomArgs(a2bc, 3)
+                ]);
+                return f1(f2);
+            } // filter
+            f2 = _.sample([equal, notEqual]);
+            return _deepfilter(randomArgs(f2, 1));
+        };
+
         var queue = [
-            // _flatmap(blueToBD),
-            // _flatmap(clone),
-            _flatmap(a2bc(YE, YE, BR)),
-            _map(a2bc(BR, BR, YE)),
+            _flatmap(clone),
+            // _deepflatmap(a2bc(BR, BR, YE)),
+            _deepmap(a2bc(BR, BR, YE)),
+            _deepmap(a2bc(BR, BR, YE)),
+            _deepfilter(equal(YE))
+            // _flatmap(a2bc(YE, YE, BR)),
+            // _map(a2bc(BR, BR, YE)),
             // _flatmap(blueToBD),
             // _filter(notEqual(1)),
-            _map(clone),
+            // _map(clone),
         ];
 
-        var initial = [BR, YE, YE];
+        var initial = [BR, YE, BR];
+
+        // queue = [ randomF(), randomF(), randomF(), randomF(), randomF() ];
+        // initial = [ randomColor(), randomColor(), randomColor() ];
 
         var lines = _.reduce(queue, function(ls, func) {
             var newLine = cleanup(func(_.last(ls)));
