@@ -106,6 +106,7 @@ var fs = [
     // map2D(replace(BR, [BR, BR])),
 ];
 
-var init = wrap([BR, BR, YE, BR, BR]);
+// BL BR RE OR YE
+var init = wrap([BR, OR, OR, YE, YE, YE, OR, OR, BR]);
 
 var steps = transformationSteps(init, fs);

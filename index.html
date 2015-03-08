@@ -6,30 +6,26 @@
         <meta name="author" content="David Peter">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-        <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        #container {
-            margin: 50px auto;
-            width: 800px;
-            height: 600px;
-        }
-        #canvas {
-            margin: auto;
-            width: 800px;
-            height: 600px;
-        }
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/fpg.css">
     </head>
     <body>
         <div id="container">
             <canvas id="canvas" resize width="1600" height="1200"></canvas>
+            <div id="controls">
+                <div class="controlBox">
+                    <h2>Available functions</h2>
+                    <ul id="available" class="sortable"></ul>
+                </div>
+                <div class="controlBox">
+                    <h2>The program</h2>
+                    <ul id="program" class="sortable"></ul>
+                </div>
+            </div>
         </div>
         <script type="text/javascript" src="bower_components/ramda/dist/ramda.min.js"></script>
         <script type="text/javascript" src="bower_components/isomer/dist/isomer.min.js"></script>
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="bower_components/html.sortable/dist/html.sortable.min.js"></script>
         <script type="text/javascript" src="js/fpg.js"> </script>
         <script type="text/javascript" src="js/io.js"> </script>
     </body>

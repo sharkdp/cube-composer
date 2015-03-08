@@ -1,5 +1,5 @@
 /*jslint browser: true, nomen: true, white: true, vars: true*/
-/*global R, Isomer, steps*/
+/*global $, R, Isomer, steps*/
 
 'use strict';
 
@@ -51,5 +51,35 @@ window.onload = function() {
     isomer = new Isomer(canvas);
     isomer.scale = 40;
 
-    render(steps);
+    render([init]);
+
+    var functions = {
+        'stackEqual': stackEqual,
+        'flatten': flattenDeep,
+        'map(clone)': map2D(clone),
+        'map(OR ↦ YE)': map2D(replace(OR, YE)),
+        'map(YE ↦ BR)': map2D(replace(YE, BR)),
+        'map(YE ↦ [BR, YE])': map2D(replace(YE, [BR, YE])),
+        'map(BR ↦ [BR, BR, BR])': map2D(replace(BR, [BR, BR, BR])),
+        'reject(OR)': reject2D(R.eq(OR)),
+        'filter(BR)': filter2D(R.eq(BR)),
+        'filter(YE)': filter2D(R.eq(YE)),
+    };
+
+    R.forEach(function(fid) {
+        $('#available').append('<li id="' + fid + '">' + fid + '</li>');
+    }, R.keys(functions));
+
+    $('.sortable').sortable({
+        connectWith: '.sortable'
+    }).bind('sortupdate', function(e, ui) {
+        var ids = [];
+        $('#program').find('li').each(function() {
+            ids.push($(this).attr('id'));
+        });
+
+        var fs = R.map(R.propOf(functions), ids);
+        isomer.canvas.clear();
+        render(transformationSteps(init, fs));
+    });
 };

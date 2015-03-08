@@ -1,0 +1,76 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    margin: 10px auto;
+    width: 800px;
+}
+
+#canvas {
+    margin: auto;
+    width: 800px;
+    height: 600px;
+}
+
+#controls {
+    overflow: hidden;
+
+    font-family: 'Roboto', sans;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+#controls h2 {
+    font-weight: 700;
+    font-size: 1.1em;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+.controlBox {
+    float: left;
+    margin-left: 80px;
+}
+
+.sortable {
+    list-style-type: none;
+    margin: 10px 0 0 0;
+    padding: 0;
+    padding-top: 8px;
+
+    width: 280px;
+    min-height: 100px;
+
+    /* background-color: #fafafa; */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    /* border-bottom: 2px solid #aaa; */
+}
+
+.sortable li {
+    width: 88%;
+    margin: 0px auto 8px auto;
+    padding: 3px 8px 3px 8px;
+
+    background-color: #eee;
+    border-bottom: 1px solid #aaa;
+    border-radius: 5px;
+
+    cursor: move;
+}
+
+li.sortable-dragging {
+    background-color: #EB6841;
+    border-color: #CC333F;
+}
+
+li.sortable-placeholder {
+    height: 28px;
+    background-color: #fff;
+    border: 1px dashed #aaa;
+}
