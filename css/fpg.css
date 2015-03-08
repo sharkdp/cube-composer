@@ -74,3 +74,19 @@ li.sortable-placeholder {
     background-color: #fff;
     border: 1px dashed #aaa;
 }
+
+.rect {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin: 0 2px 0 2px;
+    border: 1px solid #444;
+    border-radius: 3px;
+}
+
+.X { background-color: #fff; }
+.BL { background-color: #00A0B0; }
+.BR { background-color: #6A4A3C; }
+.RE { background-color: #CC333F; }
+.OR { background-color: #EB6841; }
+.YE { background-color: #EDC951; }

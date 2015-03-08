@@ -46,28 +46,52 @@ var render = function(steps) {
     R.forEachIndexed(renderLine, steps.reverse());
 };
 
+var addColorBlocks = function(str) {
+    R.forEach(function(cstr) {
+        str = str.replace(new RegExp('\{' + cstr + '\}', 'g'), '<div class="rect ' + cstr + '"> </div>');
+    }, ['X', 'BL', 'BR', 'RE', 'OR', 'YE'])
+    return str;
+}
+
+var functions = {
+    'stackEqual': stackEqual,
+    'flatten': flattenDeep,
+    'map({X} ↦ {X}{X})': map2D(clone),
+    'map({OR} ↦ {YE})': map2D(replace(OR, YE)),
+    'map({YE} ↦ {BR})': map2D(replace(YE, BR)),
+    'map({YE} ↦ {BR}{YE})': map2D(replace(YE, [BR, YE])),
+    'map({BR} ↦ {BR}{BR}{BR})': map2D(replace(BR, [BR, BR, BR])),
+    'map({BR} ↦ {OR}{OR})': map2D(replace(BR, [OR, OR])),
+    'reject({OR})': reject2D(R.eq(OR)),
+    'reject({YE})': reject2D(R.eq(YE)),
+    'filter({BR})': filter2D(R.eq(BR)),
+};
+
+// see http://stackoverflow.com/a/11935263/704831
+function getRandomSubarray(arr, size) {
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
+}
+
 window.onload = function() {
     var canvas = document.getElementById('canvas');
     isomer = new Isomer(canvas);
     isomer.scale = 40;
 
+    var randFs = getRandomSubarray(R.values(functions), 4);
+    var target = R.last(transformationSteps(init, randFs));
+
+    // render([target]);
     render([init]);
 
-    var functions = {
-        'stackEqual': stackEqual,
-        'flatten': flattenDeep,
-        'map(clone)': map2D(clone),
-        'map(OR ↦ YE)': map2D(replace(OR, YE)),
-        'map(YE ↦ BR)': map2D(replace(YE, BR)),
-        'map(YE ↦ [BR, YE])': map2D(replace(YE, [BR, YE])),
-        'map(BR ↦ [BR, BR, BR])': map2D(replace(BR, [BR, BR, BR])),
-        'reject(OR)': reject2D(R.eq(OR)),
-        'filter(BR)': filter2D(R.eq(BR)),
-        'filter(YE)': filter2D(R.eq(YE)),
-    };
-
     R.forEach(function(fid) {
-        $('#available').append('<li id="' + fid + '">' + fid + '</li>');
+        $('#available').append('<li id="' + fid + '">' + addColorBlocks(fid) + '</li>');
     }, R.keys(functions));
 
     $('.sortable').sortable({
@@ -80,6 +104,7 @@ window.onload = function() {
 
         var fs = R.map(R.propOf(functions), ids);
         isomer.canvas.clear();
+        // render([target]);
         render(transformationSteps(init, fs));
     });
 };
