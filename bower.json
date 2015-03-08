@@ -14,5 +14,9 @@
   "dependencies": {
     "isomer": "~0.2.4",
     "ramda": "~0.10.0"
+  },
+  "devDependencies": {
+    "mocha": "~2.2.0",
+    "should": "~5.1.0"
   }
 }

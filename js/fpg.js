@@ -19,8 +19,8 @@ var replace = R.curry(function(a, b, x) {
     return (x === a) ? b : x;
 });
 
-// Repeat a list twice
-// [1, 2] -> [1, 2, 1, 2]
+// Repeats an element twice
+// x -> [x, x]
 var clone = R.partialRight(R.repeat, 2);
 
 // Cycle colors
@@ -28,9 +28,10 @@ var cycle = R.pipe(R.add(1), R.mathMod(R.__, 5));
 
 // Higher order functions:
 
-// Lifts a higher order function like map or filter to the domain of
-// two-dimensional arrays.
-// lift2D(map) :: [[a]] -> (a -> b) -> [[b]]
+// Lifts a higher order function like map or filter to the
+// domain of two-dimensional arrays, for example:
+// map ::         (a -> b) ->  [a]  ->  [b]
+// lift2D(map) :: (a -> b) -> [[a]] -> [[b]]
 var lift2D = function(f) {
     return R.compose(R.map, f);
 };
@@ -39,22 +40,24 @@ var map2D = lift2D(R.map);
 var filter2D = lift2D(R.filter);
 var reject2D = lift2D(R.reject);
 
-// Wrap values in lists: [1, 2, 3] -> [[1], [2], [3]]
+// Wrap elements in lists
+// [1, 2, 3] -> [[1], [2], [3]]
 var wrap = R.map(R.of);
 
-var flatten2D = R.compose(wrap, R.flatten);
+// Flatten the array deeply, then call wrap to return a 2D array
+var flattenDeep = R.compose(wrap, R.flatten);
 
-// var flatmap2D = R.curry(function(f, xs) {
-//     return flatten2D(map2D(f)(xs));
-// });
+// Flatten array starting from the second dimension, leaving the
+// first dimension untouched.
+var flatten2D = R.map(R.flatten);
 
 // Clears out empty lists in the 2D array:
 // [[1], [], [2, 3]] -> [[1], [2, 3]]
-var clearNil = R.filter(R.not(R.eqDeep([])));
+var removeNil = R.filter(R.not(R.eqDeep([])));
 
 // Flatten to two-dimensional array and clean out empty rows
 // [[1], [], [2, [3, 4]]] -> [[1], [2, 3, 4]]
-var cleanup = R.compose(clearNil, R.map(R.flatten));
+var cleanup = R.compose(removeNil, flatten2D);
 
 // Consecutively apply the functions 'fs', returning each step
 // in the transformation chain. After each function application,
@@ -69,7 +72,7 @@ var transformationSteps = function(initial, fs) {
 // Testing:
 var fs = [
     map2D(clone),
-    flatten2D,
+    flattenDeep,
     // flatmap2D(clone),
     map2D(replace(BR, [YE, BR])),
     map2D(replace(BR, [YE, BR])),

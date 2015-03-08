@@ -47,7 +47,7 @@ var render = function(steps) {
 };
 
 window.onload = function() {
-    var canvas = document.getElementById("canvas");
+    var canvas = document.getElementById('canvas');
     isomer = new Isomer(canvas);
     isomer.scale = 40;
 
