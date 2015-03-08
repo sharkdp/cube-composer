@@ -68,17 +68,44 @@ var transformationSteps = function(initial, fs) {
     }, initial, fs);
 };
 
+// Interesting functions:
+
+var stackEqual = function(xs) {
+    if (R.isEmpty(xs)) {
+        return xs;
+    }
+    var equalFirst = R.eqDeep(xs[0]);
+    return R.concat(
+        [R.takeWhile(equalFirst, xs)],
+        stackEqual(R.dropWhile(equalFirst, xs))
+    );
+};
+
+var towersOnly = R.filter(function(xs) { return xs.length > 1; });
+
+var lowest = R.compose(wrap, R.map(R.head));
+
+var highest = R.compose(wrap, R.map(R.last));
 
 // Testing:
 var fs = [
-    map2D(clone),
-    flattenDeep,
+    // map2D(clone),
+    // flattenDeep,
     // flatmap2D(clone),
+    stackEqual,
     map2D(replace(BR, [YE, BR])),
-    map2D(replace(BR, [YE, BR])),
-    reject2D(R.eq(BR)),
+    // filter2D(R.eq(BR)),
+    // lowest,
+    // stackEqual,
+    // towersOnly,
+    // stackEqual
+    map2D(replace(YE, BR)),
+    // map2D(replace(RE, [BR, YE])),
+    // flattenDeep,
+    // towersOnly,
+    // map2D(replace(BR, [BR, BR])),
 ];
 
-var init = wrap([BR, YE, BR]);
+var init = wrap([BR, BR, YE, BR, BR]);
 
 var steps = transformationSteps(init, fs);
