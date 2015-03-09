@@ -1,13 +1,23 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
+@import url(http://fonts.googleapis.com/css?family=Roboto Condensed:400,700);
 
 html, body {
     margin: 0;
     padding: 0;
 }
 
+#logo {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 #container {
     margin: 10px auto;
     width: 800px;
+
+    font-family: 'Roboto Condensed', sans;
+    font-weight: 400;
+    font-size: 18px;
 }
 
 #canvas {
@@ -18,13 +28,9 @@ html, body {
 
 #controls {
     overflow: hidden;
-
-    font-family: 'Roboto', sans;
-    font-weight: 400;
-    font-size: 18px;
 }
 
-#controls h2 {
+h2 {
     font-weight: 700;
     font-size: 1.1em;
     text-align: center;

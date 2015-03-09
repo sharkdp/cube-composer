@@ -65,6 +65,7 @@ var functions = {
     'reject({OR})': reject2D(R.eq(OR)),
     'reject({YE})': reject2D(R.eq(YE)),
     'filter({BR})': filter2D(R.eq(BR)),
+    'map(push({YE}))': R.map(R.append(YE)),
 };
 
 // see http://stackoverflow.com/a/11935263/704831
@@ -79,32 +80,76 @@ function getRandomSubarray(arr, size) {
     return shuffled.slice(0, size);
 }
 
-window.onload = function() {
-    var canvas = document.getElementById('canvas');
-    isomer = new Isomer(canvas);
-    isomer.scale = 40;
+var renderTarget = function(target) {
+    // TODO: this is ugly
 
-    var randFs = getRandomSubarray(R.values(functions), 4);
-    var target = R.last(transformationSteps(init, randFs));
+    var originX = isomer.originX,
+        originY = isomer.originY,
+        scale = isomer.scale;
+    isomer.originX = 10;
+    isomer.originY = 1000;
+    isomer.scale = 30;
 
-    // render([target]);
-    render([init]);
+    render([target]);
 
+    isomer.originX = originX;
+    isomer.originY = originY;
+    isomer.scale = scale;
+};
+
+var newPuzzle = function() {
+    // new initial state
+    // init = wrap(getRandomSubarray([OR, BR, BR, BR, BR, BR, BR, BR, YE, YE, YE, YE], 6));
+    init = wrap([BR, OR, OR, YE, YE, YE, OR, OR, BR]);
+    console.log(init);
+
+    // new puzzle
+    var randFs = getRandomSubarray(R.values(functions), 5);
+    target = R.last(transformationSteps(init, randFs));
+};
+
+var renderAll = function() {
+    var ids = [];
+    $('#program').find('li').each(function() {
+        ids.push($(this).attr('id'));
+    });
+
+    var fs = R.map(R.propOf(functions), ids);
+    isomer.canvas.clear();
+    renderTarget(target);
+    render(transformationSteps(init, fs));
+}
+
+var resetControls = function() {
+    $('.sortable').empty();
     R.forEach(function(fid) {
         $('#available').append('<li id="' + fid + '">' + addColorBlocks(fid) + '</li>');
     }, R.keys(functions));
 
     $('.sortable').sortable({
         connectWith: '.sortable'
-    }).bind('sortupdate', function(e, ui) {
-        var ids = [];
-        $('#program').find('li').each(function() {
-            ids.push($(this).attr('id'));
-        });
+    }).bind('sortupdate', renderAll);
+};
 
-        var fs = R.map(R.propOf(functions), ids);
-        isomer.canvas.clear();
-        // render([target]);
-        render(transformationSteps(init, fs));
+var init;
+var target;
+
+window.onload = function() {
+    var canvas = document.getElementById('canvas');
+    isomer = new Isomer(canvas);
+    isomer.scale = 40;
+
+    newPuzzle();
+    resetControls();
+    renderAll();
+
+    $(window).on('keypress', function(ev) {
+        if (ev.keyCode === 114) { // r: reset program
+            resetControls();
+            renderAll();
+        } else if (ev.keyCode === 103) { // g: generate new puzzle
+            newPuzzle();
+            renderAll();
+        }
     });
 };

@@ -1,11 +1,11 @@
 {
-  "name": "fpg",
-  "version": "0.0.1",
-  "homepage": "",
+  "name": "cube composer",
+  "version": "0.1",
+  "homepage": "https://github.com/sharkdp/cube-composer",
   "authors": [
     "David Peter <mail@david-peter.de>"
   ],
-  "description": "An HTML5 game about functional programming",
+  "description": "A puzzle game inspired by functional programming",
   "license": "MIT",
   "private": true,
   "ignore": [

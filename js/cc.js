@@ -30,6 +30,7 @@ var cycle = R.pipe(R.add(1), R.mathMod(R.__, 5));
 
 // Lifts a higher order function like map or filter to the
 // domain of two-dimensional arrays, for example:
+// lift2D :: ((a -> b) -> [a] -> [b]) -> ((a -> b) -> [[a]] -> [[b]])
 // map ::         (a -> b) ->  [a]  ->  [b]
 // lift2D(map) :: (a -> b) -> [[a]] -> [[b]]
 var lift2D = function(f) {
@@ -86,27 +87,3 @@ var towersOnly = R.filter(function(xs) { return xs.length > 1; });
 var lowest = R.compose(wrap, R.map(R.head));
 
 var highest = R.compose(wrap, R.map(R.last));
-
-// Testing:
-var fs = [
-    // map2D(clone),
-    // flattenDeep,
-    // flatmap2D(clone),
-    stackEqual,
-    map2D(replace(BR, [YE, BR])),
-    // filter2D(R.eq(BR)),
-    // lowest,
-    // stackEqual,
-    // towersOnly,
-    // stackEqual
-    map2D(replace(YE, BR)),
-    // map2D(replace(RE, [BR, YE])),
-    // flattenDeep,
-    // towersOnly,
-    // map2D(replace(BR, [BR, BR])),
-];
-
-// BL BR RE OR YE
-var init = wrap([BR, OR, OR, YE, YE, YE, OR, OR, BR]);
-
-var steps = transformationSteps(init, fs);
