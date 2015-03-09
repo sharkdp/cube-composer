@@ -75,10 +75,8 @@ li.sortable-dragging {
     border-color: #CC333F;
 }
 
-li.sortable-placeholder {
-    height: 28px;
-    background-color: #fff;
-    border: 1px dashed #aaa;
+li.sortable-ghost {
+    opacity: 0.4;
 }
 
 .rect {

@@ -119,15 +119,40 @@ var renderAll = function() {
     render(transformationSteps(init, fs));
 }
 
+var liClickHandler = function() {
+    var $li = $(this);
+    var targetId = 'program';
+    if ($li.parent().attr('id') == 'program') {
+        targetId = 'available';
+    }
+    $li.remove();
+    $li.on('click', liClickHandler);
+    $('#' + targetId).append($li);
+
+    renderAll();
+    resetSortable();
+}
+
+var resetSortable = function() {
+    $('.sortable').each(function() {
+        new Sortable(this, {
+            group: 'function-lists',
+            ghostClass: 'sortable-ghost',
+            animation: 150,
+            onSort: renderAll
+        });
+    });
+}
+
 var resetControls = function() {
     $('.sortable').empty();
     R.forEach(function(fid) {
-        $('#available').append('<li id="' + fid + '">' + addColorBlocks(fid) + '</li>');
+        var $li = $('<li id="' + fid + '">' + addColorBlocks(fid) + '</li>');
+        $li.on('click', liClickHandler);
+        $('#available').append($li);
     }, R.keys(functions));
 
-    $('.sortable').sortable({
-        connectWith: '.sortable'
-    }).bind('sortupdate', renderAll);
+    resetSortable();
 };
 
 var init;
