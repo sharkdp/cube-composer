@@ -114,7 +114,7 @@ var renderAll = function() {
         ids.push($(this).attr('id'));
     });
 
-    var fs = R.map(R.propOf(functions), ids);
+    var fs = R.map(R.prop(R.__, functions), ids);
     isomer.canvas.clear();
     renderTarget(target);
     render(transformationSteps(init, fs));

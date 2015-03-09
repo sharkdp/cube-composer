@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "isomer": "~0.2.4",
-    "ramda": "~0.10.0",
+    "ramda": "~0.11.0",
     "html.sortable": "~0.1.8",
     "jquery": "~2.1.3"
   },

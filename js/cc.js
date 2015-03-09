@@ -21,7 +21,7 @@ var replace = R.curry(function(a, b, x) {
 
 // Repeats an element twice
 // x -> [x, x]
-var clone = R.partialRight(R.repeat, 2);
+var clone = R.repeat(R.__, 2);
 
 // Cycle colors
 var cycle = R.pipe(R.add(1), R.mathMod(R.__, 5));
