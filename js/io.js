@@ -130,18 +130,6 @@ var liClickHandler = function() {
     $('#' + targetId).append($li);
 
     renderAll();
-    resetSortable();
-}
-
-var resetSortable = function() {
-    $('.sortable').each(function() {
-        new Sortable(this, {
-            group: 'function-lists',
-            ghostClass: 'sortable-ghost',
-            animation: 150,
-            onSort: renderAll
-        });
-    });
 }
 
 var resetControls = function() {
@@ -151,8 +139,6 @@ var resetControls = function() {
         $li.on('click', liClickHandler);
         $('#available').append($li);
     }, R.keys(functions));
-
-    resetSortable();
 };
 
 var init;
@@ -165,6 +151,16 @@ window.onload = function() {
 
     newPuzzle();
     resetControls();
+
+    $('.sortable').each(function() {
+        new Sortable(this, {
+            group: 'function-lists',
+            ghostClass: 'sortable-ghost',
+            animation: 150,
+            onSort: renderAll
+        });
+    });
+
     renderAll();
 
     $(window).on('keypress', function(ev) {
