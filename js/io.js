@@ -19,8 +19,8 @@ var config = {
         new Color(235, 104, 65),
         new Color(237, 201, 81)
     ],
-    ymax: 13,
-    xmax: 4
+    ymax: 16,
+    xmax: 7
 };
 
 var renderBlock = function(x, y, value, z) {
@@ -42,8 +42,7 @@ var renderLine = function(line, x) {
 };
 
 var render = function(steps) {
-    // render in reverse order to avoid overlapping paths
-    R.forEachIndexed(renderLine, steps.reverse());
+    R.forEachIndexed(renderLine, steps);
 };
 
 var addColorBlocks = function(str) {
