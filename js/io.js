@@ -100,11 +100,17 @@ var newPuzzle = function() {
     // new initial state
     // init = wrap(getRandomSubarray([OR, BR, BR, BR, BR, BR, BR, BR, YE, YE, YE, YE], 6));
     init = wrap([BR, OR, OR, YE, YE, YE, OR, OR, BR]);
-    console.log(init);
 
     // new puzzle
     var randFs = getRandomSubarray(R.values(functions), 5);
     target = R.last(transformationSteps(init, randFs));
+
+    var width = target.length;
+    var height = R.length(R.maxBy(R.length, target));
+    var total = R.length(R.flatten(target));
+    if (width == 0 || width > 6 || height > 5 || total < 6) {
+        newPuzzle();
+    }
 };
 
 var renderAll = function() {
