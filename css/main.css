@@ -90,6 +90,16 @@ li.sortable-ghost {
     opacity: 0.4;
 }
 
+#container p {
+    font-size: 15px;
+    text-align: center;
+    color: #444;
+}
+
+a {
+    color: #CC333F;
+}
+
 .rect {
     display: inline-block;
     width: 11px;
