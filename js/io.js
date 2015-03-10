@@ -22,38 +22,37 @@ var config = {
     isomer: {
         normal: {
             scale: 40,
-            originX: 1200,
-            originY: 200
+            originX: 40,
+            originY: 400
         },
         target: {
             scale: 22,
-            originX: 300,
+            originX: 1200,
             originY: 250
         }
     },
 };
 
-var renderBlock = function(x, y, value, z) {
+var renderBlock = function(y, x, value, z) {
     isomer.add(
         new Shape.Prism(
-            new Point(-4.2 * x, -y, z),
+            new Point(x, -6 * y, z),
             1, 1, 1
         ),
         config.colors[value]
     );
 };
 
-var renderBlocks = function(x, value, y) {
-    R.forEachIndexed(R.partial(renderBlock, x, y), value);
+var renderBlocks = function(len, y, values, x) {
+    R.forEachIndexed(R.partial(renderBlock, y, len - x), values);
 };
 
-var renderLine = function(line, x) {
-    R.forEachIndexed(R.partial(renderBlocks, x), line);
+var renderLine = function(line, y) {
+    var len = line.length;
+    R.forEachIndexed(R.partial(renderBlocks, len, y), line.reverse());
 };
 
-var render = function(steps) {
-    R.forEachIndexed(renderLine, steps);
-};
+var render = R.forEachIndexed(renderLine);
 
 var addColorBlocks = function(str) {
     R.forEach(function(cstr) {

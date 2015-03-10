@@ -6,14 +6,13 @@ html, body {
 }
 
 #logo {
-    position: absolute;
-    top: 0;
-    right: 0;
+    width: 216px;
+    margin: 5px auto 0 auto;
 }
 
 #container {
     position: relative;
-    margin: 10px auto;
+    margin: 0 auto;
     width: 800px;
 
     font-family: 'Roboto Condensed', sans;
@@ -22,15 +21,15 @@ html, body {
 }
 
 #canvas {
-    margin: auto;
+    margin: 0 auto;
     width: 800px;
     height: 600px;
 }
 
 #targetshape {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 160px;
+    right: 40px;
 }
 
 #controls {
