@@ -12,6 +12,7 @@ html, body {
 }
 
 #container {
+    position: relative;
     margin: 10px auto;
     width: 800px;
 
@@ -26,6 +27,12 @@ html, body {
     height: 600px;
 }
 
+#targetshape {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 #controls {
     overflow: hidden;
 }
@@ -33,12 +40,12 @@ html, body {
 h2 {
     font-weight: 700;
     font-size: 1.1em;
-    text-align: center;
     padding: 0;
     margin: 0;
 }
 
 .controlBox {
+    text-align: center;
     float: left;
     margin-left: 80px;
 }

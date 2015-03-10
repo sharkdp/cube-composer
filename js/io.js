@@ -19,14 +19,24 @@ var config = {
         new Color(235, 104, 65),
         new Color(237, 201, 81)
     ],
-    ymax: 16,
-    xmax: 7
+    isomer: {
+        normal: {
+            scale: 40,
+            originX: 1200,
+            originY: 200
+        },
+        target: {
+            scale: 22,
+            originX: 300,
+            originY: 250
+        }
+    },
 };
 
 var renderBlock = function(x, y, value, z) {
     isomer.add(
         new Shape.Prism(
-            new Point(4.2 * (config.xmax - x), config.ymax - y, z),
+            new Point(-4.2 * x, -y, z),
             1, 1, 1
         ),
         config.colors[value]
@@ -47,10 +57,10 @@ var render = function(steps) {
 
 var addColorBlocks = function(str) {
     R.forEach(function(cstr) {
-        str = str.replace(new RegExp('\{' + cstr + '\}', 'g'), '<div class="rect ' + cstr + '"> </div>');
-    }, ['X', 'BL', 'BR', 'RE', 'OR', 'YE'])
+        str = str.replace(new RegExp('\\{' + cstr + '\\}', 'g'), '<div class="rect ' + cstr + '"> </div>');
+    }, ['X', 'BL', 'BR', 'RE', 'OR', 'YE']);
     return str;
-}
+};
 
 var functions = {
     'stackEqual': stackEqual,
@@ -79,21 +89,16 @@ function getRandomSubarray(arr, size) {
     return shuffled.slice(0, size);
 }
 
+var setIsomerConfig = function(config) {
+    isomer.scale = config.scale;
+    isomer.originX = config.originX;
+    isomer.originY = config.originY;
+};
+
 var renderTarget = function(target) {
-    // TODO: this is ugly
-
-    var originX = isomer.originX,
-        originY = isomer.originY,
-        scale = isomer.scale;
-    isomer.originX = 10;
-    isomer.originY = 1000;
-    isomer.scale = 30;
-
+    setIsomerConfig(config.isomer.target);
     render([target]);
-
-    isomer.originX = originX;
-    isomer.originY = originY;
-    isomer.scale = scale;
+    setIsomerConfig(config.isomer.normal);
 };
 
 var newPuzzle = function() {
@@ -108,7 +113,7 @@ var newPuzzle = function() {
     var width = target.length;
     var height = R.length(R.maxBy(R.length, target));
     var total = R.length(R.flatten(target));
-    if (width == 0 || width > 6 || height > 5 || total < 6) {
+    if (width == 0 || width > 8 || height > 6 || total < 6) {
         newPuzzle();
     }
 };
@@ -153,7 +158,7 @@ var target;
 window.onload = function() {
     var canvas = document.getElementById('canvas');
     isomer = new Isomer(canvas);
-    isomer.scale = 40;
+    setIsomerConfig(config.isomer.normal);
 
     newPuzzle();
     resetControls();
