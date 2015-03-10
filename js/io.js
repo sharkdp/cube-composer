@@ -125,8 +125,16 @@ var renderAll = function() {
 
     var fs = R.map(R.prop(R.__, functions), ids);
     isomer.canvas.clear();
+    var ts = transformationSteps(init, fs);
+
+    if (R.eqDeep(R.last(ts), target)) {
+        $('#targetshape h2').html('Solved!');
+    } else {
+        $('#targetshape h2').html('Target shape');
+    }
     renderTarget(target);
-    render(transformationSteps(init, fs));
+
+    render(ts);
 }
 
 var liClickHandler = function() {
