@@ -32,6 +32,11 @@ html, body {
     right: 40px;
 }
 
+#targetshape p {
+    font-size: 13px;
+    margin: 0;
+}
+
 #controls {
     overflow: hidden;
 }
