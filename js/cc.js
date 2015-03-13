@@ -1,16 +1,9 @@
-/*jslint nomen: true, white: true*/
-/*global R*/
-
 // This file includes only pure, functional code
 // See io.js for impure (I/O) code.
 
-'use strict';
+(function() {
 
-var BL = 0;
-var BR = 1;
-var RE = 2;
-var OR = 3;
-var YE = 4;
+'use strict';
 
 // Basic transformations:
 
@@ -87,3 +80,32 @@ var towersOnly = R.filter(function(xs) { return xs.length > 1; });
 var lowest = R.compose(wrap, R.map(R.head));
 
 var highest = R.compose(wrap, R.map(R.last));
+
+// module exports
+var CC = {
+    replace: replace,
+    clone: clone,
+    cycle: cycle,
+    map2D: map2D,
+    filter2D: filter2D,
+    reject2D: reject2D,
+    wrap: wrap,
+    flattenDeep: flattenDeep,
+    flatten2D: flatten2D,
+    cleanup: cleanup,
+    removeNil: removeNil,
+    transformationSteps: transformationSteps,
+    stackEqual: stackEqual,
+    towersOnly: towersOnly,
+    lowest: lowest,
+    highest: highest
+};
+
+// node or browser?
+if (typeof exports === 'object') {
+    module.exports = CC;
+} else {
+    this.CC = CC;
+}
+
+}.call(this));

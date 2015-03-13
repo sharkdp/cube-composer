@@ -1,5 +1,4 @@
-/*jslint browser: true, nomen: true, white: true, vars: true*/
-/*global $, R, Isomer, steps*/
+(function () {
 
 'use strict';
 
@@ -62,18 +61,24 @@ var addColorBlocks = function(str) {
     return str;
 };
 
+// var BL = 0;
+var BR = 1;
+// var RE = 2;
+var OR = 3;
+var YE = 4;
+
 var functions = {
-    'stackEqual': stackEqual,
-    'flatten': flattenDeep,
-    'map({X} ↦ {X}{X})': map2D(clone),
-    'map({OR} ↦ {YE})': map2D(replace(OR, YE)),
-    'map({YE} ↦ {BR})': map2D(replace(YE, BR)),
-    'map({YE} ↦ {BR}{YE})': map2D(replace(YE, [BR, YE])),
-    'map({BR} ↦ {BR}{BR}{BR})': map2D(replace(BR, [BR, BR, BR])),
-    'map({BR} ↦ {OR}{OR})': map2D(replace(BR, [OR, OR])),
-    'reject({OR})': reject2D(R.eq(OR)),
-    'reject({YE})': reject2D(R.eq(YE)),
-    'filter({BR})': filter2D(R.eq(BR)),
+    'stackEqual': CC.stackEqual,
+    'flatten': CC.flattenDeep,
+    'map({X} ↦ {X}{X})': CC.map2D(CC.clone),
+    'map({OR} ↦ {YE})': CC.map2D(CC.replace(OR, YE)),
+    'map({YE} ↦ {BR})': CC.map2D(CC.replace(YE, BR)),
+    'map({YE} ↦ {BR}{YE})': CC.map2D(CC.replace(YE, [BR, YE])),
+    'map({BR} ↦ {BR}{BR}{BR})': CC.map2D(CC.replace(BR, [BR, BR, BR])),
+    'map({BR} ↦ {OR}{OR})': CC.map2D(CC.replace(BR, [OR, OR])),
+    'reject({OR})': CC.reject2D(R.eq(OR)),
+    'reject({YE})': CC.reject2D(R.eq(YE)),
+    'filter({BR})': CC.filter2D(R.eq(BR)),
     'map(push({YE}))': R.map(R.append(YE))
 };
 
@@ -103,17 +108,17 @@ var renderTarget = function(target) {
 
 var newPuzzle = function() {
     // new initial state
-    init = wrap([BR, OR, OR, YE, YE, YE, OR, OR, BR]);
+    init = CC.wrap([BR, OR, OR, YE, YE, YE, OR, OR, BR]);
 
     // new puzzle
     var randFs = getRandomSubarray(R.values(functions), 5);
-    target = R.last(transformationSteps(init, randFs));
+    target = R.last(CC.transformationSteps(init, randFs));
 
     // make sure the target is not too big
     var width = target.length;
     var height = R.length(R.maxBy(R.length, target));
     var total = R.length(R.flatten(target));
-    if (width == 0 || width > 8 || height > 6 || total < 6) {
+    if (width === 0 || width > 8 || height > 6 || total < 6) {
         newPuzzle();
     }
 };
@@ -126,7 +131,7 @@ var renderAll = function() {
 
     var fs = R.map(R.prop(R.__, functions), ids);
     isomer.canvas.clear();
-    var ts = transformationSteps(init, fs);
+    var ts = CC.transformationSteps(init, fs);
 
     if (R.eqDeep(R.last(ts), target)) {
         $('#targetshape h2').html('Solved!');
@@ -141,7 +146,7 @@ var renderAll = function() {
 var liClickHandler = function() {
     var $li = $(this);
     var targetId = 'program';
-    if ($li.parent().attr('id') == 'program') {
+    if ($li.parent().attr('id') === 'program') {
         targetId = 'available';
     }
     $li.remove();
@@ -192,3 +197,5 @@ window.onload = function() {
         }
     });
 };
+
+})();
