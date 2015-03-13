@@ -30,7 +30,7 @@ var config = {
             originX: 1200,
             originY: 250
         }
-    },
+    }
 };
 
 var renderBlock = function(y, x, value, z) {
@@ -56,7 +56,8 @@ var render = R.forEachIndexed(renderLine);
 
 var addColorBlocks = function(str) {
     R.forEach(function(cstr) {
-        str = str.replace(new RegExp('\\{' + cstr + '\\}', 'g'), '<div class="rect ' + cstr + '"> </div>');
+        str = str.replace(new RegExp('\\{' + cstr + '\\}', 'g'),
+                          '<div class="rect ' + cstr + '"> </div>');
     }, ['X', 'BL', 'BR', 'RE', 'OR', 'YE']);
     return str;
 };
@@ -73,7 +74,7 @@ var functions = {
     'reject({OR})': reject2D(R.eq(OR)),
     'reject({YE})': reject2D(R.eq(YE)),
     'filter({BR})': filter2D(R.eq(BR)),
-    'map(push({YE}))': R.map(R.append(YE)),
+    'map(push({YE}))': R.map(R.append(YE))
 };
 
 // see http://stackoverflow.com/a/11935263/704831
@@ -102,13 +103,13 @@ var renderTarget = function(target) {
 
 var newPuzzle = function() {
     // new initial state
-    // init = wrap(getRandomSubarray([OR, BR, BR, BR, BR, BR, BR, BR, YE, YE, YE, YE], 6));
     init = wrap([BR, OR, OR, YE, YE, YE, OR, OR, BR]);
 
     // new puzzle
     var randFs = getRandomSubarray(R.values(functions), 5);
     target = R.last(transformationSteps(init, randFs));
 
+    // make sure the target is not too big
     var width = target.length;
     var height = R.length(R.maxBy(R.length, target));
     var total = R.length(R.flatten(target));
@@ -135,7 +136,7 @@ var renderAll = function() {
     renderTarget(target);
 
     render(ts);
-}
+};
 
 var liClickHandler = function() {
     var $li = $(this);
@@ -148,7 +149,7 @@ var liClickHandler = function() {
     $('#' + targetId).append($li);
 
     renderAll();
-}
+};
 
 var resetControls = function() {
     $('.sortable').empty();
