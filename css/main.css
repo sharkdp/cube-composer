@@ -81,11 +81,6 @@ h2 {
     cursor: move;
 }
 
-li.sortable-dragging {
-    background-color: #EB6841;
-    border-color: #CC333F;
-}
-
 li.sortable-ghost {
     opacity: 0.4;
 }
