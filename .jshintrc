@@ -6,5 +6,6 @@
     "unused": true,
     "globalstrict": true,
     "predef": ["module", "require", "describe", "it"],
-    "browser": true
+    "browser": true,
+    "devel": true
 }

@@ -1,29 +1,5 @@
 'use strict';
 
-var colors = require('mocha/lib/reporters/base').colors;
-colors = {
-    'pass': 0
-    , 'fail': 0
-    , 'bright pass': 0
-    , 'bright fail': 0
-    , 'bright yellow': 0
-    , 'pending': 36
-    , 'suite': 0
-    , 'error title': 0
-    , 'error message': 31
-    , 'error stack': 30
-    , 'checkmark': 0
-    , 'fast': 30
-    , 'medium': 33
-    , 'slow': 31
-    , 'green': 32
-    , 'light': 30
-    , 'diff gutter': 30
-    , 'diff added': 42
-    , 'diff removed': 41
-}
-
-
 require('should');
 var R = require('ramda');
 var C = require('../js/cube-composer.js');
