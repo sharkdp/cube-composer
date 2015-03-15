@@ -4,7 +4,7 @@
     "forin": true,
     "undef": true,
     "unused": true,
-    "predef": ["CC", "R", "module", "require", "describe", "it", "Isomer", "Sortable"],
-    "browser": true,
-    "jquery": true
+    "globalstrict": true,
+    "predef": ["module", "require", "describe", "it"],
+    "browser": true
 }

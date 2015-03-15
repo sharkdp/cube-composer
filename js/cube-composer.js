@@ -1,9 +1,9 @@
 // This file includes only pure, functional code
 // See io.js for impure (I/O) code.
 
-(function() {
-
 'use strict';
+
+var R = require("ramda");
 
 // Basic transformations:
 
@@ -82,7 +82,7 @@ var lowest = R.compose(wrap, R.map(R.head));
 var highest = R.compose(wrap, R.map(R.last));
 
 // module exports
-var CC = {
+module.exports = {
     replace: replace,
     clone: clone,
     cycle: cycle,
@@ -100,12 +100,3 @@ var CC = {
     lowest: lowest,
     highest: highest
 };
-
-// node or browser?
-if (typeof exports === 'object') {
-    module.exports = CC;
-} else {
-    this.CC = CC;
-}
-
-}.call(this));

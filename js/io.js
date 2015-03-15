@@ -1,6 +1,11 @@
-(function () {
-
 'use strict';
+
+var R = require('ramda');
+var $ = require('jquery');
+var Isomer = require('isomer');
+var Sortable = require('sortablejs');
+
+var C = require('./cube-composer');
 
 var Shape = Isomer.Shape;
 var Point = Isomer.Point;
@@ -68,17 +73,17 @@ var OR = 3;
 var YE = 4;
 
 var functions = {
-    'stackEqual': CC.stackEqual,
-    'flatten': CC.flattenDeep,
-    'map({X} ↦ {X}{X})': CC.map2D(CC.clone),
-    'map({OR} ↦ {YE})': CC.map2D(CC.replace(OR, YE)),
-    'map({YE} ↦ {BR})': CC.map2D(CC.replace(YE, BR)),
-    'map({YE} ↦ {BR}{YE})': CC.map2D(CC.replace(YE, [BR, YE])),
-    'map({BR} ↦ {BR}{BR}{BR})': CC.map2D(CC.replace(BR, [BR, BR, BR])),
-    'map({BR} ↦ {OR}{OR})': CC.map2D(CC.replace(BR, [OR, OR])),
-    'reject({OR})': CC.reject2D(R.eq(OR)),
-    'reject({YE})': CC.reject2D(R.eq(YE)),
-    'filter({BR})': CC.filter2D(R.eq(BR)),
+    'stackEqual': C.stackEqual,
+    'flatten': C.flattenDeep,
+    'map({X} ↦ {X}{X})': C.map2D(C.clone),
+    'map({OR} ↦ {YE})': C.map2D(C.replace(OR, YE)),
+    'map({YE} ↦ {BR})': C.map2D(C.replace(YE, BR)),
+    'map({YE} ↦ {BR}{YE})': C.map2D(C.replace(YE, [BR, YE])),
+    'map({BR} ↦ {BR}{BR}{BR})': C.map2D(C.replace(BR, [BR, BR, BR])),
+    'map({BR} ↦ {OR}{OR})': C.map2D(C.replace(BR, [OR, OR])),
+    'reject({OR})': C.reject2D(R.eq(OR)),
+    'reject({YE})': C.reject2D(R.eq(YE)),
+    'filter({BR})': C.filter2D(R.eq(BR)),
     'map(push({YE}))': R.map(R.append(YE))
 };
 
@@ -98,6 +103,7 @@ var setIsomerConfig = function(config) {
     isomer.scale = config.scale;
     isomer.originX = config.originX;
     isomer.originY = config.originY;
+    isomer._calculateTransformation();
 };
 
 var renderTarget = function(target) {
@@ -108,11 +114,11 @@ var renderTarget = function(target) {
 
 var newPuzzle = function() {
     // new initial state
-    init = CC.wrap([BR, OR, OR, YE, YE, YE, OR, OR, BR]);
+    init = C.wrap([BR, OR, OR, YE, YE, YE, OR, OR, BR]);
 
     // new puzzle
     var randFs = getRandomSubarray(R.values(functions), 5);
-    target = R.last(CC.transformationSteps(init, randFs));
+    target = R.last(C.transformationSteps(init, randFs));
 
     // make sure the target is not too big
     var width = target.length;
@@ -131,7 +137,7 @@ var renderAll = function() {
 
     var fs = R.map(R.prop(R.__, functions), ids);
     isomer.canvas.clear();
-    var ts = CC.transformationSteps(init, fs);
+    var ts = C.transformationSteps(init, fs);
 
     if (R.eqDeep(R.last(ts), target)) {
         $('#targetshape h2').html('Solved!');
@@ -197,5 +203,3 @@ window.onload = function() {
         }
     });
 };
-
-})();
