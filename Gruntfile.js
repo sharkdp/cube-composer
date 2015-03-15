@@ -10,11 +10,25 @@ module.exports = function(grunt) {
         },
 
         browserify: {
-            io: {
+            dev: {
                 src: ['js/io.js'],
                 dest: 'dist/cube-composer-bundle.js',
                 options: {
-                    debug: true
+                    browserifyOptions: {
+                        debug: true
+                    }
+                }
+            },
+            prod: {
+                src: ['js/io.js'],
+                dest: 'dist/cube-composer-bundle.js'
+            }
+        },
+
+        uglify: {
+            dist: {
+                files: {
+                    'dist/cube-composer-bundle.js': 'dist/cube-composer-bundle.js'
                 }
             }
         },
@@ -27,15 +41,17 @@ module.exports = function(grunt) {
 
         watch: {
             files: ['Gruntfile.js', 'js/*.js', 'test/*.js'],
-            tasks: ['jshint', 'mochaTest', 'browserify']
+            tasks: ['dev']
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('test', ['jshint', 'mochaTest']);
-    grunt.registerTask('default', ['browserify']);
+    grunt.registerTask('dev', ['jshint', 'mochaTest', 'browserify:dev']);
+    grunt.registerTask('prod', ['jshint', 'mochaTest', 'browserify:prod', 'uglify']);
+    grunt.registerTask('default', 'prod');
 };
