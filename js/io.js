@@ -75,16 +75,22 @@ var YE = 4;
 var functions = {
     'stackEqual': C.stackEqual,
     'flatten': C.flattenDeep,
-    'map({X} ↦ {X}{X})': C.map2D(C.clone),
-    'map({OR} ↦ {YE})': C.map2D(C.replace(OR, YE)),
+    // 'map({X} ↦ {X}{X})': C.map2D(C.clone),
+    // 'map({OR} ↦ {YE})': C.map2D(C.replace(OR, YE)),
     'map({YE} ↦ {BR})': C.map2D(C.replace(YE, BR)),
     'map({YE} ↦ {BR}{YE})': C.map2D(C.replace(YE, [BR, YE])),
     'map({BR} ↦ {BR}{BR}{BR})': C.map2D(C.replace(BR, [BR, BR, BR])),
     'map({BR} ↦ {OR}{OR})': C.map2D(C.replace(BR, [OR, OR])),
     'reject({OR})': C.reject2D(R.eq(OR)),
     'reject({YE})': C.reject2D(R.eq(YE)),
-    'filter({BR})': C.filter2D(R.eq(BR)),
-    'map(push({YE}))': R.map(R.append(YE))
+    // 'filter({BR})': C.filter2D(R.eq(BR)),
+    'map(push({YE}))': R.map(R.append(YE)),
+    'take lowest': C.lowest, // TODO
+    'take tail': C.tail, // TODO
+    // 'head': C.head, // TODO
+    'towersOnly': C.towersOnly, // TODO
+    // 'sort': R.sortBy(R.identity)
+    // 'filter(contains({BR}))': R.filter(R.contains(BR))
 };
 
 // see http://stackoverflow.com/a/11935263/704831
@@ -125,8 +131,12 @@ var newPuzzle = function() {
     var height = R.length(R.maxBy(R.length, target));
     var total = R.length(R.flatten(target));
     if (width === 0 || width > 8 || height > 6 || total < 6) {
-        newPuzzle();
+        return newPuzzle();
     }
+
+    // TODO: debug
+    console.log("target = " + JSON.stringify(target));
+    return target;
 };
 
 var renderAll = function() {
@@ -145,6 +155,12 @@ var renderAll = function() {
         $('#targetshape h2').html('Target shape');
     }
     renderTarget(target);
+
+    // TODO: debug
+    console.log("transformationSteps = ");
+    R.forEach(function(s) {
+        console.log(JSON.stringify(s));
+    }, ts);
 
     render(ts);
 };

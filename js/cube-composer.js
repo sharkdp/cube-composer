@@ -79,7 +79,7 @@ var towersOnly = R.filter(function(xs) { return xs.length > 1; });
 
 var lowest = R.compose(wrap, R.map(R.head));
 
-var highest = R.compose(wrap, R.map(R.last));
+var tail = R.compose(wrap, R.map(R.tail));
 
 // module exports
 module.exports = {
@@ -98,5 +98,5 @@ module.exports = {
     stackEqual: stackEqual,
     towersOnly: towersOnly,
     lowest: lowest,
-    highest: highest
+    tail: tail
 };
