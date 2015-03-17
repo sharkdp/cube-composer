@@ -6,6 +6,8 @@ var Isomer = require('isomer');
 var Sortable = require('sortablejs');
 
 var C = require('./cube-composer');
+var functions = require('./collection');
+var solve = require('./solve');
 
 var Shape = Isomer.Shape;
 var Point = Isomer.Point;
@@ -72,27 +74,6 @@ var BR = 1;
 var OR = 3;
 var YE = 4;
 
-var functions = {
-    'stackEqual': C.stackEqual,
-    'flatten': C.flattenDeep,
-    // 'map({X} ↦ {X}{X})': C.map2D(C.clone),
-    // 'map({OR} ↦ {YE})': C.map2D(C.replace(OR, YE)),
-    'map({YE} ↦ {BR})': C.map2D(C.replace(YE, BR)),
-    'map({YE} ↦ {BR}{YE})': C.map2D(C.replace(YE, [BR, YE])),
-    'map({BR} ↦ {BR}{BR}{BR})': C.map2D(C.replace(BR, [BR, BR, BR])),
-    'map({BR} ↦ {OR}{OR})': C.map2D(C.replace(BR, [OR, OR])),
-    'reject({OR})': C.reject2D(R.eq(OR)),
-    'reject({YE})': C.reject2D(R.eq(YE)),
-    // 'filter({BR})': C.filter2D(R.eq(BR)),
-    'map(push({YE}))': R.map(R.append(YE)),
-    'take lowest': C.lowest, // TODO
-    'take tail': C.tail, // TODO
-    // 'head': C.head, // TODO
-    'towersOnly': C.towersOnly, // TODO
-    // 'sort': R.sortBy(R.identity)
-    // 'filter(contains({BR}))': R.filter(R.contains(BR))
-};
-
 // see http://stackoverflow.com/a/11935263/704831
 function getRandomSubarray(arr, size) {
     var shuffled = arr.slice(0), i = arr.length, temp, index;
@@ -112,7 +93,7 @@ var setIsomerConfig = function(config) {
     isomer._calculateTransformation();
 };
 
-var renderTarget = function(target) {
+var renderTarget = function() {
     setIsomerConfig(config.isomer.target);
     render([target]);
     setIsomerConfig(config.isomer.normal);
@@ -131,12 +112,16 @@ var newPuzzle = function() {
     var height = R.length(R.maxBy(R.length, target));
     var total = R.length(R.flatten(target));
     if (width === 0 || width > 8 || height > 6 || total < 6) {
-        return newPuzzle();
+        newPuzzle();
+        return;
     }
 
     // TODO: debug
-    console.log("target = " + JSON.stringify(target));
-    return target;
+    console.log('target = ' + JSON.stringify(target));
+
+    var res = solve(init, target);
+    console.log('Solution in ' + res.length.toString() + ' steps');
+    console.log(res);
 };
 
 var renderAll = function() {
@@ -154,7 +139,7 @@ var renderAll = function() {
     } else {
         $('#targetshape h2').html('Target shape');
     }
-    renderTarget(target);
+    renderTarget();
 
     // TODO: debug
     console.log("transformationSteps = ");
