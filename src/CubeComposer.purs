@@ -36,6 +36,9 @@ scanl f bi as = bi : (case as of
                         [] -> []
                         a:as' -> scanl f (f bi a) as')
 
+reject :: forall a. (a -> Boolean) -> [a] -> [a]
+reject f = filter (not <<< f)
+
 -- | Successively apply all transformers to the initial wall and return
 -- | all intermediate transformation steps
 allSteps :: [Transformer] -> Wall -> [Wall]
@@ -49,16 +52,23 @@ tTail = map ((fromMaybe []) <<< tail)
 tReplace :: Transformer
 tReplace = map2d (replace Red Blue)
 
-{-- tStackEqual :: Transformer --}
-{-- tStackEqual [] = [] --}
-{-- tStackEqual (s:ss) = (flatten (s:(takeWhile (== s) ss))) : (tStackEqual (dropWhile (== s) ss)) --}
+tStackEqual :: Transformer
+tStackEqual [] = []
+tStackEqual (s:ss) = (concat (s:split.init)) : tStackEqual split.rest
+    where split = span (== s) ss
+
+-- | Remove emtpy stacks
+tClearEmpty :: Transformer
+tClearEmpty = reject null
 
 -------- TESTING -------
 
 ts :: [Transformer]
 ts = [
-       tReplace
+       tStackEqual
+     , tReplace
      , tTail
+     , tClearEmpty
      ]
 
 initial :: Wall
