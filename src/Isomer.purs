@@ -38,6 +38,14 @@ foreign import renderCube """
     };
   }""" :: forall eff. IsomerInstance -> Number -> Number -> Number -> IsomerColor -> Eff (isomer :: Isomer | eff) IsomerInstance
 
+foreign import clearCanvas """
+  function clearCanvas(isomer) {
+    return function() {
+      isomer.canvas.clear();
+      return isomer;
+    };
+  }""" :: forall eff. IsomerInstance -> Eff (isomer :: Isomer | eff) IsomerInstance
+
 foreign import setIsomerConfig """
   function setIsomerConfig(isomer) {
     return function(scale) {

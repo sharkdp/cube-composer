@@ -1,8 +1,15 @@
-module Transformer where
+module Transformer (
+      Transformer()
+    , tTail
+    , tReplace
+    , tStackEqual
+    , allSteps
+    ) where
 
 import Types
 import Data.Array
 import Data.Maybe
+import Data.Traversable
 
 type Transformer = Wall -> Wall
 
@@ -14,12 +21,6 @@ replace a b x  = if x == a then b else x
 map2d :: (Cube -> Cube) -> Wall -> Wall
 map2d = map <<< map
 
--- | Adaptation of Haskells scanl
-scanl :: forall a b . (b -> a -> b) -> b -> [a] -> [b]
-scanl f bi as = bi : (case as of
-                        [] -> []
-                        a:as' -> scanl f (f bi a) as')
-
 -- | Opposite of filter
 reject :: forall a. (a -> Boolean) -> [a] -> [a]
 reject f = filter (f >>> not)
@@ -27,7 +28,7 @@ reject f = filter (f >>> not)
 -- | Successively apply all transformers to the initial wall and return
 -- | all (intermediate) transformation steps
 allSteps :: [Transformer] -> Wall -> [Wall]
-allSteps ts wi = scanl (flip ($)) wi ts
+allSteps ts wi = wi : scanl (flip ($)) wi ts
 
 -- | Remove emtpy stacks
 tClearEmpty :: Transformer

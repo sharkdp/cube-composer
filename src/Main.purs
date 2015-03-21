@@ -1,27 +1,25 @@
 module Main where
 
-{-- import Data.DOM.Simple.Window --}
-{-- import Data.DOM.Simple.Document --}
-{-- import Data.DOM.Simple.Element --}
 import Control.Monad.Eff
 import Data.Array
+import Data.DOM.Simple.Window
+import Data.DOM.Simple.Document
+import Data.DOM.Simple.Element
 import Data.Foldable
 import Data.Maybe
+import Data.Traversable
 import Debug.Trace
 
 import Types
 import Transformer
+import Sortable
 import Isomer
-
-ts :: [Transformer]
-ts = [
-       tStackEqual
-     , tReplace Red Blue
-     , tTail
-     ]
 
 initial :: Wall
 initial = [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]]
+
+target :: Wall
+target = [[Yellow], [Yellow, Yellow], [Yellow]]
 
 cubeColor :: Cube -> IsomerColor
 cubeColor Blue = colorFromRGB 0 160 176
@@ -42,23 +40,74 @@ renderWall isomer y wall =
     sequence_ $ mapIndexed (\x stack -> renderStack isomer y (length wall - x) stack) (reverse wall)
 
 renderWalls :: forall eff. IsomerInstance -> [Wall] -> Eff (isomer :: Isomer | eff) Unit
-renderWalls isomer walls =
+renderWalls isomer walls = do
+    setIsomerConfig isomer 40 40 400
     sequence_ $ mapIndexed (renderWall isomer) walls
 
-main = do
-    trace $ "Initial: " ++ (show initial)
+renderTarget isomer target = do
+    setIsomerConfig isomer 22 1200 250
+    renderWall isomer 0 target
+
+sortHandler isomer = do
+    doc <- document globalWindow
+    Just ulAvailable <- getElementById "program" doc
+    lis <- children ulAvailable
+    ids <- sequence $ map (getAttribute "id") lis
+    let fs = catMaybes $ map getTransformerById ids
+
+    trace $ "IDs: " ++ show ids
+    trace $ "Initial: " ++ show initial
     trace "Steps:"
-    let steps = allSteps ts initial
+    let steps = allSteps fs initial
     traverse_ (show >>> trace) steps
     trace "---"
     trace ""
 
-    {-- doc <- document globalWindow --}
-    {-- Just el <- querySelector "#targetshape" doc --}
-    {-- setInnerHTML "lkasjd" el --}
-
-    isomer <- getIsomerInstance "canvas"
-    setIsomerConfig isomer 40 40 400
-
-    {-- renderWall isomer initial --}
+    clearCanvas isomer
     renderWalls isomer steps
+    renderTarget isomer target
+
+getTransformerById :: String -> Maybe Transformer
+getTransformerById id = (\x -> x.function) <$> (head $ filter (\t -> t.id == id) transformers)
+
+type TransformerRecord = {
+    id :: String,
+    name :: String,
+    function :: Transformer
+}
+
+transformers :: [TransformerRecord]
+transformers = [
+    {
+        id: "stackEqual",
+        name: "stackEqual",
+        function: tStackEqual
+    },
+    {
+        id: "tail",
+        name: "tail",
+        function: tTail
+    },
+    {
+        id: "replaceRedBlue",
+        name: "replace {Yellow} {Brown}",
+        function: tReplace Yellow Brown
+    }
+]
+
+main = do
+    isomer <- getIsomerInstance "canvas"
+
+    -- install sortable
+    doc <- document globalWindow
+
+    let dummyHandler = return unit
+    getElementById "available" doc >>= (\(Just el) -> installSortable el dummyHandler)
+    getElementById "program" doc >>= (\(Just el) -> installSortable el (sortHandler isomer))
+
+    Just ulAvailable <- getElementById "available" doc
+    let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ t.name ++ "</li>") transformers
+    setInnerHTML html ulAvailable
+
+    -- initial rendering
+    sortHandler isomer
