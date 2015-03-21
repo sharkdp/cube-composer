@@ -45,8 +45,8 @@ module.exports = function(grunt) {
 
         psc: {
             options: {
-                "main": "CubeComposer",
-                "modules": ["CubeComposer"]
+                "main": "Main",
+                "modules": ["Main"]
             },
 
             all: {

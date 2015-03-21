@@ -1,0 +1,21 @@
+{
+  "name": "cube-composer",
+  "version": "0.1.0",
+  "homepage": "https://github.com/sharkdp/cube-composer",
+  "authors": [
+    "David Peter <mail@david-peter.de>"
+  ],
+  "description": "A puzzle game inspired by functional programming",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "purescript-arrays": "~0.3.5",
+    "purescript-foldable-traversable": "~0.3.0",
+    "purescript-enums": "~0.4.0",
+    "purescript-simple-dom": "~0.0.1"
+  }
+}
