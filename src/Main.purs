@@ -30,20 +30,20 @@ cubeColor Red = colorFromRGB 204 51 63
 cubeColor Orange = colorFromRGB 235 104 65
 cubeColor Yellow = colorFromRGB 237 201 81
 
-mapIndexed :: forall a b. (a -> Number -> b) -> [a] -> [b]
-mapIndexed f xs = zipWith f xs (0 .. (length xs - 1))
+mapIndexed :: forall a b. (Number -> a -> b) -> [a] -> [b]
+mapIndexed f xs = zipWith f (0 .. (length xs - 1)) xs
 
 renderStack :: forall eff. IsomerInstance -> Number -> Number -> Stack -> Eff (isomer :: Isomer | eff) Unit
-renderStack isomer x y stack =
-    sequence_ $ mapIndexed (\cube z -> renderCube isomer x (-6 * y) z (cubeColor cube)) stack
+renderStack isomer y x stack =
+    sequence_ $ mapIndexed (renderCube isomer x (-6 * y)) $ map cubeColor stack
 
 renderWall :: forall eff. IsomerInstance -> Number -> Wall -> Eff (isomer :: Isomer | eff) Unit
 renderWall isomer y wall =
-    sequence_ $ mapIndexed (\stack x -> renderStack isomer (length wall - x) y stack) (reverse wall)
+    sequence_ $ mapIndexed (\x stack -> renderStack isomer y (length wall - x) stack) (reverse wall)
 
 renderWalls :: forall eff. IsomerInstance -> [Wall] -> Eff (isomer :: Isomer | eff) Unit
 renderWalls isomer walls =
-    sequence_ $ mapIndexed (\wall y -> renderWall isomer y wall) walls
+    sequence_ $ mapIndexed (renderWall isomer) walls
 
 main = do
     trace $ "Initial: " ++ (show initial)
