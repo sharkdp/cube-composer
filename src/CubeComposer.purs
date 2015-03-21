@@ -10,9 +10,8 @@ import Transformer
 ts :: [Transformer]
 ts = [
        tStackEqual
-     , tReplace
+     , tReplace Red Blue
      , tTail
-     , tClearEmpty
      ]
 
 initial :: Wall
