@@ -8,6 +8,7 @@ import Data.DOM.Simple.Element
 import Data.Foldable
 import Data.Maybe
 import Data.Traversable
+import Data.String.Regex (regex, parseFlags, replace)
 import Debug.Trace
 
 import Types
@@ -82,18 +83,44 @@ transformers = [
         id: "stackEqual",
         name: "stackEqual",
         function: tStackEqual
-    },
-    {
+    }, {
+        id: "flatten",
+        name: "flatten",
+        function: tFlatten
+    }, {
+        id: "replaceYB",
+        name: "replace {Yellow} ↦ {Brown}",
+        function: tReplace Yellow Brown
+    }, {
+        id: "replaceYBB",
+        name: "replace {Yellow} ↦ {Yellow}{Brown}",
+        function: tReplaceMultiple Yellow [Yellow, Brown]
+    }, {
+        id: "replaceBBBB",
+        name: "replace {Brown} ↦ {Brown}{Brown}{Brown}",
+        function: tReplaceMultiple Brown [Brown, Brown, Brown]
+    }, {
+        id: "replaceBOO",
+        name: "replace {Brown} ↦ {Orange}{Orange}",
+        function: tReplaceMultiple Brown [Orange, Orange]
+    }, {
+        id: "pushY",
+        name: "push {Yellow}",
+        function: map (flip snoc Yellow)
+    }, {
         id: "tail",
         name: "tail",
         function: tTail
-    },
-    {
-        id: "replaceRedBlue",
-        name: "replace {Yellow} {Brown}",
-        function: tReplace Yellow Brown
     }
 ]
+
+replaceColors :: String -> String
+replaceColors s =
+    foldl replaceColor s ("X" : map show [Brown, Orange, Red, Yellow, Blue]) -- TODO
+      where replaceColor s c = replace (regex (pattern c) rf) (replacement c) s
+            rf = parseFlags "g"
+            pattern c = "{" ++ c ++ "}"
+            replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
 
 main = do
     isomer <- getIsomerInstance "canvas"
@@ -106,7 +133,7 @@ main = do
     getElementById "program" doc >>= (\(Just el) -> installSortable el (sortHandler isomer))
 
     Just ulAvailable <- getElementById "available" doc
-    let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ t.name ++ "</li>") transformers
+    let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ replaceColors t.name ++ "</li>") transformers
     setInnerHTML html ulAvailable
 
     -- initial rendering

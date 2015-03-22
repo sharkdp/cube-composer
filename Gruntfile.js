@@ -55,7 +55,7 @@ module.exports = function(grunt) {
             }
         },
 
-        dotPsci: ["<%=src%>"],
+        // dotPsci: ["<%=src%>"],
 
         watch: {
             files: ["Gruntfile.js", "<%=src%>"],
@@ -71,7 +71,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-watch");
 
     // grunt.registerTask("dev", ["jshint", "mochaTest", "browserify:dev"]);
-    grunt.registerTask("dev", ["psc", "dotPsci"]);
+    grunt.registerTask("dev", ["psc"]);
     // grunt.registerTask("prod", ["jshint", "mochaTest", "browserify:prod", "uglify"]);
     // grunt.registerTask("default", "prod");
 };

@@ -105,8 +105,8 @@ a {
 }
 
 .X { background-color: #fff; }
-.BL { background-color: #00A0B0; }
-.BR { background-color: #6A4A3C; }
-.RE { background-color: #CC333F; }
-.OR { background-color: #EB6841; }
-.YE { background-color: #EDC951; }
+.Blue { background-color: #00A0B0; }
+.Brown { background-color: #6A4A3C; }
+.Red { background-color: #CC333F; }
+.Orange { background-color: #EB6841; }
+.Yellow { background-color: #EDC951; }

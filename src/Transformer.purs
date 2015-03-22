@@ -2,7 +2,9 @@ module Transformer (
       Transformer()
     , tTail
     , tReplace
+    , tReplaceMultiple
     , tStackEqual
+    , tFlatten
     , allSteps
     ) where
 
@@ -12,10 +14,6 @@ import Data.Maybe
 import Data.Traversable
 
 type Transformer = Wall -> Wall
-
--- | replace a by b, leave unchanged otherwise
-replace :: Cube -> Cube -> Cube -> Cube
-replace a b x  = if x == a then b else x
 
 -- | Map a function over the two dimensional array
 map2d :: (Cube -> Cube) -> Wall -> Wall
@@ -40,10 +38,19 @@ tTail = tClearEmpty <<< map ((fromMaybe []) <<< tail)
 
 -- | Replace all occurences of a by b
 tReplace :: Cube -> Cube -> Transformer
-tReplace a b = map2d $ replace a b
+tReplace a b = map2d replace
+    where replace x = if x == a then b else x
+
+-- | Replace all occurences of a by bs and flattens
+tReplaceMultiple :: Cube -> [Cube] -> Transformer
+tReplaceMultiple a bs ss = map (concatMap replace) ss
+   where replace x = if x == a then bs else [x]
 
 -- | concat adjacent lists if they are equal
 tStackEqual :: Transformer
 tStackEqual [] = []
 tStackEqual (s:ss) = (concat (s:split.init)) : tStackEqual split.rest
     where split = span (== s) ss
+
+tFlatten :: Transformer
+tFlatten = concat >>> map singleton
