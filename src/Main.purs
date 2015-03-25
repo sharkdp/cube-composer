@@ -2,9 +2,13 @@ module Main (main) where
 
 import Control.Monad.Eff
 import Data.Array
-import Data.DOM.Simple.Window
-import Data.DOM.Simple.Document
 import Data.DOM.Simple.Element
+import Data.DOM.Simple.Events
+import Data.DOM.Simple.Document
+import Data.DOM.Simple.Window
+import Data.DOM.Simple.Types
+import DOM
+import Data.Enum
 import Data.Foldable
 import Data.Maybe
 import Data.Traversable
@@ -49,7 +53,7 @@ renderTarget isomer target = do
     setIsomerConfig isomer 22 1200 250
     renderWall isomer 0 target
 
-sortHandler isomer = do
+renderAll isomer = do
     doc <- document globalWindow
     Just ulAvailable <- getElementById "program" doc
     lis <- children ulAvailable
@@ -124,11 +128,29 @@ transformers = [
 
 replaceColors :: String -> String
 replaceColors s =
-    foldl replaceColor s ("X" : map show [Brown, Orange, Red, Yellow, Blue]) -- TODO
-      where replaceColor s c = replace (regex (pattern c) rf) (replacement c) s
-            rf = parseFlags "g"
-            pattern c = "{" ++ c ++ "}"
-            replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
+    foldl replaceColor s ("X" : map show (Blue `enumFromTo` Yellow))
+        where replaceColor s c = replace (regex (pattern c) rf) (replacement c) s
+              rf = parseFlags "g"
+              pattern c = "{" ++ c ++ "}"
+              replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
+
+keyPress :: forall eff. HTMLDocument -> DOMEvent -> Eff (dom :: DOM | eff) Unit
+keyPress doc event = do
+    code <- keyCode event
+    case code of
+         -- 'g': generate new puzzle
+         71 -> return unit
+         -- 'r': reset lists
+         82 -> resetUI doc
+    return unit
+
+resetUI :: forall eff. HTMLDocument -> Eff (dom :: DOM | eff) Unit
+resetUI doc = do
+    Just ulAvailable <- getElementById "available" doc
+    let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ replaceColors t.name ++ "</li>") transformers
+    setInnerHTML html ulAvailable
+    Just ulProgram <- getElementById "program" doc
+    setInnerHTML "" ulProgram
 
 main = do
     isomer <- getIsomerInstance "canvas"
@@ -138,11 +160,10 @@ main = do
 
     let dummyHandler = return unit
     getElementById "available" doc >>= (\(Just el) -> installSortable el dummyHandler)
-    getElementById "program" doc >>= (\(Just el) -> installSortable el (sortHandler isomer))
+    getElementById "program" doc >>= (\(Just el) -> installSortable el (renderAll isomer))
 
-    Just ulAvailable <- getElementById "available" doc
-    let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ replaceColors t.name ++ "</li>") transformers
-    setInnerHTML html ulAvailable
+    -- keyboard events
+    addKeyboardEventListener KeydownEvent (keyPress doc) globalWindow
 
-    -- initial rendering
-    sortHandler isomer
+    resetUI doc
+    renderAll isomer
