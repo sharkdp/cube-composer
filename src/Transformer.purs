@@ -1,12 +1,4 @@
-module Transformer (
-      Transformer()
-    , tTail
-    , tReplace
-    , tReplaceMultiple
-    , tStackEqual
-    , tFlatten
-    , allSteps
-    ) where
+module Transformer where
 
 import Types
 import Data.Array
@@ -34,7 +26,7 @@ tClearEmpty = reject null
 
 -- | Drop lowest cube
 tTail :: Transformer
-tTail = tClearEmpty <<< map ((fromMaybe []) <<< tail)
+tTail =  map (tail >>> fromMaybe []) >>> tClearEmpty
 
 -- | Replace all occurences of a by b
 tReplace :: Cube -> Cube -> Transformer
@@ -43,13 +35,13 @@ tReplace a b = map2d replace
 
 -- | Replace all occurences of a by bs and flattens
 tReplaceMultiple :: Cube -> [Cube] -> Transformer
-tReplaceMultiple a bs ss = map (concatMap replace) ss
+tReplaceMultiple a bs = map (concatMap replace)
    where replace x = if x == a then bs else [x]
 
 -- | concat adjacent lists if they are equal
 tStackEqual :: Transformer
 tStackEqual [] = []
-tStackEqual (s:ss) = (concat (s:split.init)) : tStackEqual split.rest
+tStackEqual (s:ss) = concat (s:split.init) : tStackEqual split.rest
     where split = span (== s) ss
 
 tFlatten :: Transformer

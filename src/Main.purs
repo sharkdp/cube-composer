@@ -1,4 +1,4 @@
-module Main where
+module Main (main) where
 
 import Control.Monad.Eff
 import Data.Array
@@ -84,32 +84,40 @@ transformers = [
         name: "stackEqual",
         function: tStackEqual
     }, {
+        id: "mapClone",
+        name: "map({X} ↦ {X}{X})",
+        function: map $ concatMap (\x -> [x, x])
+    }, {
         id: "flatten",
         name: "flatten",
         function: tFlatten
     }, {
-        id: "replaceYB",
-        name: "replace {Yellow} ↦ {Brown}",
+        id: "replaceYbyB",
+        name: "map({Yellow} ↦ {Brown})",
         function: tReplace Yellow Brown
     }, {
-        id: "replaceYBB",
-        name: "replace {Yellow} ↦ {Yellow}{Brown}",
-        function: tReplaceMultiple Yellow [Yellow, Brown]
+        id: "replaceYbyBY",
+        name: "map({Yellow} ↦ {Brown}{Yellow})",
+        function: tReplaceMultiple Yellow [Brown, Yellow]
     }, {
-        id: "replaceBBBB",
-        name: "replace {Brown} ↦ {Brown}{Brown}{Brown}",
+        id: "replaceBbyBBB",
+        name: "map({Brown} ↦ {Brown}{Brown}{Brown})",
         function: tReplaceMultiple Brown [Brown, Brown, Brown]
     }, {
-        id: "replaceBOO",
-        name: "replace {Brown} ↦ {Orange}{Orange}",
+        id: "replaceBbyOO",
+        name: "map({Brown} ↦ {Orange}{Orange})",
         function: tReplaceMultiple Brown [Orange, Orange]
     }, {
+        id: "rejectO",
+        name: "reject({Orange})",
+        function: map (reject (== Orange)) >>> tClearEmpty
+    }, {
         id: "pushY",
-        name: "push {Yellow}",
+        name: "map(push({Yellow}))",
         function: map (flip snoc Yellow)
     }, {
         id: "tail",
-        name: "tail",
+        name: "map(tail)",
         function: tTail
     }
 ]
