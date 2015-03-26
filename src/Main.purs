@@ -17,6 +17,7 @@ import Debug.Trace
 
 import Types
 import Transformer
+import Solver
 import Sortable
 import Isomer
 
@@ -24,7 +25,7 @@ initial :: Wall
 initial = [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]]
 
 target :: Wall
-target = [[Yellow], [Yellow, Yellow], [Yellow]]
+target = [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
 
 cubeColor :: Cube -> IsomerColor
 cubeColor Blue = colorFromRGB 0 160 176
@@ -72,60 +73,6 @@ renderAll isomer = do
     renderWalls isomer steps
     renderTarget isomer target
 
-getTransformerById :: String -> Maybe Transformer
-getTransformerById id = (\x -> x.function) <$> (head $ filter (\t -> t.id == id) transformers)
-
-type TransformerRecord = {
-    id :: String,
-    name :: String,
-    function :: Transformer
-}
-
-transformers :: [TransformerRecord]
-transformers = [
-    {
-        id: "stackEqual",
-        name: "stackEqual",
-        function: tStackEqual
-    }, {
-        id: "mapClone",
-        name: "map({X} ↦ {X}{X})",
-        function: map $ concatMap (\x -> [x, x])
-    }, {
-        id: "flatten",
-        name: "flatten",
-        function: tFlatten
-    }, {
-        id: "replaceYbyB",
-        name: "map({Yellow} ↦ {Brown})",
-        function: tReplace Yellow Brown
-    }, {
-        id: "replaceYbyBY",
-        name: "map({Yellow} ↦ {Brown}{Yellow})",
-        function: tReplaceMultiple Yellow [Brown, Yellow]
-    }, {
-        id: "replaceBbyBBB",
-        name: "map({Brown} ↦ {Brown}{Brown}{Brown})",
-        function: tReplaceMultiple Brown [Brown, Brown, Brown]
-    }, {
-        id: "replaceBbyOO",
-        name: "map({Brown} ↦ {Orange}{Orange})",
-        function: tReplaceMultiple Brown [Orange, Orange]
-    }, {
-        id: "rejectO",
-        name: "reject({Orange})",
-        function: map (reject (== Orange)) >>> tClearEmpty
-    }, {
-        id: "pushY",
-        name: "map(push({Yellow}))",
-        function: map (flip snoc Yellow)
-    }, {
-        id: "tail",
-        name: "map(tail)",
-        function: tTail
-    }
-]
-
 replaceColors :: String -> String
 replaceColors s =
     foldl replaceColor s ("X" : map show (Blue `enumFromTo` Yellow))
@@ -167,3 +114,10 @@ main = do
 
     resetUI doc
     renderAll isomer
+
+    -- test
+    let msol = solve initial (tStackEqual initial)
+    case msol of
+         Just sol -> do
+             let ids = map (\x -> x.id) sol
+             print ids
