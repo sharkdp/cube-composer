@@ -21,12 +21,6 @@ import Solver
 import Sortable
 import Isomer
 
-initial :: Wall
-initial = [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]]
-
-target :: Wall
-target = [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
-
 cubeColor :: Cube -> IsomerColor
 cubeColor Blue = colorFromRGB 0 160 176
 cubeColor Brown = colorFromRGB 106 74 60
@@ -34,21 +28,21 @@ cubeColor Red = colorFromRGB 204 51 63
 cubeColor Orange = colorFromRGB 235 104 65
 cubeColor Yellow = colorFromRGB 237 201 81
 
-mapIndexed :: forall a b. (Number -> a -> b) -> [a] -> [b]
-mapIndexed f xs = zipWith f (0 .. (length xs - 1)) xs
+traverseWithIndex_ :: forall a b m. (Applicative m) => (Number -> a -> m b) -> [a] -> m Unit
+traverseWithIndex_ f xs = sequence_ (zipWith f (0 .. (length xs - 1)) xs)
 
 renderStack :: forall eff. IsomerInstance -> Number -> Number -> Stack -> Eff (isomer :: Isomer | eff) Unit
 renderStack isomer y x stack =
-    sequence_ $ mapIndexed (renderCube isomer x (-6 * y)) $ map cubeColor stack
+    traverseWithIndex_ (renderCube isomer x (-6 * y)) $ map cubeColor stack
 
 renderWall :: forall eff. IsomerInstance -> Number -> Wall -> Eff (isomer :: Isomer | eff) Unit
 renderWall isomer y wall =
-    sequence_ $ mapIndexed (\x stack -> renderStack isomer y (length wall - x) stack) (reverse wall)
+    traverseWithIndex_ (\x -> renderStack isomer y (length wall - x)) (reverse wall)
 
 renderWalls :: forall eff. IsomerInstance -> [Wall] -> Eff (isomer :: Isomer | eff) Unit
 renderWalls isomer walls = do
     setIsomerConfig isomer 40 40 400
-    sequence_ $ mapIndexed (renderWall isomer) walls
+    traverseWithIndex_ (renderWall isomer) walls
 
 renderTarget isomer target = do
     setIsomerConfig isomer 22 1200 250
@@ -58,20 +52,24 @@ renderAll isomer = do
     doc <- document globalWindow
     Just ulAvailable <- getElementById "program" doc
     lis <- children ulAvailable
+    -- The following line could be simplified to:
+    --   ids <- traverse (getAttribute "id") lis
+    -- see https://github.com/aktowns/purescript-simple-dom/issues/25
     ids <- sequence $ map (getAttribute "id") lis
-    let fs = catMaybes $ map getTransformerById ids
-
-    trace $ "IDs: " ++ show ids
-    trace $ "Initial: " ++ show initial
-    trace "Steps:"
+    let fs = mapMaybe getTransformerById ids
     let steps = allSteps fs initial
-    traverse_ (show >>> trace) steps
-    trace "---"
-    trace ""
 
     clearCanvas isomer
     renderWalls isomer steps
     renderTarget isomer target
+
+    -- DEBUG:
+    trace $ "IDs: " ++ show ids
+    trace $ "Initial: " ++ show initial
+    trace "Steps:"
+    traverse_ print steps
+    trace "---"
+    trace ""
 
 replaceColors :: String -> String
 replaceColors s =
@@ -100,6 +98,12 @@ resetUI doc = do
     Just ulProgram <- getElementById "program" doc
     setInnerHTML "" ulProgram
 
+initial :: Wall
+initial = [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]]
+
+target :: Wall
+target = [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
+
 main = do
     isomer <- getIsomerInstance "canvas"
 
@@ -115,10 +119,3 @@ main = do
 
     resetUI doc
     renderAll isomer
-
-    {-- -- test --}
-    {-- let msol = solve initial (tStackEqual initial) --}
-    {-- case msol of --}
-    {--      Just sol -> do --}
-    {--          let ids = map (\x -> x.id) sol --}
-    {--          print ids --}
