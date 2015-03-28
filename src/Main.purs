@@ -52,10 +52,7 @@ renderAll isomer = do
     doc <- document globalWindow
     Just ulAvailable <- getElementById "program" doc
     lis <- children ulAvailable
-    -- The following line could be simplified to:
-    --   ids <- traverse (getAttribute "id") lis
-    -- see https://github.com/aktowns/purescript-simple-dom/issues/25
-    ids <- sequence $ map (getAttribute "id") lis
+    ids <- traverse (getAttribute "id") lis
     let fs = mapMaybe getTransformerById ids
     let steps = allSteps fs initial
 
@@ -79,24 +76,53 @@ replaceColors s =
               pattern c = "{" ++ c ++ "}"
               replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
 
-keyPress :: forall eff. HTMLDocument -> DOMEvent -> Eff (dom :: DOM | eff) Unit
-keyPress doc event = do
+keyPress :: forall eff. IsomerInstance -> HTMLDocument -> DOMEvent -> Eff (dom :: DOM | eff) Unit
+keyPress isomer doc event = do
     code <- keyCode event
     case code of
          -- 'g': generate new puzzle
          71 -> return unit
          -- 'r': reset lists
-         82 -> resetUI doc
+         82 -> resetUI isomer doc
          _ -> return unit
     return unit
 
-resetUI :: forall eff. HTMLDocument -> Eff (dom :: DOM | eff) Unit
-resetUI doc = do
+foreign import appendChild """
+    function appendChild(parent) {
+        return function(child) {
+            return function() {
+                parent.appendChild(child);
+            };
+        };
+    } """ :: forall eff. HTMLElement -> HTMLElement -> Eff (dom :: DOM | eff) Unit
+
+foreign import parentElement """
+    function parentElement(child) {
+        return function() {
+            return child.parentElement;
+        };
+    } """ :: forall eff. HTMLElement -> Eff (dom :: DOM | eff) HTMLElement
+
+clickLi :: forall eff. IsomerInstance -> HTMLDocument -> HTMLElement -> DOMEvent -> Eff (dom :: DOM, trace :: Trace, isomer :: Isomer | eff) Unit
+clickLi isomer doc li event = do
+    parent <- parentElement li >>= getAttribute "id"
+    let other = if parent == "available" then "program" else "available"
+    Just ul <- getElementById other doc
+    appendChild ul li
+
+    renderAll isomer
+
+resetUI :: forall eff. IsomerInstance -> HTMLDocument -> Eff (dom :: DOM | eff) Unit
+resetUI isomer doc = do
     Just ulAvailable <- getElementById "available" doc
+    Just ulProgram <-   getElementById "program" doc
     let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ replaceColors t.name ++ "</li>") transformers
     setInnerHTML html ulAvailable
-    Just ulProgram <- getElementById "program" doc
     setInnerHTML "" ulProgram
+
+    -- register mouse events
+    items <- children ulAvailable
+    traverse_ (\li -> addMouseEventListener MouseClickEvent (clickLi isomer doc li) li) items
 
 initial :: Wall
 initial = [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]]
@@ -110,12 +136,13 @@ main = do
     -- install sortable
     doc <- document globalWindow
 
-    let dummyHandler = return unit
-    getElementById "available" doc >>= (\(Just el) -> installSortable el dummyHandler)
-    getElementById "program" doc >>= (\(Just el) -> installSortable el (renderAll isomer))
+    Just ulAvailable <- getElementById "available" doc
+    Just ulProgram   <- getElementById "program" doc
+    installSortable ulAvailable (return unit)
+    installSortable ulProgram (renderAll isomer)
 
     -- keyboard events
-    addKeyboardEventListener KeydownEvent (keyPress doc) globalWindow
+    addKeyboardEventListener KeydownEvent (keyPress isomer doc) globalWindow
 
-    resetUI doc
+    resetUI isomer doc
     renderAll isomer
