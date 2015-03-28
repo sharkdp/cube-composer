@@ -89,6 +89,7 @@ keyPress doc event = do
          71 -> return unit
          -- 'r': reset lists
          82 -> resetUI doc
+         _ -> return unit
     return unit
 
 resetUI :: forall eff. HTMLDocument -> Eff (dom :: DOM | eff) Unit
@@ -115,9 +116,9 @@ main = do
     resetUI doc
     renderAll isomer
 
-    -- test
-    let msol = solve initial (tStackEqual initial)
-    case msol of
-         Just sol -> do
-             let ids = map (\x -> x.id) sol
-             print ids
+    {-- -- test --}
+    {-- let msol = solve initial (tStackEqual initial) --}
+    {-- case msol of --}
+    {--      Just sol -> do --}
+    {--          let ids = map (\x -> x.id) sol --}
+    {--          print ids --}

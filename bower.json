@@ -17,6 +17,12 @@
     "purescript-foldable-traversable": "~0.3.0",
     "purescript-enums": "~0.4.0",
     "purescript-simple-dom": "~0.0.1",
-    "purescript-strings": "~0.4.3"
+    "purescript-strings": "~0.4.3",
+    "Sortable": "RubaXa/Sortable#~1.1.1",
+    "isomer": "jdan/isomer#~0.2.4"
+  },
+  "resolutions": {
+    "purescript-tuples": "~0.3.0",
+    "purescript-monoid": "~0.2.0"
   }
 }

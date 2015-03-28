@@ -4,44 +4,25 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
 
-        src: ["src/**/*.purs", "bower_components/**/src/**/*.purs"],
+        src: [
+            "bower_components/**/src/**/*.purs",
+            "src/*.purs"
+        ],
 
-        // jshint: {
-        //     files: ["js/*.js", "test/*.js"],
-        //     options: {
-        //         jshintrc: ".jshintrc"
-        //     }
-        // },
+        srcPsci: [
+            "bower_components/**/src/**/*.purs",
+            "src/Types.purs",
+            "src/Transformer.purs",
+            "src/Solver.purs"
+        ],
 
-        // browserify: {
-        //     dev: {
-        //         src: ["js/io.js"],
-        //         dest: "dist/cube-composer-bundle.js",
-        //         options: {
-        //             browserifyOptions: {
-        //                 debug: true
-        //             }
-        //         }
-        //     },
-        //     prod: {
-        //         src: ["js/io.js"],
-        //         dest: "dist/cube-composer-bundle.js"
-        //     }
-        // },
-
-        // uglify: {
-        //     dist: {
-        //         files: {
-        //             "dist/cube-composer-bundle.js": "dist/cube-composer-bundle.js"
-        //         }
-        //     }
-        // },
-
-        // mochaTest: {
-        //     test: {
-        //         src: ["test/*.js"]
-        //     }
-        // },
+        uglify: {
+            dist: {
+                files: {
+                    "dist/main.js": "dist/main.js"
+                }
+            }
+        },
 
         psc: {
             options: {
@@ -55,7 +36,7 @@ module.exports = function(grunt) {
             }
         },
 
-        // dotPsci: ["<%=src%>"],
+        dotPsci: ["<%=srcPsci%>"],
 
         watch: {
             files: ["Gruntfile.js", "<%=src%>"],
@@ -63,15 +44,11 @@ module.exports = function(grunt) {
         }
     });
 
-    // grunt.loadNpmTasks("grunt-contrib-jshint");
-    // grunt.loadNpmTasks("grunt-browserify");
-    // grunt.loadNpmTasks("grunt-contrib-uglify");
-    // grunt.loadNpmTasks("grunt-mocha-test");
+    grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-purescript");
     grunt.loadNpmTasks("grunt-contrib-watch");
 
-    // grunt.registerTask("dev", ["jshint", "mochaTest", "browserify:dev"]);
-    grunt.registerTask("dev", ["psc"]);
-    // grunt.registerTask("prod", ["jshint", "mochaTest", "browserify:prod", "uglify"]);
-    // grunt.registerTask("default", "prod");
+    grunt.registerTask("dev", ["psc", "dotPsci"]);
+    grunt.registerTask("prod", ["psc", "uglify"]);
+    grunt.registerTask("default", "dev");
 };
