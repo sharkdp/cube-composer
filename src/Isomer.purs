@@ -55,8 +55,7 @@ foreign import setIsomerConfig """
             isomer.scale = scale;
             isomer.originX = originX;
             isomer.originY = originY;
-            // This will be needed for isomer >= 0.2.4
-            // isomer._calculateTransformation();
+            isomer._calculateTransformation();
             return isomer;
           }
         };
