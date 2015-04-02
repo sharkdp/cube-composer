@@ -16,6 +16,14 @@ module.exports = function(grunt) {
             "src/Solver.purs"
         ],
 
+        srcCli: [
+            "bower_components/**/src/**/*.purs",
+            "src/Types.purs",
+            "src/Transformer.purs",
+            "src/Solver.purs",
+            "leveleditor/cli.purs"
+        ],
+
         uglify: {
             dist: {
                 files: {
@@ -33,6 +41,11 @@ module.exports = function(grunt) {
             all: {
                 src: ["<%=src%>"],
                 dest: "dist/main.js"
+            },
+
+            cli: {
+                src: ["<%=srcCli%>"],
+                dest: "dist/cli.js"
             }
         },
 
