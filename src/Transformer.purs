@@ -54,6 +54,7 @@ type TransformerRecord = {
     function :: Transformer
 }
 
+{--
 transformers :: [TransformerRecord]
 transformers = [
     {
@@ -98,6 +99,47 @@ transformers = [
         function: tTail
     }
 ]
+--}
 
+transformers :: [TransformerRecord]
+transformers = [
+    {
+        id: "rejectSizeGE2",
+        name: "reject(size > 2)",
+        function: reject (\x -> length x > 2)
+    }, {
+        id: "mapYtoYR",
+        name: "map({Yellow} ↦ {Yellow}{Red})",
+        function: tReplaceMultiple Yellow [Yellow, Red]
+    }, {
+        id: "mapBtoRB",
+        name: "map({Blue} ↦ {Red}{Blue})",
+        function: tReplaceMultiple Blue [Red, Blue]
+    }, {
+        id: "rejectY",
+        name: "reject({Yellow})",
+        function: map (reject (== Yellow)) >>> tClearEmpty
+    }, {
+        id: "rejectB",
+        name: "reject({Blue})",
+        function: map (reject (== Blue)) >>> tClearEmpty
+    }, {
+        id: "filterContainsR",
+        name: "filter(contains({Red}))",
+        function: filter (\stack -> Red `elemIndex` stack /= -1) >>> tClearEmpty
+    }, {
+        id: "mapPushR",
+        name: "map(push({Red}))",
+        function: map (flip snoc Red)
+    }, {
+        id: "pushB",
+        name: "push({Blue})",
+        function: flip snoc [Blue]
+    }, {
+        id: "mapReverse",
+        name: "map(reverse)",
+        function: map reverse
+    }
+]
 getTransformerById :: String -> Maybe Transformer
 getTransformerById id = (\x -> x.function) <$> (head $ filter (\t -> t.id == id) transformers)

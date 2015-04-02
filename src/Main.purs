@@ -125,7 +125,8 @@ resetUI isomer doc = do
     traverse_ (\li -> addMouseEventListener MouseClickEvent (clickLi isomer doc li) li) items
 
 initial :: Wall
-initial = [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]]
+{-- initial = [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]] --}
+initial = [[Red, Red], [Red, Yellow], [Blue, Yellow], [Blue, Blue]]
 
 target :: Wall
 target = [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
