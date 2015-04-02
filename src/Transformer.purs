@@ -4,6 +4,7 @@ import Types
 import Data.Array
 import Data.Maybe
 import Data.Traversable
+import Data.Foldable
 
 type Transformer = Wall -> Wall
 
@@ -19,6 +20,10 @@ reject f = filter (f >>> not)
 -- | all (intermediate) transformation steps
 allSteps :: [Transformer] -> Wall -> [Wall]
 allSteps ts wi = wi : scanl (flip ($)) wi ts
+
+-- | Return the final step of the transformation chain
+transformed :: [Transformer] -> Wall -> Wall
+transformed ts wi = foldl (flip ($)) wi ts
 
 -- | Remove emtpy stacks
 tClearEmpty :: Transformer

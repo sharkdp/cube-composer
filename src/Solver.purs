@@ -1,8 +1,11 @@
-module Solver where
+module Solver (
+      Solution()
+    , solve
+    ) where
 
 import Data.Array
+import Data.Function
 import Data.Maybe
-import Data.Maybe.Unsafe -- TODO
 
 import Transformer
 import Types
@@ -19,10 +22,9 @@ solve :: Wall -> Wall -> Maybe Solution
 solve initial target = solve' initial target [] transformers
 
 solve' :: Wall -> Wall -> [TransformerRecord] -> [TransformerRecord] -> Maybe Solution
-solve' initial target chain ts = if final == target
-                                 then (Just chain)
-                                 else head $ sortBy (\a b -> length a `compare` length b) $ mapMaybe (\t -> solve' initial target (chain `snoc` t) (remove t ts)) ts
-    where steps = allSteps (functions chain) initial
-          final = fromJust $ last steps
-
--- TODO: try to do this with a lazy list?
+solve' initial target chain ts =
+        if final == target
+        then return chain
+        else head $ sortBy (compare `on` length)
+                  $ mapMaybe (\t -> solve' initial target (chain `snoc` t) (remove t ts)) ts
+    where final = transformed (functions chain) initial
