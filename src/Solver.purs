@@ -2,7 +2,7 @@ module Solver where
 
 import Data.Array
 import Data.Maybe
-import Data.Maybe.Unsafe
+import Data.Maybe.Unsafe -- TODO
 
 import Transformer
 import Types
@@ -21,7 +21,7 @@ solve initial target = solve' initial target [] transformers
 solve' :: Wall -> Wall -> [TransformerRecord] -> [TransformerRecord] -> Maybe Solution
 solve' initial target chain ts = if final == target
                                  then (Just chain)
-                                 else head $ mapMaybe (\t -> solve' initial target (chain `snoc` t) (remove t ts)) ts
+                                 else head $ sortBy (\a b -> length a `compare` length b) $ mapMaybe (\t -> solve' initial target (chain `snoc` t) (remove t ts)) ts
     where steps = allSteps (functions chain) initial
           final = fromJust $ last steps
 
