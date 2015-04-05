@@ -97,7 +97,7 @@ transformers = [
     }, {
         id: "pushY",
         name: "map(push({Yellow}))",
-        function: map (flip snoc Yellow)
+        function: map (`snoc` Yellow)
     }, {
         id: "tail",
         name: "map(tail)",
@@ -135,7 +135,7 @@ transformers = [
     }, {
         id: "mapPushR",
         name: "map(push({Red}))",
-        function: map (flip snoc Red)
+        function: map (`snoc` Red)
     }, {
         id: "pushB",
         name: "push({Blue})",
@@ -147,4 +147,4 @@ transformers = [
     }
 ]
 getTransformerById :: String -> Maybe Transformer
-getTransformerById id = (\x -> x.function) <$> (head $ filter (\t -> t.id == id) transformers)
+getTransformerById id = _.function <$> (head $ filter (\t -> t.id == id) transformers)
