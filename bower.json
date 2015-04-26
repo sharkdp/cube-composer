@@ -13,11 +13,11 @@
     "bower_components"
   ],
   "dependencies": {
-    "purescript-arrays": "~0.3.5",
-    "purescript-foldable-traversable": "~0.3.0",
+    "purescript-arrays": "~0.3.7",
+    "purescript-foldable-traversable": "~0.3.1",
     "purescript-enums": "~0.4.0",
-    "purescript-strings": "~0.4.3",
-    "Sortable": "RubaXa/Sortable#~1.1.1",
+    "purescript-strings": "~0.4.5",
+    "Sortable": "RubaXa/Sortable#~1.2.0",
     "isomer": "https://github.com/jdan/isomer.git#a36706dba1869ff3d53eaa23b958b74fc76ca3cc",
     "purescript-simple-dom": "https://github.com/sharkdp/purescript-simple-dom.git#3dedb490f124c4151dd41673b1ce40f23a58f0f3"
   }
