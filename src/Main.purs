@@ -76,14 +76,15 @@ replaceColors s =
               pattern c = "{" ++ c ++ "}"
               replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
 
-keyPress :: forall eff. IsomerInstance -> HTMLDocument -> DOMEvent -> Eff (dom :: DOM | eff) Unit
+keyPress :: forall eff. IsomerInstance -> HTMLDocument -> DOMEvent -> Eff (dom :: DOM, isomer :: Isomer, trace :: Trace | eff) Unit
 keyPress isomer doc event = do
     code <- keyCode event
     case code of
          -- 'g': generate new puzzle
          71 -> return unit
          -- 'r': reset lists
-         82 -> resetUI isomer doc
+         82 -> do resetUI isomer doc
+                  renderAll isomer
          _ -> return unit
     return unit
 
