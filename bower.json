@@ -19,11 +19,6 @@
     "purescript-strings": "~0.4.3",
     "Sortable": "RubaXa/Sortable#~1.1.1",
     "isomer": "https://github.com/jdan/isomer.git#a36706dba1869ff3d53eaa23b958b74fc76ca3cc",
-    "purescript-simple-dom": "https://github.com/sharkdp/purescript-simple-dom.git#2230657aafd27ca7cebf8288ca714b5a8e9205e2"
-  },
-  "resolutions": {
-    "purescript-tuples": "~0.3.0",
-    "purescript-monoid": "~0.2.0",
-    "isomer": "a36706dba1869ff3d53eaa23b958b74fc76ca3cc"
+    "purescript-simple-dom": "https://github.com/sharkdp/purescript-simple-dom.git#3dedb490f124c4151dd41673b1ce40f23a58f0f3"
   }
 }

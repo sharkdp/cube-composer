@@ -87,15 +87,6 @@ keyPress isomer doc event = do
          _ -> return unit
     return unit
 
-foreign import appendChild """
-    function appendChild(parent) {
-        return function(child) {
-            return function() {
-                parent.appendChild(child);
-            };
-        };
-    } """ :: forall eff. HTMLElement -> HTMLElement -> Eff (dom :: DOM | eff) Unit
-
 foreign import parentElement """
     function parentElement(child) {
         return function() {
