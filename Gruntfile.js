@@ -21,6 +21,8 @@ module.exports = function(grunt) {
             "src/Types.purs",
             "src/Transformer.purs",
             "src/Solver.purs",
+            "src/Level.purs",
+            "src/Levels/*.purs",
             "leveleditor/cli.purs"
         ],
 
