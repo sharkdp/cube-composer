@@ -52,7 +52,7 @@ module.exports = function(grunt) {
         dotPsci: ["<%=srcPsci%>"],
 
         watch: {
-            files: ["Gruntfile.js", "<%=src%>"],
+            files: ["Gruntfile.js", "<%=src%>", "<%=srcCli%>"],
             tasks: ["dev"]
         }
     });
