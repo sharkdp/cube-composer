@@ -18,8 +18,8 @@ remove :: TransformerRecord -> [TransformerRecord] -> [TransformerRecord]
 remove x = filter (\y -> y.id /= x.id)
 
 -- | Brute force solver
-solve :: Wall -> Wall -> Maybe Solution
-solve initial target = solve' initial target [] transformers
+solve :: [TransformerRecord] -> Wall -> Wall -> Maybe Solution
+solve transformers initial target = solve' initial target [] transformers
 
 solve' :: Wall -> Wall -> [TransformerRecord] -> [TransformerRecord] -> Maybe Solution
 solve' initial target chain ts =

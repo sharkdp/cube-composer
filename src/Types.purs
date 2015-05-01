@@ -3,6 +3,8 @@ module Types where
 import Data.Enum
 import Data.Maybe
 
+-- Cube, Stack, Wall
+
 data Cube = Blue | Brown | Red | Orange | Yellow
 
 instance showCube :: Show Cube where
@@ -45,4 +47,36 @@ cubeToEnum 4 = Just Yellow
 cubeToEnum _ = Nothing
 
 type Stack = [Cube]
+
 type Wall = [Stack]
+
+-- Transformer
+type Transformer = Wall -> Wall
+
+type TransformerId = String
+
+type TransformerRecord = {
+    id :: TransformerId,
+    name :: String,
+    function :: Transformer
+}
+
+-- Levels and chapters
+
+type LevelId = String
+
+type ChapterId = String
+
+type Level = {
+    id :: LevelId,
+    name :: String,
+    initial :: Wall,
+    target :: Wall
+}
+
+type Chapter = {
+    id :: ChapterId,
+    name :: String,
+    transformers :: [TransformerRecord],
+    levels :: [Level]
+}

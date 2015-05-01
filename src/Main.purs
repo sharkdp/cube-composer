@@ -19,6 +19,7 @@ import Debug.Trace
 import Types
 import Transformer
 import Solver
+import Level
 import Sortable
 import Isomer
 
@@ -60,25 +61,26 @@ renderAll isomer = do
     Just ulAvailable <- getElementById "program" doc
     lis <- children ulAvailable
     ids <- traverse (getAttribute "id") lis
-    let fs = mapMaybe getTransformerById ids
-    let steps = allSteps fs initial
+    let fs = mapMaybe (getTransformerById chapter) ids
+    let steps = allSteps fs level.initial
 
     clearCanvas isomer
     renderWalls isomer steps
-    renderTarget isomer target
+    renderTarget isomer level.target
 
     -- Level solved?
-    let message = if (maybe false (== target) (last steps))
+    let message = if (maybe false (== (level.target)) (last steps))
                   then "Solved!"
                   else "Target"
     withElementById "message" doc (setInnerHTML message)
 
     -- DEBUG:
     trace $ "IDs: " ++ show ids
-    trace $ "Initial: " ++ show initial
+    trace $ "Initial: " ++ show level.initial
     trace "Steps:"
     traverse_ print steps
     trace "---"
+    trace $ "Target: " ++ show level.target
     trace ""
 
 replaceColors :: String -> String
@@ -118,7 +120,7 @@ clickLi isomer doc li event = do
 
 resetUI :: forall eff. IsomerInstance -> HTMLDocument -> Eff (dom :: DOM | eff) Unit
 resetUI isomer doc = do
-    let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ replaceColors t.name ++ "</li>") transformers
+    let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ replaceColors t.name ++ "</li>") chapter.transformers
     withElementById "available" doc $ \ulAvailable -> do
         setInnerHTML html ulAvailable
 
@@ -128,12 +130,9 @@ resetUI isomer doc = do
 
     withElementById "program" doc (setInnerHTML "")
 
-initial :: Wall
-{-- initial = [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]] --}
-initial = [[Red, Red], [Red, Yellow], [Blue, Yellow], [Blue, Blue]]
-
-target :: Wall
-target = [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
+-- TODO
+chapter = case (head allChapters) of Just c -> c
+level = case (getLevelById "1") of Just level -> level
 
 main = do
     isomer <- getIsomerInstance "canvas"
@@ -146,8 +145,9 @@ main = do
     installSortable ulAvailable (return unit)
     installSortable ulProgram (renderAll isomer)
 
-    -- keyboard events
+    -- set up keyboard event handlers
     addKeyboardEventListener KeydownEvent (keyPress isomer doc) globalWindow
 
+    -- render initial state
     resetUI isomer doc
     renderAll isomer

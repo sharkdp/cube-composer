@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
         src: [
             "bower_components/**/src/**/*.purs",
-            "src/*.purs"
+            "src/**/*.purs"
         ],
 
         srcPsci: [
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
         dotPsci: ["<%=srcPsci%>"],
 
         watch: {
-            files: ["Gruntfile.js", "<%=src%>", "<%=srcCli%>"],
+            files: ["Gruntfile.js", "<%=src%>"],
             tasks: ["dev"]
         }
     });
@@ -61,7 +61,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-purescript");
     grunt.loadNpmTasks("grunt-contrib-watch");
 
-    grunt.registerTask("dev", ["psc", "dotPsci"]);
+    grunt.registerTask("dev", ["psc:all", "dotPsci"]);
     grunt.registerTask("prod", ["psc", "uglify"]);
     grunt.registerTask("default", "dev");
 };

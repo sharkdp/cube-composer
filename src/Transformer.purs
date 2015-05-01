@@ -6,8 +6,6 @@ import Data.Maybe
 import Data.Traversable
 import Data.Foldable
 
-type Transformer = Wall -> Wall
-
 -- | Map a function over the two dimensional array
 map2d :: (Cube -> Cube) -> Wall -> Wall
 map2d = map <<< map
@@ -52,99 +50,5 @@ tStackEqual (s:ss) = concat (s:split.init) : tStackEqual split.rest
 tFlatten :: Transformer
 tFlatten = concat >>> map singleton
 
-
-type TransformerRecord = {
-    id :: String,
-    name :: String,
-    function :: Transformer
-}
-
-{--
-transformers :: [TransformerRecord]
-transformers = [
-    {
-        id: "stackEqual",
-        name: "stackEqual",
-        function: tStackEqual
-    }, {
-        id: "mapClone",
-        name: "map({X} ↦ {X}{X})",
-        function: map $ concatMap (\x -> [x, x])
-    }, {
-        id: "flatten",
-        name: "flatten",
-        function: tFlatten
-    }, {
-        id: "replaceYbyB",
-        name: "map({Yellow} ↦ {Brown})",
-        function: tReplace Yellow Brown
-    }, {
-        id: "replaceYbyBY",
-        name: "map({Yellow} ↦ {Brown}{Yellow})",
-        function: tReplaceMultiple Yellow [Brown, Yellow]
-    }, {
-        id: "replaceBbyBBB",
-        name: "map({Brown} ↦ {Brown}{Brown}{Brown})",
-        function: tReplaceMultiple Brown [Brown, Brown, Brown]
-    }, {
-        id: "replaceBbyOO",
-        name: "map({Brown} ↦ {Orange}{Orange})",
-        function: tReplaceMultiple Brown [Orange, Orange]
-    }, {
-        id: "rejectO",
-        name: "reject({Orange})",
-        function: map (reject (== Orange)) >>> tClearEmpty
-    }, {
-        id: "pushY",
-        name: "map(push({Yellow}))",
-        function: map (`snoc` Yellow)
-    }, {
-        id: "tail",
-        name: "map(tail)",
-        function: tTail
-    }
-]
---}
-
-transformers :: [TransformerRecord]
-transformers = [
-    {
-        id: "rejectSizeGE2",
-        name: "reject(size > 2)",
-        function: reject (\x -> length x > 2)
-    }, {
-        id: "mapYtoYR",
-        name: "map({Yellow} ↦ {Yellow}{Red})",
-        function: tReplaceMultiple Yellow [Yellow, Red]
-    }, {
-        id: "mapBtoRB",
-        name: "map({Blue} ↦ {Red}{Blue})",
-        function: tReplaceMultiple Blue [Red, Blue]
-    }, {
-        id: "rejectY",
-        name: "reject({Yellow})",
-        function: map (reject (== Yellow)) >>> tClearEmpty
-    }, {
-        id: "rejectB",
-        name: "reject({Blue})",
-        function: map (reject (== Blue)) >>> tClearEmpty
-    }, {
-        id: "filterContainsR",
-        name: "filter(contains({Red}))",
-        function: filter (\stack -> Red `elemIndex` stack /= -1) >>> tClearEmpty
-    }, {
-        id: "mapPushR",
-        name: "map(push({Red}))",
-        function: map (`snoc` Red)
-    }, {
-        id: "pushB",
-        name: "push({Blue})",
-        function: flip snoc [Blue]
-    }, {
-        id: "mapReverse",
-        name: "map(reverse)",
-        function: map reverse
-    }
-]
-getTransformerById :: String -> Maybe Transformer
-getTransformerById id = _.function <$> (head $ filter (\t -> t.id == id) transformers)
+getTransformerById :: Chapter -> TransformerId -> Maybe Transformer
+getTransformerById chapter id = _.function <$> (head $ filter (\t -> t.id == id) chapter.transformers)
