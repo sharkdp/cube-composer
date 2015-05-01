@@ -1,5 +1,6 @@
 module Main (main) where
 
+import Control.Monad
 import Control.Monad.Eff
 import Data.Array
 import Data.DOM.Simple.Element
@@ -48,6 +49,12 @@ renderTarget isomer target = do
     setIsomerConfig isomer 22 1200 250
     renderWall isomer 0 target
 
+withElementById :: forall eff. String
+                            -> HTMLDocument
+                            -> (HTMLElement -> Eff (dom :: DOM | eff) Unit)
+                            -> Eff (dom :: DOM | eff) Unit
+withElementById id doc f = getElementById id doc >>= maybe (return unit) f
+
 renderAll isomer = do
     doc <- document globalWindow
     Just ulAvailable <- getElementById "program" doc
@@ -59,6 +66,12 @@ renderAll isomer = do
     clearCanvas isomer
     renderWalls isomer steps
     renderTarget isomer target
+
+    -- Level solved?
+    let message = if (maybe false (== target) (last steps))
+                  then "Solved!"
+                  else "Target"
+    withElementById "message" doc (setInnerHTML message)
 
     -- DEBUG:
     trace $ "IDs: " ++ show ids
@@ -99,22 +112,21 @@ clickLi :: forall eff. IsomerInstance -> HTMLDocument -> HTMLElement -> DOMEvent
 clickLi isomer doc li event = do
     parent <- parentElement li >>= getAttribute "id"
     let other = if parent == "available" then "program" else "available"
-    Just ul <- getElementById other doc
-    appendChild ul li
+    withElementById other doc (flip appendChild li)
 
     renderAll isomer
 
 resetUI :: forall eff. IsomerInstance -> HTMLDocument -> Eff (dom :: DOM | eff) Unit
 resetUI isomer doc = do
-    Just ulAvailable <- getElementById "available" doc
-    Just ulProgram <-   getElementById "program" doc
     let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ replaceColors t.name ++ "</li>") transformers
-    setInnerHTML html ulAvailable
-    setInnerHTML "" ulProgram
+    withElementById "available" doc $ \ulAvailable -> do
+        setInnerHTML html ulAvailable
 
-    -- register mouse events
-    items <- children ulAvailable
-    traverse_ (\li -> addMouseEventListener MouseClickEvent (clickLi isomer doc li) li) items
+        -- set up mouse event handlers
+        items <- children ulAvailable
+        traverse_ (\li -> addMouseEventListener MouseClickEvent (clickLi isomer doc li) li) items
+
+    withElementById "program" doc (setInnerHTML "")
 
 initial :: Wall
 {-- initial = [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]] --}
