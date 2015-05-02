@@ -2,6 +2,7 @@ module Types where
 
 import Data.Enum
 import Data.Maybe
+import Data.Map
 
 -- Cube, Stack, Wall
 
@@ -79,4 +80,11 @@ type Chapter = {
     name :: String,
     transformers :: [TransformerRecord],
     levels :: [Level]
+}
+
+-- Game state
+
+type GameState = {
+    currentLevel :: LevelId,
+    levelState :: Map LevelId [TransformerId]
 }
