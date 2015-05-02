@@ -137,6 +137,7 @@ resetUI = do
     doc <- document globalWindow
     withElementById "available" doc $ \ulAvailable -> do
         -- create li elements for transformers
+        setInnerHTML "" ulAvailable
         _ <- SM.foldM (\z -> appendLiElement ulAvailable) unit chapter.transformers
 
         -- set up mouse event handlers
