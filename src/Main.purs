@@ -2,27 +2,29 @@ module Main (main) where
 
 import Control.Monad
 import Control.Monad.Eff
+import DOM
 import Data.Array
+import Data.DOM.Simple.Document
 import Data.DOM.Simple.Element
 import Data.DOM.Simple.Events
-import Data.DOM.Simple.Document
-import Data.DOM.Simple.Window
 import Data.DOM.Simple.Types
-import DOM
+import Data.DOM.Simple.Window
 import Data.Enum
 import Data.Foldable
 import Data.Maybe
-import Data.Traversable
 import Data.String.Regex (regex, parseFlags, replace)
+import Data.Traversable
 import Debug.Trace
+import qualified Data.Map as Map
 
-import Types
-import Transformer
-import Solver
-import Level
-import Sortable
-import Isomer
 import DOMHelper
+import Isomer
+import Level
+import Solver
+import Sortable
+import Storage
+import Transformer
+import Types
 
 cubeColor :: Cube -> IsomerColor
 cubeColor Blue = colorFromRGB 0 160 176
@@ -57,8 +59,10 @@ withElementById :: forall eff. String
                             -> Eff (dom :: DOM | eff) Unit
 withElementById id doc f = getElementById id doc >>= maybe (return unit) f
 
-renderAll isomer = do
+render = do
     doc <- document globalWindow
+    isomer <- getIsomerInstance "canvas"
+
     Just ulAvailable <- getElementById "program" doc
     lis <- children ulAvailable
     ids <- traverse (getAttribute "id") lis
@@ -92,35 +96,38 @@ replaceColors s =
               pattern c = "{" ++ c ++ "}"
               replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
 
-keyPress :: forall eff. IsomerInstance -> HTMLDocument -> DOMEvent -> Eff (dom :: DOM, isomer :: Isomer, trace :: Trace | eff) Unit
-keyPress isomer doc event = do
+keyPress :: forall eff. DOMEvent -> Eff (dom :: DOM, isomer :: Isomer, trace :: Trace | eff) Unit
+keyPress event = do
+    doc <- document globalWindow
     code <- keyCode event
     case code of
          -- 'g': generate new puzzle
          71 -> return unit
          -- 'r': reset lists
-         82 -> do resetUI isomer doc
-                  renderAll isomer
+         82 -> do resetUI
+                  render
          _ -> return unit
     return unit
 
-clickLi :: forall eff. IsomerInstance -> HTMLDocument -> HTMLElement -> DOMEvent -> Eff (dom :: DOM, trace :: Trace, isomer :: Isomer | eff) Unit
-clickLi isomer doc li event = do
+clickLi :: forall eff. HTMLElement -> DOMEvent -> Eff (dom :: DOM, trace :: Trace, isomer :: Isomer | eff) Unit
+clickLi li event = do
+    doc <- document globalWindow
     parent <- parentElement li >>= getAttribute "id"
     let other = if parent == "available" then "program" else "available"
     withElementById other doc (flip appendChild li)
 
-    renderAll isomer
+    render
 
-resetUI :: forall eff. IsomerInstance -> HTMLDocument -> Eff (dom :: DOM | eff) Unit
-resetUI isomer doc = do
+resetUI :: forall eff. Eff (dom :: DOM | eff) Unit
+resetUI = do
+    doc <- document globalWindow
     let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ replaceColors t.name ++ "</li>") chapter.transformers
     withElementById "available" doc $ \ulAvailable -> do
         setInnerHTML html ulAvailable
 
         -- set up mouse event handlers
         items <- children ulAvailable
-        traverse_ (\li -> addMouseEventListener MouseClickEvent (clickLi isomer doc li) li) items
+        traverse_ (\li -> addMouseEventListener MouseClickEvent (clickLi li) li) items
 
     withElementById "program" doc (setInnerHTML "")
 
@@ -128,20 +135,21 @@ resetUI isomer doc = do
 chapter = case (head allChapters) of Just c -> c
 level = case (getLevelById "1") of Just level -> level
 
-main = do
-    isomer <- getIsomerInstance "canvas"
+initialGS :: GameState
+initialGS = { currentLevel: "1", levelState: Map.empty }
 
-    -- install sortable
+main = do
     doc <- document globalWindow
 
+    -- install sortable
     Just ulAvailable <- getElementById "available" doc
     Just ulProgram   <- getElementById "program" doc
     installSortable ulAvailable (return unit)
-    installSortable ulProgram (renderAll isomer)
+    installSortable ulProgram render
 
     -- set up keyboard event handlers
-    addKeyboardEventListener KeydownEvent (keyPress isomer doc) globalWindow
+    addKeyboardEventListener KeydownEvent keyPress globalWindow
 
     -- render initial state
-    resetUI isomer doc
-    renderAll isomer
+    resetUI
+    render

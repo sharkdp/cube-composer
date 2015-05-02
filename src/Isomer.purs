@@ -9,12 +9,19 @@ foreign import data IsomerInstance :: *
 foreign import data IsomerColor :: *
 
 foreign import getIsomerInstance """
-  function getIsomerInstance(canvasId) {
-    return function() {
-      var canvas = document.getElementById(canvasId);
-      return new Isomer(canvas);
+  var getIsomerInstance = (function() {
+    var instances = {};
+
+    return function(canvasId) {
+      return function() {
+        if (!instances.hasOwnProperty(canvasId)) {
+          var canvas = document.getElementById(canvasId);
+          instances[canvasId] = new Isomer(canvas);
+        }
+        return instances[canvasId];
+      };
     };
-  }""" :: forall eff. String -> Eff (isomer :: Isomer | eff) IsomerInstance
+  })();""" :: forall eff. String -> Eff (isomer :: Isomer | eff) IsomerInstance
 
 foreign import renderCube """
   function renderCube(isomer) {
