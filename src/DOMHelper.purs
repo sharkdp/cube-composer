@@ -2,9 +2,10 @@ module DOMHelper where
 
 import Control.Monad.Eff
 import DOM
+import Data.DOM.Simple.Document
+import Data.DOM.Simple.Element
 import Data.DOM.Simple.Types
-
-{-- import Types --}
+import Data.Maybe
 
 -- | Get the parent element in the DOM tree, this should be in purescript-simple-dom
 foreign import parentElement """
@@ -25,3 +26,10 @@ foreign import getLocationHash """
             }
         };
     } """ :: forall eff. DOMLocation -> Eff (dom :: DOM | eff) String
+
+-- | Perform a DOM action with a single element which can be accessed by ID
+withElementById :: forall eff. String
+                            -> HTMLDocument
+                            -> (HTMLElement -> Eff (dom :: DOM | eff) Unit)
+                            -> Eff (dom :: DOM | eff) Unit
+withElementById id doc f = getElementById id doc >>= maybe (return unit) f

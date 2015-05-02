@@ -20,12 +20,12 @@ import qualified Data.Map as Map
 import DOMHelper
 import Isomer
 import Level
-import Solver
 import Sortable
 import Storage
 import Transformer
 import Types
 
+-- | RGB codes for the abstract colors
 cubeColor :: Cube -> IsomerColor
 cubeColor Blue = colorFromRGB 0 160 176
 cubeColor Brown = colorFromRGB 106 74 60
@@ -33,47 +33,49 @@ cubeColor Red = colorFromRGB 204 51 63
 cubeColor Orange = colorFromRGB 235 104 65
 cubeColor Yellow = colorFromRGB 237 201 81
 
+-- | Like traverse_, but specialized for arrays with an additional parameter (index of element)
 traverseWithIndex_ :: forall a b m. (Applicative m) => (Number -> a -> m b) -> [a] -> m Unit
 traverseWithIndex_ f xs = sequence_ (zipWith f (0 .. (length xs - 1)) xs)
 
+-- | Render a single stack of cubes
 renderStack :: forall eff. IsomerInstance -> Number -> Number -> Stack -> Eff (isomer :: Isomer | eff) Unit
 renderStack isomer y x stack =
     traverseWithIndex_ (renderCube isomer x (-6 * y)) $ map cubeColor stack
 
+-- | Render a wall (multiple stacks)
 renderWall :: forall eff. IsomerInstance -> Number -> Wall -> Eff (isomer :: Isomer | eff) Unit
 renderWall isomer y wall =
     traverseWithIndex_ (\x -> renderStack isomer y (length wall - x)) (reverse wall)
 
+-- | Render a series of walls
 renderWalls :: forall eff. IsomerInstance -> [Wall] -> Eff (isomer :: Isomer | eff) Unit
 renderWalls isomer walls = do
     setIsomerConfig isomer 40 40 400
     traverseWithIndex_ (renderWall isomer) walls
 
+-- | Render the target shape
 renderTarget isomer target = do
     setIsomerConfig isomer 22 1200 250
     renderWall isomer 0 target
 
-withElementById :: forall eff. String
-                            -> HTMLDocument
-                            -> (HTMLElement -> Eff (dom :: DOM | eff) Unit)
-                            -> Eff (dom :: DOM | eff) Unit
-withElementById id doc f = getElementById id doc >>= maybe (return unit) f
-
+-- | Render all UI components, DOM and canvas
 render = do
     doc <- document globalWindow
     isomer <- getIsomerInstance "canvas"
 
+    -- Retrieve current 'program'
     Just ulAvailable <- getElementById "program" doc
     lis <- children ulAvailable
     ids <- traverse (getAttribute "id") lis
     let fs = mapMaybe (getTransformerById chapter) ids
     let steps = allSteps fs level.initial
 
+    -- On-canvas rendering
     clearCanvas isomer
     renderWalls isomer steps
     renderTarget isomer level.target
 
-    -- Level solved?
+    -- DOM 'rendering'
     let message = if (maybe false (== (level.target)) (last steps))
                   then "Solved!"
                   else "Target"
@@ -88,6 +90,7 @@ render = do
     trace $ "Target: " ++ show level.target
     trace ""
 
+-- | Replace color placeholders in the transformer description by colored rectangular divs
 replaceColors :: String -> String
 replaceColors s =
     foldl replaceColor s ("X" : map show (Blue `enumFromTo` Yellow))
@@ -96,6 +99,7 @@ replaceColors s =
               pattern c = "{" ++ c ++ "}"
               replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
 
+-- | General key press handler
 keyPress :: forall eff. DOMEvent -> Eff (dom :: DOM, isomer :: Isomer, trace :: Trace | eff) Unit
 keyPress event = do
     doc <- document globalWindow
@@ -109,6 +113,7 @@ keyPress event = do
          _ -> return unit
     return unit
 
+-- | Click handler for the <li> elements (transformers)
 clickLi :: forall eff. HTMLElement -> DOMEvent -> Eff (dom :: DOM, trace :: Trace, isomer :: Isomer | eff) Unit
 clickLi li event = do
     doc <- document globalWindow
@@ -118,6 +123,7 @@ clickLi li event = do
 
     render
 
+-- | Set up or reset the whole UI
 resetUI :: forall eff. Eff (dom :: DOM | eff) Unit
 resetUI = do
     doc <- document globalWindow
@@ -135,6 +141,7 @@ resetUI = do
 chapter = case (head allChapters) of Just c -> c
 level = case (getLevelById "1") of Just level -> level
 
+-- | Initial game state for first-time visitors
 initialGS :: GameState
 initialGS = { currentLevel: "1", levelState: Map.empty }
 

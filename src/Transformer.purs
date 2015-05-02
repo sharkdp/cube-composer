@@ -47,8 +47,10 @@ tStackEqual [] = []
 tStackEqual (s:ss) = concat (s:split.init) : tStackEqual split.rest
     where split = span (== s) ss
 
+-- | Flatten the whole wall to single cubes
 tFlatten :: Transformer
 tFlatten = concat >>> map singleton
 
+-- | Find a specific transformer by its id
 getTransformerById :: Chapter -> TransformerId -> Maybe Transformer
 getTransformerById chapter id = _.function <$> (head $ filter (\t -> t.id == id) chapter.transformers)
