@@ -11,3 +11,8 @@ npm install
 bower install
 grunt
 ```
+
+
+Status:
+
+[![Build Status](https://img.shields.io/travis/sharkdp/cube-composer.svg?style=flat)](https://travis-ci.org/sharkdp/cube-composer)
