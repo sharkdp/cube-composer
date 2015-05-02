@@ -22,6 +22,7 @@ import Solver
 import Level
 import Sortable
 import Isomer
+import DOMHelper
 
 cubeColor :: Cube -> IsomerColor
 cubeColor Blue = colorFromRGB 0 160 176
@@ -102,13 +103,6 @@ keyPress isomer doc event = do
                   renderAll isomer
          _ -> return unit
     return unit
-
-foreign import parentElement """
-    function parentElement(child) {
-        return function() {
-            return child.parentElement;
-        };
-    } """ :: forall eff. HTMLElement -> Eff (dom :: DOM | eff) HTMLElement
 
 clickLi :: forall eff. IsomerInstance -> HTMLDocument -> HTMLElement -> DOMEvent -> Eff (dom :: DOM, trace :: Trace, isomer :: Isomer | eff) Unit
 clickLi isomer doc li event = do
