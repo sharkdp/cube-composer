@@ -3,6 +3,7 @@ module Level where
 import Data.Array
 import Data.Foldable
 import Data.Maybe
+import qualified Data.StrMap as SM
 
 import Levels.Chapter1
 import Types
@@ -11,10 +12,10 @@ import Types
 allChapters :: [Chapter]
 allChapters = [chapter1]
 
--- | A simple list of all available levels across the chapters
-allLevels :: [Level]
-allLevels = concatMap _.levels allChapters
+-- | A dictionary of all available levels across the chapters
+allLevels :: SM.StrMap Level
+allLevels = SM.unions (map _.levels allChapters)
 
 -- | Find a given level by its id
 getLevelById :: String -> Maybe Level
-getLevelById lid = find (\l -> l.id == lid) allLevels
+getLevelById = flip SM.lookup allLevels

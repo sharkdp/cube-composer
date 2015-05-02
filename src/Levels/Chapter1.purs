@@ -54,9 +54,8 @@ chapter1 = {
         }
     ],
 
-    levels: [
-        {
-            id: "1",
+    levels: SM.fromList [
+        "1" :> {
             name: "1",
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]

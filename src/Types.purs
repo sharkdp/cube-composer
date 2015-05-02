@@ -66,7 +66,6 @@ type TransformerRecord = {
 type LevelId = String
 
 type Level = {
-    id :: LevelId,
     name :: String,
     initial :: Wall,
     target :: Wall
@@ -75,7 +74,7 @@ type Level = {
 type Chapter = {
     name :: String,
     transformers :: SM.StrMap TransformerRecord,
-    levels :: [Level]
+    levels :: SM.StrMap Level
 }
 
 -- Game state
