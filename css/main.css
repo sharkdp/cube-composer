@@ -6,8 +6,10 @@ html, body {
 }
 
 #logo {
+    position: absolute;
+    left: 292px;
+    top: 5px;
     width: 216px;
-    margin: 5px auto 0 auto;
 }
 
 #container {
@@ -23,7 +25,7 @@ html, body {
 #canvas {
     margin: 0 auto;
     width: 800px;
-    height: 600px;
+    height: 500px;
 }
 
 #targetshape {
