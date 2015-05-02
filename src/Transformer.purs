@@ -1,10 +1,11 @@
 module Transformer where
 
-import Types
 import Data.Array
+import Data.Foldable
 import Data.Maybe
 import Data.Traversable
-import Data.Foldable
+import Types
+import qualified Data.StrMap as SM
 
 -- | Map a function over the two dimensional array
 map2d :: (Cube -> Cube) -> Wall -> Wall
@@ -52,5 +53,5 @@ tFlatten :: Transformer
 tFlatten = concat >>> map singleton
 
 -- | Find a specific transformer by its id
-getTransformerById :: Chapter -> TransformerId -> Maybe Transformer
-getTransformerById chapter id = _.function <$> (head $ filter (\t -> t.id == id) chapter.transformers)
+getTransformerById :: Chapter -> String -> Maybe Transformer
+getTransformerById chapter id = _.function <$> SM.lookup id chapter.transformers

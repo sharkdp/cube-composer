@@ -15,6 +15,16 @@ foreign import parentElement """
         };
     } """ :: forall eff. HTMLElement -> Eff (dom :: DOM | eff) HTMLElement
 
+-- | Create a new DOM element, this should be in purescript-simple-dom
+foreign import createElement """
+    function createElement(doc) {
+        return function(tag) {
+            return function() {
+                return doc.createElement(tag);
+            };
+        };
+    } """ :: forall eff. HTMLDocument -> String -> Eff (dom :: DOM | eff) HTMLElement
+
 -- | Read the URL hash from a given DOM location
 foreign import getLocationHash """
     function getLocationHash(loc) {

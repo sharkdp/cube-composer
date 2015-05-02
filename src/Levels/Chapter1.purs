@@ -1,57 +1,59 @@
 module Levels.Chapter1 where
 
 import Data.Array
+import qualified Data.StrMap as SM
 
-import Types
+import Helper
 import Transformer
+import Types
 
 chapter1 :: Chapter
 chapter1 = {
-    id:   "chapter1",
     name: "Chapter 1",
-    transformers: [
-        {
-            id: "stackEqual",
+
+    transformers: SM.fromList [
+        "stackEqual" :> {
             name: "stackEqual",
             function: tStackEqual
-        }, {
-            id: "mapClone",
+        },
+        "mapClone" :> {
             name: "map({X} ↦ {X}{X})",
             function: map $ concatMap (\x -> [x, x])
-        }, {
-            id: "flatten",
+        },
+        "flatten" :> {
             name: "flatten",
             function: tFlatten
-        }, {
-            id: "replaceYbyB",
+        },
+        "replaceYbyB" :> {
             name: "map({Yellow} ↦ {Brown})",
             function: tReplace Yellow Brown
-        }, {
-            id: "replaceYbyBY",
+        },
+        "replaceYbyBY" :> {
             name: "map({Yellow} ↦ {Brown}{Yellow})",
             function: tReplaceMultiple Yellow [Brown, Yellow]
-        }, {
-            id: "replaceBbyBBB",
+        },
+        "replaceBbyBBB" :> {
             name: "map({Brown} ↦ {Brown}{Brown}{Brown})",
             function: tReplaceMultiple Brown [Brown, Brown, Brown]
-        }, {
-            id: "replaceBbyOO",
+        },
+        "replaceBbyOO" :> {
             name: "map({Brown} ↦ {Orange}{Orange})",
             function: tReplaceMultiple Brown [Orange, Orange]
-        }, {
-            id: "rejectO",
+        },
+        "rejectO" :> {
             name: "reject({Orange})",
             function: map (reject (== Orange)) >>> tClearEmpty
-        }, {
-            id: "pushY",
+        },
+        "pushY" :> {
             name: "map(push({Yellow}))",
             function: map (`snoc` Yellow)
-        }, {
-            id: "tail",
+        },
+        "tail" :> {
             name: "map(tail)",
             function: tTail
         }
     ],
+
     levels: [
         {
             id: "1",

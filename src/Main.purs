@@ -15,7 +15,7 @@ import Data.Maybe
 import Data.String.Regex (regex, parseFlags, replace)
 import Data.Traversable
 import Debug.Trace
-import qualified Data.Map as Map
+import qualified Data.StrMap as SM
 
 import DOMHelper
 import Isomer
@@ -123,13 +123,21 @@ clickLi li event = do
 
     render
 
+appendLiElement :: forall eff. HTMLElement -> String -> TransformerRecord -> Eff (dom :: DOM | eff) Unit
+appendLiElement ul id t = do
+    doc <- document globalWindow
+    li <- createElement doc "li"
+    setAttribute "id" id li
+    setInnerHTML (replaceColors t.name) li
+    appendChild ul li
+
 -- | Set up or reset the whole UI
 resetUI :: forall eff. Eff (dom :: DOM | eff) Unit
 resetUI = do
     doc <- document globalWindow
-    let html = mconcat $ map (\t -> "<li id=\"" ++ t.id ++ "\">" ++ replaceColors t.name ++ "</li>") chapter.transformers
     withElementById "available" doc $ \ulAvailable -> do
-        setInnerHTML html ulAvailable
+        -- create li elements for transformers
+        _ <- SM.foldM (\z -> appendLiElement ulAvailable) unit chapter.transformers
 
         -- set up mouse event handlers
         items <- children ulAvailable
@@ -143,7 +151,7 @@ level = case (getLevelById "1") of Just level -> level
 
 -- | Initial game state for first-time visitors
 initialGS :: GameState
-initialGS = { currentLevel: "1", levelState: Map.empty }
+initialGS = { currentLevel: "1", levelState: SM.empty }
 
 main = do
     doc <- document globalWindow

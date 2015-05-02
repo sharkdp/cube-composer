@@ -2,7 +2,7 @@ module Types where
 
 import Data.Enum
 import Data.Maybe
-import Data.Map
+import qualified Data.StrMap as SM
 
 -- Cube, Stack, Wall
 
@@ -57,7 +57,6 @@ type Transformer = Wall -> Wall
 type TransformerId = String
 
 type TransformerRecord = {
-    id :: TransformerId,
     name :: String,
     function :: Transformer
 }
@@ -65,8 +64,6 @@ type TransformerRecord = {
 -- Levels and chapters
 
 type LevelId = String
-
-type ChapterId = String
 
 type Level = {
     id :: LevelId,
@@ -76,9 +73,8 @@ type Level = {
 }
 
 type Chapter = {
-    id :: ChapterId,
     name :: String,
-    transformers :: [TransformerRecord],
+    transformers :: SM.StrMap TransformerRecord,
     levels :: [Level]
 }
 
@@ -86,5 +82,5 @@ type Chapter = {
 
 type GameState = {
     currentLevel :: LevelId,
-    levelState :: Map LevelId [TransformerId]
+    levelState :: SM.StrMap [TransformerId]
 }

@@ -16,5 +16,5 @@ allLevels :: [Level]
 allLevels = concatMap _.levels allChapters
 
 -- | Find a given level by its id
-getLevelById :: LevelId -> Maybe Level
+getLevelById :: String -> Maybe Level
 getLevelById lid = find (\l -> l.id == lid) allLevels
