@@ -48,7 +48,7 @@ foreign import renderCube
         }
       };
     };
-  }i
+  }
   """ :: forall eff. IsomerInstance
       -> Number
       -> Number
