@@ -14,22 +14,25 @@
     <body>
         <div id="container">
             <div id="logo"><img src="img/cube-composer.svg" width="200" height="35" alt="cube composer"></div>
-            <div id="targetshape">
-                <h2 id="message"></h2>
-                <p>press <em>g</em> to generate<br>a new puzzle</p>
+            <div id="panel">
+                <b id="message"></b>
+                <div id="settings">
+                    Select level:<br>
+                    <select id="levels"></select>
+                </div>
             </div>
             <canvas id="canvas" resize width="1600" height="1000"></canvas>
             <div id="controls">
                 <div class="controlBox">
-                    <h2>Available functions</h2>
+                    <b>Available functions</b>
                     <ul id="available" class="sortable"></ul>
                 </div>
                 <div class="controlBox">
-                    <h2>The program</h2>
+                    <b>The program</b>
                     <ul id="program" class="sortable"></ul>
                 </div>
             </div>
-            <p>a game by <a href="http://david-peter.de/">david peter</a>. source on <a href="https://github.com/sharkdp/cube-composer">github</a>.</p>
+            <p class="footer">a game by <a href="http://david-peter.de/">david peter</a>. source on <a href="https://github.com/sharkdp/cube-composer">github</a>.</p>
         </div>
         <script type="text/javascript" src="bower_components/Sortable/Sortable.min.js"></script>
         <script type="text/javascript" src="bower_components/isomer/dist/isomer.min.js"></script>

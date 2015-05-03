@@ -5,6 +5,15 @@ html, body {
     padding: 0;
 }
 
+body, select {
+    font-family: 'Roboto Condensed', sans;
+    font-weight: 400;
+}
+
+b {
+    font-weight: 700;
+}
+
 #logo {
     position: absolute;
     left: 292px;
@@ -17,9 +26,7 @@ html, body {
     margin: 0 auto;
     width: 800px;
 
-    font-family: 'Roboto Condensed', sans;
-    font-weight: 400;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 #canvas {
@@ -28,26 +35,14 @@ html, body {
     height: 500px;
 }
 
-#targetshape {
+#panel {
     position: absolute;
     top: 160px;
     right: 40px;
 }
 
-#targetshape p {
-    font-size: 13px;
-    margin: 0;
-}
-
 #controls {
     overflow: hidden;
-}
-
-h2 {
-    font-weight: 700;
-    font-size: 1.1em;
-    padding: 0;
-    margin: 0;
 }
 
 .controlBox {
@@ -65,10 +60,8 @@ h2 {
     width: 280px;
     min-height: 100px;
 
-    /* background-color: #fafafa; */
     border-radius: 5px;
     border: 1px solid #ccc;
-    /* border-bottom: 2px solid #aaa; */
 }
 
 .sortable li {
@@ -87,8 +80,9 @@ li.sortable-ghost {
     opacity: 0.4;
 }
 
-#container p {
-    font-size: 15px;
+p.footer {
+    margin-top: 30px;
+    font-size: 14px;
     text-align: center;
     color: #444;
 }
@@ -97,10 +91,27 @@ a {
     color: #CC333F;
 }
 
+#settings {
+    margin-top: 30px;
+}
+
+select {
+    margin-top: 4px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 16px;
+    background-color: #fff;
+
+    border: 1px solid #ccc;
+    border-bottom: 1px solid #aaa;
+    border-radius: 3px;
+    outline: none;
+}
+
 .rect {
     display: inline-block;
-    width: 11px;
-    height: 11px;
+    width: 10px;
+    height: 10px;
     margin: 0 2px 0 2px;
     border: 1px solid #444;
     border-radius: 3px;
