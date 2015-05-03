@@ -58,17 +58,52 @@ renderTarget isomer target = do
     setIsomerConfig isomer 22 1200 250
     renderWall isomer 0 target
 
+-- | Get program (list of transformer ids) of the active level
+getCurrentIds :: GameState -> [TransformerId]
+getCurrentIds gs = case (SM.lookup gs.currentLevel gs.levelState) of
+                       Just ids -> ids
+                       Nothing -> []
+
+-- | Traverse a StrMap while performing monadic side effects
+traverseWithKey_ :: forall a m. (Monad m) => (String -> a -> m Unit) -> SM.StrMap a -> m Unit
+traverseWithKey_ f sm = SM.foldM (const f) unit sm
+
 -- | Render all UI components, DOM and canvas
-render = do
+render :: Boolean -> GameState -> _
+render setupUI gs = do
     doc <- document globalWindow
     isomer <- getIsomerInstance "canvas"
 
-    -- Retrieve current 'program'
-    Just ulAvailable <- getElementById "program" doc
-    lis <- children ulAvailable
-    ids <- traverse (getAttribute "id") lis
-    let fs = mapMaybe (getTransformerById chapter) ids
-    let steps = allSteps fs level.initial
+    let level = case (getLevelById gs.currentLevel) of Just l -> l
+
+    let tids = getCurrentIds gs
+
+    -- Set up UI, only if new level is loaded
+    when setupUI $ do
+        Just ulAvailable <- getElementById "available" doc
+        Just ulProgram <- getElementById "program" doc
+
+        setInnerHTML "" ulAvailable
+        setInnerHTML "" ulProgram
+
+        let unused = foldl (flip SM.delete) chapter.transformers tids
+        let active = foldl (\sm id -> SM.insert id (case (SM.lookup id chapter.transformers) of Just t -> t) sm) SM.empty tids
+
+        -- create li elements for transformers
+        traverseWithKey_ (appendTransformerElement ulAvailable) unused
+        traverseWithKey_ (appendTransformerElement ulProgram) active
+
+        -- set up mouse event handlers
+        {-- for (map children [ulAvailable, ulProgram]) $ \items -> --}
+        let installClickHandler li = addMouseEventListener MouseClickEvent (clickLi li) li
+        children ulAvailable >>= traverse_ installClickHandler
+
+        withElementById "levels" doc $ \selectLevel -> do
+            setInnerHTML "levels" selectLevel
+            traverseWithKey_ (appendLevelElement selectLevel gs.currentLevel) allLevels
+
+    let transformers = mapMaybe (getTransformerById chapter) tids
+    let steps = allSteps transformers level.initial
 
     -- On-canvas rendering
     clearCanvas isomer
@@ -82,7 +117,7 @@ render = do
     withElementById "message" doc (setInnerHTML message)
 
     -- DEBUG:
-    trace $ "IDs: " ++ show ids
+    trace $ "Program: " ++ show tids
     trace $ "Initial: " ++ show level.initial
     trace "Steps:"
     traverse_ print steps
@@ -100,59 +135,91 @@ replaceColors s =
               replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
 
 -- | General key press handler
-keyPress :: forall eff. DOMEvent -> Eff (dom :: DOM, isomer :: Isomer, trace :: Trace | eff) Unit
+keyPress :: forall eff. DOMEvent -> _
 keyPress event = do
     doc <- document globalWindow
     code <- keyCode event
     case code of
-         -- 'g': generate new puzzle
-         71 -> return unit
          -- 'r': reset lists
-         82 -> do resetUI
-                  render
+         82 -> modifyGameStateAndRender true $ \gs ->
+                   gs { levelState = SM.insert gs.currentLevel [] gs.levelState }
          _ -> return unit
     return unit
 
 -- | Click handler for the <li> elements (transformers)
-clickLi :: forall eff. HTMLElement -> DOMEvent -> Eff (dom :: DOM, trace :: Trace, isomer :: Isomer | eff) Unit
-clickLi li event = do
-    doc <- document globalWindow
-    parent <- parentElement li >>= getAttribute "id"
-    let other = if parent == "available" then "program" else "available"
-    withElementById other doc (flip appendChild li)
+clickLi :: forall eff. HTMLElement
+        -> DOMEvent
+        -> Eff (dom :: DOM, trace :: Trace, isomer :: Isomer, storage :: Storage | eff) Unit
+clickLi liEl event = do
+    newId <- getAttribute "id" liEl
+    modifyGameStateAndRender true (modify newId)
 
-    render
+    where modify new gs = let program = getCurrentIds gs
+                              program' = program `snoc` new
+                          in  gs { levelState = SM.insert gs.currentLevel program' gs.levelState }
 
-appendLiElement :: forall eff. HTMLElement -> String -> TransformerRecord -> Eff (dom :: DOM | eff) Unit
-appendLiElement ul id t = do
+-- | Add a li-element corresponding to the given Transformer
+appendTransformerElement :: forall eff. HTMLElement -> String -> TransformerRecord -> Eff (dom :: DOM | eff) Unit
+appendTransformerElement ul id t = do
     doc <- document globalWindow
     li <- createElement doc "li"
     setAttribute "id" id li
     setInnerHTML (replaceColors t.name) li
     appendChild ul li
 
--- | Set up or reset the whole UI
-resetUI :: forall eff. Eff (dom :: DOM | eff) Unit
-resetUI = do
+-- | Add an option-element corresponding to the given Level
+appendLevelElement :: forall eff. HTMLElement -> String -> LevelId -> Level -> Eff (dom :: DOM | eff) Unit
+appendLevelElement select currentId id l = do
     doc <- document globalWindow
-    withElementById "available" doc $ \ulAvailable -> do
-        -- create li elements for transformers
-        setInnerHTML "" ulAvailable
-        _ <- SM.foldM (\z -> appendLiElement ulAvailable) unit chapter.transformers
-
-        -- set up mouse event handlers
-        items <- children ulAvailable
-        traverse_ (\li -> addMouseEventListener MouseClickEvent (clickLi li) li) items
-
-    withElementById "program" doc (setInnerHTML "")
-
--- TODO
-chapter = case (head allChapters) of Just c -> c
-level = case (getLevelById "1") of Just level -> level
+    option <- createElement doc "option"
+    setAttribute "value" id option
+    when (currentId == id) $
+        setAttribute "selected" "selected" option
+    setTextContent l.name option
+    appendChild select option
 
 -- | Initial game state for first-time visitors
 initialGS :: GameState
 initialGS = { currentLevel: "1", levelState: SM.empty }
+
+-- | Load game, modify and store the game state. Render the new state
+modifyGameStateAndRender :: forall eff.  Boolean
+                         -> (GameState -> GameState)
+                         -> Eff (storage :: Storage, dom :: DOM, isomer :: Isomer, trace :: Trace | eff) Unit
+modifyGameStateAndRender setupUI modifyGS = do
+    -- Load old game state from local storage
+    mgs <- loadGameState
+    let gs = fromMaybe initialGS mgs
+
+    -- Modify by supplied function
+    let gs' = modifyGS gs
+
+    -- Render the new state and save back to local storage
+    render setupUI gs'
+    saveGameState gs'
+
+-- | Event handler for a level change
+levelChangeHandler :: forall eff. HTMLElement -> _
+levelChangeHandler selectLevel = do
+    levelId <- getSelectedValue selectLevel
+
+    modifyGameStateAndRender true $ \gs ->
+        gs { currentLevel = levelId }
+
+-- | Event handler for a 'reprogram' (new instruction, re-ordering, ..)
+reprogramHandler = do
+    doc <- document globalWindow
+
+    -- Retrieve current 'program'
+    Just ulAvailable <- getElementById "program" doc
+    lis <- children ulAvailable
+    program <- traverse (getAttribute "id") lis
+
+    modifyGameStateAndRender false $ \gs ->
+        gs { levelState = SM.insert gs.currentLevel program gs.levelState }
+
+-- TODO
+chapter = case (head allChapters) of Just c -> c
 
 main = do
     doc <- document globalWindow
@@ -161,11 +228,19 @@ main = do
     Just ulAvailable <- getElementById "available" doc
     Just ulProgram   <- getElementById "program" doc
     installSortable ulAvailable (return unit)
-    installSortable ulProgram render
+    installSortable ulProgram reprogramHandler
 
     -- set up keyboard event handlers
     addKeyboardEventListener KeydownEvent keyPress globalWindow
 
+    -- set up 'change' handler for the level selector
+    withElementById "levels" doc $ \selectLevel ->
+        addChangeEventListener levelChangeHandler selectLevel
+
+    -- load game state (or set initial one)
+    mgs <- loadGameState
+    let gs = fromMaybe initialGS mgs
+    saveGameState gs
+
     -- render initial state
-    resetUI
-    render
+    render true gs

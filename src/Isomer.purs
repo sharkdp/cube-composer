@@ -9,7 +9,8 @@ foreign import data IsomerInstance :: *
 foreign import data IsomerColor :: *
 
 -- | (Install and) return the Isomer instance on the canvas with the given id
-foreign import getIsomerInstance """
+foreign import getIsomerInstance
+  """
   var getIsomerInstance = (function() {
     var instances = {};
 
@@ -23,10 +24,11 @@ foreign import getIsomerInstance """
       };
     };
   })();""" :: forall eff. String
-                       -> Eff (isomer :: Isomer | eff) IsomerInstance
+           -> Eff (isomer :: Isomer | eff) IsomerInstance
 
 -- | Render a single colored cube at the given position
-foreign import renderCube """
+foreign import renderCube
+  """
   function renderCube(isomer) {
     return function(x) {
       return function(y) {
@@ -46,25 +48,29 @@ foreign import renderCube """
         }
       };
     };
-  }""" :: forall eff. IsomerInstance
-                   -> Number
-                   -> Number
-                   -> Number
-                   -> IsomerColor
-                   -> Eff (isomer :: Isomer | eff) Unit
+  }i
+  """ :: forall eff. IsomerInstance
+      -> Number
+      -> Number
+      -> Number
+      -> IsomerColor
+      -> Eff (isomer :: Isomer | eff) Unit
 
 -- | Clear the whole canvas that belongs to the Isomer instance
-foreign import clearCanvas """
+foreign import clearCanvas
+  """
   function clearCanvas(isomer) {
     return function() {
       isomer.canvas.clear();
       return {};
     };
-  }""" :: forall eff. IsomerInstance
-                   -> Eff (isomer :: Isomer | eff) Unit
+  }
+  """ :: forall eff. IsomerInstance
+      -> Eff (isomer :: Isomer | eff) Unit
 
 -- | Set Isomer scale factor and origin (X and Y)
-foreign import setIsomerConfig """
+foreign import setIsomerConfig
+  """
   function setIsomerConfig(isomer) {
     return function(scale) {
       return function(originX) {
@@ -80,17 +86,22 @@ foreign import setIsomerConfig """
       };
     };
   }""" :: forall eff. IsomerInstance
-                   -> Number
-                   -> Number
-                   -> Number
-                   -> Eff (isomer :: Isomer | eff) Unit
+       -> Number
+       -> Number
+       -> Number
+       -> Eff (isomer :: Isomer | eff) Unit
 
 -- | Create Isomer.Color object from its RGB representation
-foreign import colorFromRGB """
+foreign import colorFromRGB
+  """
   function colorFromRGB(r) {
     return function(g) {
       return function(b) {
         return new Isomer.Color(r, g, b);
       };
     };
-  }""" :: Number -> Number -> Number -> IsomerColor
+  }
+  """ :: Number
+      -> Number
+      -> Number
+      -> IsomerColor

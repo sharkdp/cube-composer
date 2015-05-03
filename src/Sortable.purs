@@ -6,7 +6,8 @@ import DOM
 
 -- | Install 'Sortable' on the given DOM element. The second argument is
 -- | an event handler that is called if the list is modified.
-foreign import installSortable """
+foreign import installSortable
+  """
   function installSortable(el) {
     return function(sortHandler) {
       return function() {
@@ -18,6 +19,7 @@ foreign import installSortable """
         });
       };
     };
-  }""" :: forall eff. HTMLElement
-                   -> (Eff (dom :: DOM | eff) Unit)
-                   -> Eff (dom :: DOM | eff) Unit
+  }
+  """ :: forall eff. HTMLElement
+      -> (Eff (dom :: DOM | eff) Unit)
+      -> Eff (dom :: DOM | eff) Unit

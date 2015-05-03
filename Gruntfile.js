@@ -9,13 +9,6 @@ module.exports = function(grunt) {
             "src/**/*.purs"
         ],
 
-        srcPsci: [
-            "bower_components/**/src/**/*.purs",
-            "src/Types.purs",
-            "src/Transformer.purs",
-            "src/Solver.purs"
-        ],
-
         srcCli: [
             "bower_components/**/src/**/*.purs",
             "src/Types.purs",
@@ -51,7 +44,7 @@ module.exports = function(grunt) {
             }
         },
 
-        dotPsci: ["<%=srcPsci%>"],
+        dotPsci: ["<%=src%>"],
 
         watch: {
             files: ["Gruntfile.js", "<%=src%>"],
