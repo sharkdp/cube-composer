@@ -9,7 +9,7 @@ import Types
 
 chapter1 :: Chapter
 chapter1 = {
-    name: "Chapter 1",
+    name: "Warm up",
 
     transformers: SM.fromList [
         "stackEqual" :> {
@@ -55,15 +55,15 @@ chapter1 = {
     ],
 
     levels: SM.fromList [
-        "1" :> {
-            name: "Warm up",
+        "1_1" :> {
+            name: "Filters",
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
         },
-        "2" :> {
+        "1_2" :> {
             name: "Maps",
-            initial: [[Brown], [Orange], [Orange]],
-            target: [[Brown], [Yellow]]
+            initial: [[Brown], [Orange], [Orange], [Brown]],
+            target: [[Orange, Orange, Orange, Orange], [Orange, Orange], [Orange, Orange], [Orange, Orange, Orange, Orange]]
         }
     ]
 }

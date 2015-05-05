@@ -75,6 +75,7 @@ render setupUI gs = do
     isomer <- getIsomerInstance "canvas"
 
     let level = case (getLevelById gs.currentLevel) of Just l -> l
+    let chapter = case (getChapter gs.currentLevel) of Just c -> c
 
     let tids = getCurrentIds gs
 
@@ -170,17 +171,18 @@ appendTransformerElement ul id t = do
 -- | Add an option-element corresponding to the given Level
 appendLevelElement :: forall eff. HTMLElement -> String -> LevelId -> Level -> Eff (dom :: DOM | eff) Unit
 appendLevelElement select currentId id l = do
+    let chapter = case (getChapter id) of Just c -> c
     doc <- document globalWindow
     option <- createElement doc "option"
     setAttribute "value" id option
     when (currentId == id) $
         setAttribute "selected" "selected" option
-    setTextContent l.name option
+    setTextContent (chapter.name ++ ": " ++ l.name) option
     appendChild select option
 
 -- | Initial game state for first-time visitors
 initialGS :: GameState
-initialGS = { currentLevel: "1", levelState: SM.empty }
+initialGS = { currentLevel: "1_1", levelState: SM.empty }
 
 -- | Load game, modify and store the game state. Render the new state
 modifyGameStateAndRender :: forall eff.  Boolean
@@ -217,9 +219,6 @@ reprogramHandler = do
 
     modifyGameStateAndRender false $ \gs ->
         gs { levelState = SM.insert gs.currentLevel program gs.levelState }
-
--- TODO
-chapter = case (head allChapters) of Just c -> c
 
 main = do
     doc <- document globalWindow
