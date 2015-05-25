@@ -13,9 +13,11 @@ module.exports = function(grunt) {
             "bower_components/**/src/**/*.purs",
             "src/Types.purs",
             "src/Transformer.purs",
-            "src/Solver.purs",
             "src/Level.purs",
+            "src/Helper.purs",
+            "src/Unsafe.purs",
             "src/Levels/*.purs",
+            "leveleditor/Solver.purs",
             "leveleditor/cli.purs"
         ],
 
