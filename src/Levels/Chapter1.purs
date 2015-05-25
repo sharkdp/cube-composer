@@ -16,10 +16,10 @@ chapter1 = {
             name: "stackEqual",
             function: tStackEqual
         },
-        "mapClone" :> {
-            name: "map({X} ↦ {X}{X})",
-            function: map $ concatMap (\x -> [x, x])
-        },
+--        "mapClone" :> {
+--            name: "map({X} ↦ {X}{X})",
+--            function: map $ concatMap (\x -> [x, x])
+--        },
 --        "flatten" :> {
 --            name: "flatten",
 --            function: tFlatten
@@ -44,6 +44,10 @@ chapter1 = {
             name: "reject({Orange})",
             function: map (reject (== Orange)) >>> tClearEmpty
         },
+        "filterB" :> {
+            name: "reject({Brown})",
+            function: map (reject (== Brown)) >>> tClearEmpty
+        },
         "pushY" :> {
             name: "map(push({Yellow}))",
             function: map (`snoc` Yellow)
@@ -64,6 +68,16 @@ chapter1 = {
             name: "Maps",
             initial: [[Brown], [Orange], [Orange], [Brown]],
             target: [[Orange, Orange, Orange, Orange], [Orange, Orange], [Orange, Orange], [Orange, Orange, Orange, Orange]]
+        },
+        "1_3" :> {
+            name: "...",
+            initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
+            target: [[Brown, Brown], [Brown], [Brown, Brown, Brown, Brown], [Brown], [Brown, Brown]]
+        },
+        "1_4" :> {
+            name: "...",
+            initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
+            target: [[Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown, Brown, Brown, Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown]]
         }
     ]
 }
