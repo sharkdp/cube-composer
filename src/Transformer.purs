@@ -51,7 +51,3 @@ tStackEqual (s:ss) = concat (s:split.init) : tStackEqual split.rest
 -- | Flatten the whole wall to single cubes
 tFlatten :: Transformer
 tFlatten = concat >>> map singleton
-
--- | Find a specific transformer by its id
-getTransformerById :: Chapter -> String -> Maybe Transformer
-getTransformerById chapter id = _.function <$> SM.lookup id chapter.transformers

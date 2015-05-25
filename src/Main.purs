@@ -74,10 +74,9 @@ render setupUI gs = do
     doc <- document globalWindow
     isomer <- getIsomerInstance "canvas"
 
-    let level = case (getLevelById gs.currentLevel) of Just l -> l
-    let chapter = case (getChapter gs.currentLevel) of Just c -> c
-
-    let tids = getCurrentIds gs
+    let level = getLevel gs.currentLevel
+        chapter = getChapter gs.currentLevel
+        tids = getCurrentIds gs
 
     -- Set up UI, only if new level is loaded
     when setupUI $ do
@@ -88,14 +87,13 @@ render setupUI gs = do
         setInnerHTML "" ulProgram
 
         let unused = foldl (flip SM.delete) chapter.transformers tids
-        let active = foldl (\sm id -> SM.insert id (case (SM.lookup id chapter.transformers) of Just t -> t) sm) SM.empty tids
+        let active = foldl (\sm id -> SM.insert id (getTransformerRecord chapter id) sm) SM.empty tids
 
         -- create li elements for transformers
         traverseWithKey_ (appendTransformerElement ulAvailable) unused
         traverseWithKey_ (appendTransformerElement ulProgram) active
 
         -- set up mouse event handlers
-        {-- for (map children [ulAvailable, ulProgram]) $ \items -> --}
         let installClickHandler li = addMouseEventListener MouseClickEvent (clickLi li) li
         children ulAvailable >>= traverse_ installClickHandler
 
@@ -103,7 +101,7 @@ render setupUI gs = do
             setInnerHTML "levels" selectLevel
             traverseWithKey_ (appendLevelElement selectLevel gs.currentLevel) allLevels
 
-    let transformers = mapMaybe (getTransformerById chapter) tids
+    let transformers = map (getTransformer chapter) tids
     let steps = allSteps transformers level.initial
 
     -- On-canvas rendering
@@ -171,7 +169,7 @@ appendTransformerElement ul id t = do
 -- | Add an option-element corresponding to the given Level
 appendLevelElement :: forall eff. HTMLElement -> String -> LevelId -> Level -> Eff (dom :: DOM | eff) Unit
 appendLevelElement select currentId id l = do
-    let chapter = case (getChapter id) of Just c -> c
+    let chapter = getChapter id
     doc <- document globalWindow
     option <- createElement doc "option"
     setAttribute "value" id option
