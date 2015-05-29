@@ -51,7 +51,7 @@ chapter2 = {
     ],
 
     levels: SM.fromList [
-        "2_1" :> {
+        "2.1" :> {
             name: "Mercury",
             difficulty: Easy,
             initial: [[Red, Red], [Red, Yellow], [Blue, Yellow], [Blue, Blue]],

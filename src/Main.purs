@@ -100,7 +100,8 @@ render setupUI gs = do
 
         withElementById "levels" doc $ \selectLevel -> do
             setInnerHTML "levels" selectLevel
-            traverseWithKey_ (appendLevelElement selectLevel gs.currentLevel) allLevels
+            let allIds = allChapters >>= (_.levels >>> SM.keys) >>> sort
+            traverse_ (appendLevelElement selectLevel gs.currentLevel) allIds
 
     let transformers = map (getTransformer chapter) tids
     let steps = allSteps transformers level.initial
@@ -172,20 +173,21 @@ appendTransformerElement ul id t = do
     appendChild ul li
 
 -- | Add an option-element corresponding to the given Level
-appendLevelElement :: forall eff. HTMLElement -> String -> LevelId -> Level -> Eff (dom :: DOM | eff) Unit
-appendLevelElement select currentId id l = do
-    let chapter = getChapter id
+appendLevelElement :: forall eff. HTMLElement -> LevelId -> LevelId -> Eff (dom :: DOM | eff) Unit
+appendLevelElement select currentId lid = do
+    let chapter = getChapter lid
+        level = getLevel lid
     doc <- document globalWindow
     option <- createElement doc "option"
-    setAttribute "value" id option
-    when (currentId == id) $
+    setAttribute "value" lid option
+    when (currentId == lid) $
         setAttribute "selected" "selected" option
-    setTextContent (chapter.name ++ ": " ++ l.name ++ " (" ++ show l.difficulty ++ ")") option
+    setTextContent ("Level " ++ lid ++ " - " ++ level.name ++ " (" ++ show level.difficulty ++ ")") option
     appendChild select option
 
 -- | Initial game state for first-time visitors
 initialGS :: GameState
-initialGS = { currentLevel: "1_1", levelState: SM.empty }
+initialGS = { currentLevel: "1.1", levelState: SM.empty }
 
 -- | Load game, modify and store the game state. Render the new state
 modifyGameStateAndRender :: forall eff.  Boolean

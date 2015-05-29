@@ -59,25 +59,25 @@ chapter1 = {
     ],
 
     levels: SM.fromList [
-        "1_1" :> {
+        "1.1" :> {
             name: "Dismiss",
             difficulty: Easy,
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
         },
-        "1_2" :> {
+        "1.2" :> {
             name: "Gizeh",
             difficulty: Medium,
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown, Brown, Brown, Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown]]
         },
-        "1_4" :> {
+        "1.3" :> {
             name: "Poseidon",
             difficulty: Medium,
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown, Brown], [Brown], [Brown, Brown, Brown, Brown], [Brown], [Brown, Brown]]
         },
-        "1_3" :> {
+        "1.4" :> {
             name: "Bowl",
             difficulty: Hard,
             initial: [[Brown], [Orange], [Orange], [Brown]],
