@@ -96,6 +96,7 @@ render setupUI gs = do
         -- set up mouse event handlers
         let installClickHandler li = addMouseEventListener MouseClickEvent (clickLi li) li
         children ulAvailable >>= traverse_ installClickHandler
+        children ulProgram >>=   traverse_ installClickHandler
 
         withElementById "levels" doc $ \selectLevel -> do
             setInnerHTML "levels" selectLevel
@@ -151,11 +152,15 @@ clickLi :: forall eff. HTMLElement
         -> Eff (dom :: DOM, trace :: Trace, isomer :: Isomer, storage :: Storage | eff) Unit
 clickLi liEl event = do
     newId <- getAttribute "id" liEl
-    modifyGameStateAndRender true (modify newId)
+    ulId <- parentElement liEl >>= getAttribute "id"
+    modifyGameStateAndRender true (modify ulId newId)
 
-    where modify new gs = let program = getCurrentIds gs
-                              program' = program `snoc` new
-                          in  gs { levelState = SM.insert gs.currentLevel program' gs.levelState }
+    where modify ulId clicked gs = let program = getCurrentIds gs
+                                       program' =
+                                           if ulId == "available"
+                                           then program `snoc` clicked
+                                           else filter (/= clicked) program
+                          in gs { levelState = SM.insert gs.currentLevel program' gs.levelState }
 
 -- | Add a li-element corresponding to the given Transformer
 appendTransformerElement :: forall eff. HTMLElement -> String -> TransformerRecord -> Eff (dom :: DOM | eff) Unit
