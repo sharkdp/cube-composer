@@ -56,6 +56,24 @@ chapter2 = {
             difficulty: Easy,
             initial: [[Red, Red], [Red, Yellow], [Blue, Yellow], [Blue, Blue]],
             target: [[Red, Red]]
+        },
+        "2.2" :> {
+            name: "Venus",
+            difficulty: Easy,
+            initial: [[Red, Red], [Red, Yellow], [Blue, Yellow], [Blue, Blue]],
+            target: [[Red, Red], [Red, Red]]
+        },
+        "2.3" :> {
+            name: "Earth",
+            difficulty: Easy,
+            initial: [[Blue, Blue, Yellow], [Blue, Red], [Blue, Red], [Blue, Blue, Yellow]],
+            target: [[Red, Blue, Blue], [Red, Blue], [Red, Blue], [Red, Blue, Blue]]
+        },
+        "2.4" :> {
+            name: "Mars",
+            difficulty: Easy,
+            initial: [[Red, Red], [Red, Yellow], [Blue, Yellow], [Blue, Blue]],
+            target: [[Red, Red, Red], [Red, Yellow, Red], [Red, Yellow, Red], [Red, Red, Red]]
         }
     ]
 }
