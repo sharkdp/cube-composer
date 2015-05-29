@@ -65,8 +65,16 @@ type TransformerRecord = {
 
 type LevelId = String
 
+data Difficulty = Easy | Medium | Hard
+
+instance showDifficulty :: Show Difficulty where
+    show Easy = "Easy"
+    show Medium = "Medium"
+    show Hard = "Hard"
+
 type Level = {
     name :: String,
+    difficulty :: Difficulty,
     initial :: Wall,
     target :: Wall
 }

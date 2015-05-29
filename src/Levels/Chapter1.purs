@@ -9,7 +9,7 @@ import Types
 
 chapter1 :: Chapter
 chapter1 = {
-    name: "Warm up",
+    name: "Chapter 1",
 
     transformers: SM.fromList [
         "stackEqual" :> {
@@ -60,24 +60,28 @@ chapter1 = {
 
     levels: SM.fromList [
         "1_1" :> {
-            name: "Filters",
+            name: "Dismiss",
+            difficulty: Easy,
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
         },
         "1_2" :> {
-            name: "Maps",
-            initial: [[Brown], [Orange], [Orange], [Brown]],
-            target: [[Orange, Orange, Orange, Orange], [Orange, Orange], [Orange, Orange], [Orange, Orange, Orange, Orange]]
+            name: "Gizeh",
+            difficulty: Medium,
+            initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
+            target: [[Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown, Brown, Brown, Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown]]
         },
-        "1_3" :> {
-            name: "...",
+        "1_4" :> {
+            name: "Poseidon",
+            difficulty: Medium,
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown, Brown], [Brown], [Brown, Brown, Brown, Brown], [Brown], [Brown, Brown]]
         },
-        "1_4" :> {
-            name: "...",
-            initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
-            target: [[Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown, Brown, Brown, Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown]]
+        "1_3" :> {
+            name: "Bowl",
+            difficulty: Hard,
+            initial: [[Brown], [Orange], [Orange], [Brown]],
+            target: [[Orange, Orange, Orange, Orange], [Orange, Orange], [Orange, Orange], [Orange, Orange, Orange, Orange]]
         }
     ]
 }

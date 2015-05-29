@@ -175,7 +175,7 @@ appendLevelElement select currentId id l = do
     setAttribute "value" id option
     when (currentId == id) $
         setAttribute "selected" "selected" option
-    setTextContent (chapter.name ++ ": " ++ l.name) option
+    setTextContent (chapter.name ++ ": " ++ l.name ++ " (" ++ show l.difficulty ++ ")") option
     appendChild select option
 
 -- | Initial game state for first-time visitors
@@ -235,8 +235,7 @@ main = do
         addChangeEventListener levelChangeHandler selectLevel
 
     -- load game state (or set initial one)
-    mgs <- loadGameState
-    let gs = fromMaybe initialGS mgs
+    gs <- fromMaybe initialGS <$> loadGameState
     saveGameState gs
 
     -- render initial state
