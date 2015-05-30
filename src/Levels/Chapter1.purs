@@ -12,29 +12,29 @@ chapter1 = {
     name: "Chapter 1",
 
     transformers: SM.fromList [
-        "stackEqual" :> {
-            name: "stackEqual",
-            function: tStackEqual
-        },
         "replaceYbyB" :> {
-            name: "map({Yellow} ↦ {Brown})",
+            name: "map {Yellow}↦{Brown}",
             function: tReplace Yellow Brown
         },
         "replaceYbyBY" :> {
-            name: "map({Yellow} ↦ {Brown}{Yellow})",
+            name: "map {Yellow}↦{Brown}{Yellow}",
             function: tReplaceMultiple Yellow [Brown, Yellow]
         },
         "replaceBbyOO" :> {
-            name: "map({Brown} ↦ {Orange}{Orange})",
+            name: "map {Brown}↦{Orange}{Orange}",
             function: tReplaceMultiple Brown [Orange, Orange]
         },
         "rejectO" :> {
-            name: "reject({Orange})",
+            name: "map (reject {Orange})",
             function: map (reject (== Orange)) >>> tClearEmpty
         },
         "pushY" :> {
-            name: "map(push({Yellow}))",
+            name: "map (push {Yellow})",
             function: map (`snoc` Yellow)
+        },
+        "stackEqual" :> {
+            name: "stackEqual",
+            function: tStackEqual
         }
     ],
 
