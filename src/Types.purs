@@ -6,10 +6,10 @@ import qualified Data.StrMap as SM
 
 -- Cube, Stack, Wall
 
-data Cube = Blue | Brown | Red | Orange | Yellow
+data Cube = Cyan | Brown | Red | Orange | Yellow
 
 instance showCube :: Show Cube where
-    show Blue = "Blue"
+    show Cyan = "Cyan"
     show Brown = "Brown"
     show Red = "Red"
     show Orange = "Orange"
@@ -31,16 +31,16 @@ instance enumCube :: Enum Cube where
     toEnum = cubeToEnum
     fromEnum = cubeFromEnum
 
-cubeFirst = Blue
+cubeFirst = Cyan
 cubeLast = Yellow
 
-cubeFromEnum Blue = 0
+cubeFromEnum Cyan = 0
 cubeFromEnum Brown = 1
 cubeFromEnum Red = 2
 cubeFromEnum Orange = 3
 cubeFromEnum Yellow = 4
 
-cubeToEnum 0 = Just Blue
+cubeToEnum 0 = Just Cyan
 cubeToEnum 1 = Just Brown
 cubeToEnum 2 = Just Red
 cubeToEnum 3 = Just Orange

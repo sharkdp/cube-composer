@@ -15,7 +15,7 @@ ttyColor Yellow = 0
 ttyColor Orange = 1
 ttyColor Brown = 2
 ttyColor Red = 3
-ttyColor Blue = 4
+ttyColor Cyan = 4
 
 main =
     for allLevelIds $ \lid -> do

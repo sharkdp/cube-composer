@@ -27,7 +27,7 @@ import Types
 
 -- | RGB codes for the abstract colors
 cubeColor :: Cube -> IsomerColor
-cubeColor Blue = colorFromRGB 0 160 176
+cubeColor Cyan = colorFromRGB 0 160 176
 cubeColor Brown = colorFromRGB 106 74 60
 cubeColor Red = colorFromRGB 204 51 63
 cubeColor Orange = colorFromRGB 235 104 65
@@ -128,7 +128,7 @@ render setupUI gs = do
 -- | Replace color placeholders in the transformer description by colored rectangular divs
 replaceColors :: String -> String
 replaceColors s =
-    foldl replaceColor s ("X" : map show (Blue `enumFromTo` Yellow))
+    foldl replaceColor s ("X" : map show (Cyan `enumFromTo` Yellow))
         where replaceColor s c = replace (regex (pattern c) rf) (replacement c) s
               rf = parseFlags "g"
               pattern c = "{" ++ c ++ "}"

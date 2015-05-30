@@ -12,7 +12,7 @@ chapter2 = {
     name: "Chapter 2",
 
     transformers: SM.fromList [
-        "rejectSizeGE2" :> {
+        "rejectSizeG2" :> {
             name: "reject(size > 2)",
             function: reject (\x -> length x > 2)
         },
@@ -20,17 +20,17 @@ chapter2 = {
             name: "map({Yellow} ↦ {Yellow}{Red})",
             function: tReplaceMultiple Yellow [Yellow, Red]
         },
-        "mapBtoRB" :> {
-            name: "map({Blue} ↦ {Red}{Blue})",
-            function: tReplaceMultiple Blue [Red, Blue]
+        "mapCtoRC" :> {
+            name: "map({Cyan} ↦ {Red}{Cyan})",
+            function: tReplaceMultiple Cyan [Red, Cyan]
         },
         "rejectY" :> {
             name: "reject({Yellow})",
             function: map (reject (== Yellow)) >>> tClearEmpty
         },
-        "rejectB" :> {
-            name: "reject({Blue})",
-            function: map (reject (== Blue)) >>> tClearEmpty
+        "rejectC" :> {
+            name: "reject({Cyan})",
+            function: map (reject (== Cyan)) >>> tClearEmpty
         },
         "filterContainsR" :> {
             name: "filter(contains({Red}))",
@@ -50,25 +50,25 @@ chapter2 = {
         "2.1" :> {
             name: "Mercury",
             difficulty: Easy,
-            initial: [[Red, Red], [Red, Yellow], [Blue, Yellow], [Blue, Blue]],
+            initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red]]
         },
         "2.2" :> {
             name: "Venus",
             difficulty: Easy,
-            initial: [[Red, Red], [Red, Yellow], [Blue, Yellow], [Blue, Blue]],
+            initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red], [Red, Red]]
         },
         "2.3" :> {
             name: "Earth",
             difficulty: Easy,
-            initial: [[Blue, Blue, Yellow], [Blue, Red], [Blue, Red], [Blue, Blue, Yellow]],
-            target: [[Red, Blue, Blue], [Red, Blue], [Red, Blue], [Red, Blue, Blue]]
+            initial: [[Cyan, Cyan, Yellow], [Cyan, Red], [Cyan, Red], [Cyan, Cyan, Yellow]],
+            target: [[Red, Cyan, Cyan], [Red, Cyan], [Red, Cyan], [Red, Cyan, Cyan]]
         },
         "2.4" :> {
             name: "Mars",
             difficulty: Easy,
-            initial: [[Red, Red], [Red, Yellow], [Blue, Yellow], [Blue, Blue]],
+            initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red, Red], [Red, Yellow, Red], [Red, Yellow, Red], [Red, Red, Red]]
         }
     ]
