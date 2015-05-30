@@ -87,6 +87,12 @@ chapter3 = {
             difficulty: Hard,
             initial: map toStack [0, 1, 2, 3, 4, 5, 6, 7],
             target: map toStack [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        "3.4" :> {
+            name: "Don't panic",
+            difficulty: Hard,
+            initial: map toStack [0, 1, 2, 3, 4, 5, 6, 7],
+            target: map toStack [4, 2, 4, 2, 4, 2, 4, 2]
         }
     ]
 }
