@@ -141,8 +141,11 @@ keyPress event = do
     code <- keyCode event
     case code of
          -- 'r': reset lists
-         82 -> modifyGameStateAndRender true $ \gs ->
-                   gs { levelState = SM.insert gs.currentLevel [] gs.levelState }
+         82 -> do
+                   ctrlPressed <- ctrlKey event
+                   when (not ctrlPressed) $
+                       modifyGameStateAndRender true $ \gs ->
+                           gs { levelState = SM.insert gs.currentLevel [] gs.levelState }
          _ -> return unit
     return unit
 
