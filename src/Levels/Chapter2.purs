@@ -12,10 +12,6 @@ chapter2 = {
     name: "Chapter 2",
 
     transformers: SM.fromList [
-        "rejectSizeG2" :> {
-            name: "reject(size > 2)",
-            function: reject (\x -> length x > 2)
-        },
         "mapYtoYR" :> {
             name: "map({Yellow} ↦ {Yellow}{Red})",
             function: tReplaceMultiple Yellow [Yellow, Red]
@@ -51,7 +47,7 @@ chapter2 = {
             name: "Mercury",
             difficulty: Easy,
             initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
-            target: [[Red, Red]]
+            target: [[Red, Red], [Red, Red], [Red, Red], [Red, Red]]
         },
         "2.2" :> {
             name: "Venus",
