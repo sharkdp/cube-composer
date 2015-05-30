@@ -51,6 +51,10 @@ b {
     margin-left: 80px;
 }
 
+.controlBox p {
+    font-size: 12px;
+}
+
 .sortable {
     list-style-type: none;
     margin: 10px 0 0 0;

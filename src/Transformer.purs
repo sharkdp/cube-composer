@@ -37,7 +37,7 @@ tReplace :: Cube -> Cube -> Transformer
 tReplace a b = map2d replace
     where replace x = if x == a then b else x
 
--- | Replace all occurences of a by bs and flattens
+-- | Replace all occurences of a by bs and flatten
 tReplaceMultiple :: Cube -> [Cube] -> Transformer
 tReplaceMultiple a bs = map (concatMap replace)
    where replace x = if x == a then bs else [x]
