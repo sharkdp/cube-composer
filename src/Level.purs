@@ -19,12 +19,20 @@ allChapters = [chapter1, chapter2]
 allLevels :: SM.StrMap Level
 allLevels = SM.unions (map _.levels allChapters)
 
+-- | A list of all level ids across the chapters
+allLevelIds :: [LevelId]
+allLevelIds = allChapters >>= (_.levels >>> SM.keys) >>> sort
+
 -- | Find a given level by its id
 getLevel :: LevelId -> Level
 getLevel lid =
     case (SM.lookup lid allLevels) of
          Just level -> level
          Nothing -> unsafeError $ "Could not find level " ++ show lid
+
+-- | Level id, name and difficulty as a single string
+levelTitle :: LevelId -> Level -> String
+levelTitle lid level = "Level " ++ lid ++ " - " ++ level.name ++ " (" ++ show level.difficulty ++ ")"
 
 -- | Get the chapter to which a level belongs
 getChapter :: LevelId -> Chapter

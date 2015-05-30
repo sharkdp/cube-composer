@@ -100,8 +100,7 @@ render setupUI gs = do
 
         withElementById "levels" doc $ \selectLevel -> do
             setInnerHTML "levels" selectLevel
-            let allIds = allChapters >>= (_.levels >>> SM.keys) >>> sort
-            traverse_ (appendLevelElement selectLevel gs.currentLevel) allIds
+            traverse_ (appendLevelElement selectLevel gs.currentLevel) allLevelIds
 
     let transformers = map (getTransformer chapter) tids
     let steps = allSteps transformers level.initial
@@ -182,7 +181,7 @@ appendLevelElement select currentId lid = do
     setAttribute "value" lid option
     when (currentId == lid) $
         setAttribute "selected" "selected" option
-    setTextContent ("Level " ++ lid ++ " - " ++ level.name ++ " (" ++ show level.difficulty ++ ")") option
+    setTextContent (levelTitle lid level) option
     appendChild select option
 
 -- | Initial game state for first-time visitors

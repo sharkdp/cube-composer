@@ -40,10 +40,6 @@ chapter2 = {
             name: "map(push({Red}))",
             function: map (`snoc` Red)
         },
-        "pushB" :> {
-            name: "push({Blue})",
-            function: flip snoc [Blue]
-        },
         "mapReverse" :> {
             name: "map(reverse)",
             function: map reverse

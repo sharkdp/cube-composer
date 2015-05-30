@@ -16,14 +16,6 @@ chapter1 = {
             name: "stackEqual",
             function: tStackEqual
         },
---        "mapClone" :> {
---            name: "map({X} ↦ {X}{X})",
---            function: map $ concatMap (\x -> [x, x])
---        },
---        "flatten" :> {
---            name: "flatten",
---            function: tFlatten
---        },
         "replaceYbyB" :> {
             name: "map({Yellow} ↦ {Brown})",
             function: tReplace Yellow Brown
@@ -32,10 +24,6 @@ chapter1 = {
             name: "map({Yellow} ↦ {Brown}{Yellow})",
             function: tReplaceMultiple Yellow [Brown, Yellow]
         },
---        "replaceBbyBBB" :> {
---            name: "map({Brown} ↦ {Brown}{Brown}{Brown})",
---            function: tReplaceMultiple Brown [Brown, Brown, Brown]
---        },
         "replaceBbyOO" :> {
             name: "map({Brown} ↦ {Orange}{Orange})",
             function: tReplaceMultiple Brown [Orange, Orange]
@@ -44,7 +32,7 @@ chapter1 = {
             name: "reject({Orange})",
             function: map (reject (== Orange)) >>> tClearEmpty
         },
-        "filterB" :> {
+        "rejectB" :> {
             name: "reject({Brown})",
             function: map (reject (== Brown)) >>> tClearEmpty
         },
@@ -52,10 +40,6 @@ chapter1 = {
             name: "map(push({Yellow}))",
             function: map (`snoc` Yellow)
         }
---        "tail" :> {
---            name: "map(tail)",
---            function: tTail
---        }
     ],
 
     levels: SM.fromList [

@@ -1,8 +1,8 @@
 module Main (main) where
 
 import Data.Array
-import Data.Maybe
-import Data.Maybe.Unsafe
+import Data.Foldable
+import Data.Traversable
 import Debug.Trace
 
 import Types
@@ -17,14 +17,16 @@ ttyColor Brown = 2
 ttyColor Red = 3
 ttyColor Blue = 4
 
-levelid :: LevelId
-levelid = "1_4"
+main =
+    for allLevelIds $ \lid -> do
+        let chapter = getChapter lid
+            level = getLevel lid
+            solutions = solve lid
 
-main = do
-    let chapter = getChapter levelid
-        level = getLevel levelid
-        solution = solve levelid
-
-    trace $ "Initial: " ++ show (map (map ttyColor) level.initial)
-    trace $ "Target:  " ++ show (map (map ttyColor) level.target)
-    trace $ "Solution: " ++ show solution
+        trace $ levelTitle lid level
+        trace $ "  Initial: " ++ show (map (map ttyColor) level.initial)
+        trace $ "  Target:  " ++ show (map (map ttyColor) level.target)
+        trace $ "  Solutions: "
+        for solutions $ \sol ->
+            trace $ "    " ++ show sol
+        trace ""
