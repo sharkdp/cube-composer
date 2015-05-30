@@ -10,10 +10,11 @@ import Unsafe
 
 import Levels.Chapter1
 import Levels.Chapter2
+import Levels.Chapter3
 
 -- | A simple list of all available chapters
 allChapters :: [Chapter]
-allChapters = [chapter1, chapter2]
+allChapters = [chapter1, chapter2, chapter3]
 
 -- | A dictionary of all available levels across the chapters
 allLevels :: SM.StrMap Level
