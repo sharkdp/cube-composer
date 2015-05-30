@@ -32,10 +32,6 @@ chapter1 = {
             name: "reject({Orange})",
             function: map (reject (== Orange)) >>> tClearEmpty
         },
-        "rejectB" :> {
-            name: "reject({Brown})",
-            function: map (reject (== Brown)) >>> tClearEmpty
-        },
         "pushY" :> {
             name: "map(push({Yellow}))",
             function: map (`snoc` Yellow)
@@ -66,6 +62,12 @@ chapter1 = {
             difficulty: Hard,
             initial: [[Brown], [Orange], [Orange], [Brown]],
             target: [[Orange, Orange, Orange, Orange], [Orange, Orange], [Orange, Orange], [Orange, Orange, Orange, Orange]]
+        },
+        "1.5" :> {
+            name: "Stamp",
+            difficulty: Hard,
+            initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
+            target: [[Yellow], [Yellow], [Yellow, Yellow, Yellow, Yellow], [Yellow], [Yellow]]
         }
     ]
 }
