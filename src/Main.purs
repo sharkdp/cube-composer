@@ -55,7 +55,7 @@ renderWalls isomer walls = do
 
 -- | Render the target shape
 renderTarget isomer target = do
-    setIsomerConfig isomer 22 1200 250
+    setIsomerConfig isomer 22 1250 360
     renderWall isomer 0 target
 
 -- | Get program (list of transformer ids) of the active level
@@ -113,7 +113,7 @@ render setupUI gs = do
     -- DOM 'rendering'
     let message = if (maybe false (== (level.target)) (last steps))
                   then "Solved!"
-                  else "Target"
+                  else "Objective:"
     withElementById "message" doc (setInnerHTML message)
 
     -- DEBUG:

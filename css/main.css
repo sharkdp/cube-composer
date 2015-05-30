@@ -37,7 +37,7 @@ b {
 
 #panel {
     position: absolute;
-    top: 160px;
+    top: 50px;
     right: 40px;
 }
 
@@ -92,7 +92,7 @@ a {
 }
 
 #settings {
-    margin-top: 30px;
+    margin-top: 150px;
 }
 
 select {

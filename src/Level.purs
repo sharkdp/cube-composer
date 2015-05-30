@@ -33,7 +33,7 @@ getLevel lid =
 
 -- | Level id, name and difficulty as a single string
 levelTitle :: LevelId -> Level -> String
-levelTitle lid level = "Level " ++ lid ++ " - " ++ level.name ++ " (" ++ show level.difficulty ++ ")"
+levelTitle lid level = lid ++ " - " ++ level.name ++ " (" ++ show level.difficulty ++ ")"
 
 -- | Get the chapter to which a level belongs
 getChapter :: LevelId -> Chapter
