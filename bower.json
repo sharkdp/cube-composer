@@ -20,6 +20,7 @@
     "Sortable": "RubaXa/Sortable#~1.2.0",
     "isomer": "https://github.com/jdan/isomer.git#a36706dba1869ff3d53eaa23b958b74fc76ca3cc",
     "purescript-simple-dom": "https://github.com/sharkdp/purescript-simple-dom.git#3dedb490f124c4151dd41673b1ce40f23a58f0f3",
-    "purescript-maps": "~0.3.4"
+    "purescript-maps": "~0.3.4",
+    "github-fork-ribbon-css": "~0.1.1"
   }
 }

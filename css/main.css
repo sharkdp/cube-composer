@@ -112,6 +112,10 @@ select {
     outline: none;
 }
 
+.left-bottom .github-fork-ribbon {
+    background-color: #CC333F;
+}
+
 .rect {
     display: inline-block;
     width: 11px;
