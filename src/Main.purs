@@ -112,8 +112,8 @@ render setupUI gs = do
 
     -- DOM 'rendering'
     let message = if (maybe false (== (level.target)) (last steps))
-                  then "Solved!"
-                  else "Objective:"
+                  then "<span class=\"animated flash\">Solved!</span>"
+                  else "Goal:"
     withElementById "message" doc (setInnerHTML message)
 
     -- DEBUG:
