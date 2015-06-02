@@ -44,6 +44,9 @@ renderStack isomer y x stack =
 
 -- | Render a wall (multiple stacks)
 renderWall :: forall eff. IsomerInstance -> Number -> Wall -> Eff (isomer :: Isomer | eff) Unit
+renderWall isomer y [] =
+    -- Render a gray placeholder for the empty wall
+    renderBlock isomer 1 (-6 * y) 0 5 0.9 0.1 (colorFromRGB 100 100 100)
 renderWall isomer y wall =
     traverseWithIndex_ (\x -> renderStack isomer y (length wall - x)) (reverse wall)
 

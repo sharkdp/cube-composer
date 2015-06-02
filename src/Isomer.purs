@@ -26,35 +26,38 @@ foreign import getIsomerInstance
   })();""" :: forall eff. String
            -> Eff (isomer :: Isomer | eff) IsomerInstance
 
--- | Render a single colored cube at the given position
-foreign import renderCube
+-- | Render a colored block of size dx, dy, dz at position x, y, z
+foreign import renderBlock
   """
-  function renderCube(isomer) {
-    return function(x) {
-      return function(y) {
-        return function(z) {
-          return function(color) {
-            return function() {
-              isomer.add(
-                new Isomer.Shape.Prism(
-                  new Isomer.Point(x, y, z),
-                  0.9, 0.9, 0.9
-                ),
-                color
-              );
-              return {};
-            };
-          }
-        }
-      };
-    };
+  function renderBlock(isomer) {
+    return function(x) { return function(y) { return function(z) {
+    return function(dx) { return function(dy) { return function(dz) {
+    return function(color) { return function() {
+      isomer.add(
+        new Isomer.Shape.Prism(new Isomer.Point(x, y, z), dx, dy, dz),
+        color
+        );
+      return {};
+    }; }; }; }; }; }; }; };
   }
   """ :: forall eff. IsomerInstance
       -> Number
       -> Number
       -> Number
+      -> Number
+      -> Number
+      -> Number
       -> IsomerColor
       -> Eff (isomer :: Isomer | eff) Unit
+
+-- | Render a single colored cube at the given position
+renderCube :: forall eff. IsomerInstance
+           -> Number
+           -> Number
+           -> Number
+           -> IsomerColor
+           -> Eff (isomer :: Isomer | eff) Unit
+renderCube isomer x y z col = renderBlock isomer x y z 0.9 0.9 0.9 col
 
 -- | Clear the whole canvas that belongs to the Isomer instance
 foreign import clearCanvas
