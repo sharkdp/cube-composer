@@ -7,12 +7,12 @@ import Helper
 import Transformer
 import Types
 
-cxToC :: Stack -> Stack
-cxToC [] = []
-cxToC [c] = [c]
-cxToC (c1:c2:cs) = if c1 == Cyan
-                   then c2 : cxToC cs
-                   else c1 : cxToC (c2 : cs)
+cxToX :: Stack -> Stack
+cxToX [] = []
+cxToX [c] = [c]
+cxToX (c:x:cs) = if c == Cyan
+                   then x : cxToX cs
+                   else c : cxToX (x : cs)
 
 ooToC :: Stack -> Stack
 ooToC [] = []
@@ -31,8 +31,8 @@ chapter4 = {
             function: map (concatMap (\c -> [Orange, c]))
         },
         "mapCXtoC" :> {
-            name: "map {Cyan}{X}↦{Cyan}",
-            function: map cxToC
+            name: "map {Cyan}{X}↦{X}",
+            function: map cxToX
         },
         "mapOOtoC" :> {
             name: "map {Orange}{Orange}↦{Cyan}",
