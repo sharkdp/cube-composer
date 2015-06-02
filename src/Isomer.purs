@@ -38,7 +38,7 @@ foreign import renderCube
               isomer.add(
                 new Isomer.Shape.Prism(
                   new Isomer.Point(x, y, z),
-                  1, 1, 1
+                  0.9, 0.9, 0.9
                 ),
                 color
               );
