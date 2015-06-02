@@ -124,7 +124,7 @@ select {
     border-radius: 3px;
 }
 
-.X { background-color: #fff; }
+.X { background-color: #fff; border: 1px dashed #444; }
 .Cyan { background-color: #00A0B0; }
 .Brown { background-color: #6A4A3C; }
 .Red { background-color: #CC333F; }
