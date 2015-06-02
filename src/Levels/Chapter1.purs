@@ -29,7 +29,7 @@ chapter1 = {
             function: map (reject (== Orange)) >>> tClearEmpty
         },
         "pushY" :> {
-            name: "map (push {Yellow})",
+            name: "map (stack {Yellow})",
             function: map (`snoc` Yellow)
         },
         "stackEqual" :> {

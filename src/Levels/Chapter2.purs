@@ -33,7 +33,7 @@ chapter2 = {
             function: filter (\stack -> Red `elemIndex` stack /= -1) >>> tClearEmpty
         },
         "mapPushR" :> {
-            name: "map (push {Red})",
+            name: "map (stack {Red})",
             function: map (`snoc` Red)
         },
         "mapReverse" :> {
