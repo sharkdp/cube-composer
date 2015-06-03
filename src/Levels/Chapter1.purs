@@ -53,7 +53,7 @@ chapter1 = {
         },
         "1.3" :> {
             name: "Poseidon",
-            difficulty: Medium,
+            difficulty: Hard,
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown, Brown], [Brown], [Brown, Brown, Brown, Brown], [Brown], [Brown, Brown]]
         },

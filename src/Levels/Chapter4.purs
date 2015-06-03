@@ -43,7 +43,7 @@ chapter4 = {
             function: tReplace Cyan Orange
         },
         "rejectSizeG2" :> {
-            name: "reject(size > 2)",
+            name: "reject (size > 2)",
             function: reject (\x -> length x > 2)
         }
     ],
