@@ -1,6 +1,7 @@
 module Levels.Chapter2 where
 
 import Data.Array
+import Data.Maybe
 import qualified Data.StrMap as SM
 
 import Helper
@@ -46,23 +47,27 @@ chapter2 = {
         "2.1" :> {
             name: "Mercury",
             difficulty: Medium,
+            help: Nothing,
             initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red], [Red, Red], [Red, Red], [Red, Red]]
         },
         "2.2" :> {
             name: "Venus",
+            help: Nothing,
             difficulty: Easy,
             initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red], [Red, Red]]
         },
         "2.3" :> {
             name: "Earth",
+            help: Nothing,
             difficulty: Easy,
             initial: [[Cyan, Cyan, Yellow], [Cyan, Red], [Cyan, Red], [Cyan, Cyan, Yellow]],
             target: [[Red, Cyan, Cyan], [Red, Cyan], [Red, Cyan], [Red, Cyan, Cyan]]
         },
         "2.4" :> {
             name: "Mars",
+            help: Nothing,
             difficulty: Easy,
             initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red, Red], [Red, Yellow, Red], [Red, Yellow, Red], [Red, Red, Red]]

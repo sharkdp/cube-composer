@@ -74,6 +74,7 @@ instance showDifficulty :: Show Difficulty where
 
 type Level = {
     name :: String,
+    help :: Maybe String,
     difficulty :: Difficulty,
     initial :: Wall,
     target :: Wall

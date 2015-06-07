@@ -1,6 +1,7 @@
 module Levels.Chapter3 where
 
 import Data.Array
+import Data.Maybe
 import Data.Foldable
 import Math
 import qualified Data.StrMap as SM
@@ -72,24 +73,28 @@ chapter3 = {
     levels: SM.fromList [
         "3.1" :> {
             name: "0b0 .. 0b111",
+            help: Nothing,
             difficulty: Easy,
             initial: map toStack [0, 1, 2, 3, 4, 5, 6, 7],
             target: map toStack [1, 3, 5, 7, 1, 3, 5, 7]
         },
         "3.2" :> {
             name: "Odd..",
+            help: Nothing,
             difficulty: Easy,
             initial: map toStack [0, 1, 2, 3, 4, 5, 6, 7],
             target: map toStack [1, 3, 5, 7]
         },
         "3.3" :> {
             name: "Zero",
+            help: Nothing,
             difficulty: Hard,
             initial: map toStack [0, 1, 2, 3, 4, 5, 6, 7],
             target: map toStack [0, 0, 0, 0, 0, 0, 0, 0]
         },
         "3.4" :> {
             name: "Don't panic",
+            help: Nothing,
             difficulty: Hard,
             initial: map toStack [0, 1, 2, 3, 4, 5, 6, 7],
             target: map toStack [4, 2, 4, 2, 4, 2, 4, 2]

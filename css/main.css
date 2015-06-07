@@ -36,7 +36,8 @@ b {
 #panel {
     position: absolute;
     top: 50px;
-    right: 40px;
+    right: 0px;
+    width: 180px;
 }
 
 #controls {
@@ -94,14 +95,18 @@ a {
     color: #CC333F;
 }
 
-#settings {
-    margin-top: 150px;
+#goal {
+    height: 130px;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 30px;
 }
 
-select {
+#levels {
+    width: 100%;
+
     margin-top: 4px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding: 3px 0px;
     font-size: 16px;
     background-color: #fff;
 
@@ -109,6 +114,16 @@ select {
     border-bottom: 1px solid #aaa;
     border-radius: 3px;
     outline: none;
+}
+
+#help {
+    font-size: 14px;
+}
+
+#message {
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
 }
 
 .left-bottom .github-fork-ribbon {

@@ -58,7 +58,7 @@ renderWalls isomer walls = do
 
 -- | Render the target shape
 renderTarget isomer target = do
-    setIsomerConfig isomer 22 1250 360
+    setIsomerConfig isomer 30 1300 410
     renderWall isomer 0 target
 
 -- | Get program (list of transformer ids) of the active level
@@ -116,8 +116,9 @@ render setupUI gs = do
     -- DOM 'rendering'
     let message = if (maybe false (== (level.target)) (last steps))
                   then "<span class=\"animated flash\">Solved!</span>"
-                  else "Goal:"
+                  else ""
     withElementById "message" doc (setInnerHTML message)
+    withElementById "help" doc (setInnerHTML $ fromMaybe "" level.help)
 
     -- DEBUG:
     trace $ "Program: " ++ show tids

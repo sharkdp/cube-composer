@@ -1,6 +1,7 @@
 module Levels.Chapter4 where
 
 import Data.Array
+import Data.Maybe
 import qualified Data.StrMap as SM
 
 import Helper
@@ -51,12 +52,14 @@ chapter4 = {
     levels: SM.fromList [
         "4.1" :> {
             name: "Brick",
+            help: Nothing,
             difficulty: Easy,
             initial: [[Cyan, Orange], [Cyan, Cyan, Orange], [Orange, Orange], [Cyan, Cyan, Orange], [Cyan, Orange]],
             target: [[Cyan], [Cyan, Orange], [Cyan], [Cyan, Orange], [Cyan]]
         },
         "4.2" :> {
             name: "Fort",
+            help: Nothing,
             difficulty: Hard,
             initial: [[Cyan, Orange], [Cyan, Cyan, Orange], [Orange, Orange], [Cyan, Cyan, Orange], [Cyan, Orange]],
             target: [[Orange, Cyan], [Orange, Orange], [Orange, Cyan], [Orange, Orange], [Orange, Cyan]]
