@@ -118,7 +118,8 @@ render setupUI gs = do
                   then "<span class=\"animated flash\">Solved!</span>"
                   else ""
     withElementById "message" doc (setInnerHTML message)
-    withElementById "help" doc (setInnerHTML $ fromMaybe "" level.help)
+    let helpHTML = maybe "" (replaceColors <<< replaceTransformers chapter) level.help
+    withElementById "help" doc (setInnerHTML helpHTML)
 
     -- DEBUG:
     trace $ "Program: " ++ show tids
@@ -137,6 +138,14 @@ replaceColors s =
               rf = parseFlags "g"
               pattern c = "{" ++ c ++ "}"
               replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
+
+-- | Replace transformer names by boxes
+replaceTransformers :: Chapter -> String -> String
+replaceTransformers ch initial = SM.fold replaceT initial ch.transformers
+    where replaceT text id tr = replace (regex (pattern id) rf) (replacement tr) text
+          rf = parseFlags "g"
+          pattern id = "`" ++ id ++ "`"
+          replacement tr = "<span class=\"transformer\">" ++ tr.name ++ "</span>"
 
 -- | General key press handler
 keyPress :: forall eff. DOMEvent -> _

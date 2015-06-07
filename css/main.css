@@ -139,6 +139,15 @@ a {
     border-radius: 3px;
 }
 
+.transformer {
+    display: inline-block;
+    padding: 2px 2px;
+
+    background-color: #eee;
+    border-bottom: 1px solid #aaa;
+    border-radius: 5px;
+}
+
 .X { background-color: #fff; border: 1px dashed #444; }
 .Cyan { background-color: #00A0B0; }
 .Brown { background-color: #6A4A3C; }
