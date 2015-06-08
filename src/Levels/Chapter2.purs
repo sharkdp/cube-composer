@@ -15,23 +15,23 @@ chapter2 = {
     transformers: SM.fromList [
         "mapYtoYR" :> {
             name: "map {Yellow}↦{Yellow}{Red}",
-            function: tReplaceMultiple Yellow [Yellow, Red]
+            function: replaceMultiple Yellow [Yellow, Red]
         },
         "mapCtoRC" :> {
             name: "map {Cyan}↦{Red}{Cyan}",
-            function: tReplaceMultiple Cyan [Red, Cyan]
+            function: replaceMultiple Cyan [Red, Cyan]
         },
         "rejectY" :> {
             name: "map (reject {Yellow})",
-            function: map (reject (== Yellow)) >>> tClearEmpty
+            function: map (reject (== Yellow)) >>> clearEmpty
         },
         "rejectC" :> {
             name: "map (reject {Cyan})",
-            function: map (reject (== Cyan)) >>> tClearEmpty
+            function: map (reject (== Cyan)) >>> clearEmpty
         },
         "filterContainsR" :> {
             name: "filter (contains {Red})",
-            function: filter (\stack -> Red `elemIndex` stack /= -1) >>> tClearEmpty
+            function: filter (\stack -> Red `elemIndex` stack /= -1) >>> clearEmpty
         },
         "mapPushR" :> {
             name: "map (stack {Red})",

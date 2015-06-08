@@ -41,7 +41,7 @@ chapter4 = {
         },
         "mapCtoO" :> {
             name: "map {Cyan}↦{Orange}",
-            function: tReplace Cyan Orange
+            function: replaceSingle Cyan Orange
         },
         "rejectSizeG2" :> {
             name: "reject (size > 2)",
@@ -64,6 +64,5 @@ chapter4 = {
             initial: [[Cyan, Orange], [Cyan, Cyan, Orange], [Orange, Orange], [Cyan, Cyan, Orange], [Cyan, Orange]],
             target: [[Orange, Cyan], [Orange, Orange], [Orange, Cyan], [Orange, Orange], [Orange, Cyan]]
         }
-
     ]
 }

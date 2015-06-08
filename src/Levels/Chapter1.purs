@@ -8,6 +8,12 @@ import Helper
 import Transformer
 import Types
 
+-- | concat adjacent lists if they are equal
+stackEqual :: Transformer
+stackEqual [] = []
+stackEqual (s:ss) = concat (s:split.init) : stackEqual split.rest
+    where split = span (== s) ss
+
 chapter1 :: Chapter
 chapter1 = {
     name: "Chapter 1",
@@ -15,19 +21,19 @@ chapter1 = {
     transformers: SM.fromList [
         "replaceYbyB" :> {
             name: "map {Yellow}↦{Brown}",
-            function: tReplace Yellow Brown
+            function: replaceSingle Yellow Brown
         },
         "replaceYbyBY" :> {
             name: "map {Yellow}↦{Brown}{Yellow}",
-            function: tReplaceMultiple Yellow [Brown, Yellow]
+            function: replaceMultiple Yellow [Brown, Yellow]
         },
         "replaceBbyOO" :> {
             name: "map {Brown}↦{Orange}{Orange}",
-            function: tReplaceMultiple Brown [Orange, Orange]
+            function: replaceMultiple Brown [Orange, Orange]
         },
         "rejectO" :> {
             name: "map (reject {Orange})",
-            function: map (reject (== Orange)) >>> tClearEmpty
+            function: map (reject (== Orange)) >>> clearEmpty
         },
         "pushY" :> {
             name: "map (stack {Yellow})",
@@ -35,7 +41,7 @@ chapter1 = {
         },
         "stackEqual" :> {
             name: "stackEqual",
-            function: tStackEqual
+            function: stackEqual
         }
     ],
 
