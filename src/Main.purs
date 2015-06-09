@@ -62,7 +62,7 @@ renderWalls isomer walls = do
 
 -- | Render the target shape
 renderTarget isomer target = do
-    setIsomerConfig isomer 30 1300 410
+    setIsomerConfig isomer 30 1280 550
     renderWall isomer 0 target
 
 -- | Get program (list of transformer ids) of the active level

@@ -27,13 +27,14 @@
 
 @panelWidth:          200px;
 @panelMargin:         50px;
+@panelPadding:        8px;
 
 @boxWidth:            240px;
 @boxSpacing:          80px;
 @boxHeightMin:        100px;
 
 @transformerHeight:   30px;
-@transformerSpacing:  8px;
+@transformerSpacing:  @panelPadding;
 
 @cubeSize:            11px;
 
@@ -48,8 +49,12 @@ body, select {
     font-size: @fontSize;
 }
 
-b {
+.bold() {
     font-weight: 700;
+}
+
+b {
+    .bold;
 }
 
 #logo {
@@ -71,24 +76,29 @@ b {
     height: @canvasHeight;
 }
 
+.border() {
+    border-radius: 5px;
+    border: 1px solid @borderGray;
+}
+
 #panel {
     position: absolute;
     width: @panelWidth;
     top: @panelMargin;
     right: 0px;
+
+    padding: @panelPadding;
 }
 
 #goal {
-    height: 130px;
+    height: 140px;
     width: 100%;
-    margin-top: 5px;
-    margin-bottom: 30px;
 }
 
 #levels {
     width: 100%;
 
-    margin-top: 4px;
+    margin: 4px 0 15px 0;
     padding: 3px 0px;
     font-size: @fontSize;
     background-color: #fff;
@@ -105,9 +115,8 @@ b {
 }
 
 #message {
+    .bold;
     text-align: center;
-    font-weight: 700;
-    font-size: @fontSizeLarge;
 }
 
 #controls {
@@ -138,8 +147,7 @@ b {
 
     list-style-type: none;
 
-    border-radius: 5px;
-    border: 1px solid @borderGray;
+    .border;
 }
 
 .transformerStyle() {
