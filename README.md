@@ -11,7 +11,7 @@ git clone https://github.com/sharkdp/cube-composer.git
 cd cube-composer
 npm install
 bower install
-grunt
+gulp
 ```
 
 
