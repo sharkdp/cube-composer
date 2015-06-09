@@ -40,7 +40,7 @@ chapter1 = {
             function: map (`snoc` Yellow)
         },
         "stackEqual" :> {
-            name: "stackEqual",
+            name: "stackEqualColumns",
             function: stackEqual
         }
     ],
