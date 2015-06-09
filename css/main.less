@@ -1,0 +1,202 @@
+@import (inline) "bower_components/github-fork-ribbon-css/gh-fork-ribbon.css";
+@import (inline) "bower_components/animate-css/animate.min.css";
+
+// Ocean Five palette (http://www.colourlovers.com/palette/1473/Ocean_Five)
+@cyan:    #00A0B0;
+@brown:   #6A4A3C;
+@red:     #CC333F;
+@orange:  #EB6841;
+@yellow:  #EDC951;
+
+@transformerGray:  #eee;
+@borderGray:       #ccc;
+
+// Font
+@fontSize:      16px;
+@fontSizeSmall: 14px;
+@fontSizeLarge: 18px;
+
+// Dimensions
+@width:               800px;
+
+@canvasWidth:         @width;
+@canvasHeight:        500px;
+
+@logoWidth:           216px;
+@logoMargin:          10px;
+
+@panelWidth:          200px;
+@panelMargin:         50px;
+
+@boxWidth:            240px;
+@boxSpacing:          80px;
+@boxHeightMin:        100px;
+
+@transformerHeight:   30px;
+@transformerSpacing:  8px;
+
+@cubeSize:            11px;
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body, select {
+    font-family: 'Roboto Condensed', sans;
+    font-weight: 400;
+    font-size: @fontSize;
+}
+
+b {
+    font-weight: 700;
+}
+
+#logo {
+    position: absolute;
+    top: @logoMargin;
+    left: (@width - @logoWidth) / 2;
+    width: @logoWidth;
+}
+
+#container {
+    position: relative;
+    margin: 0 auto;
+    width: @width;
+}
+
+#canvas {
+    margin: 0 auto;
+    width: @canvasWidth;
+    height: @canvasHeight;
+}
+
+#panel {
+    position: absolute;
+    width: @panelWidth;
+    top: @panelMargin;
+    right: 0px;
+}
+
+#goal {
+    height: 130px;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 30px;
+}
+
+#levels {
+    width: 100%;
+
+    margin-top: 4px;
+    padding: 3px 0px;
+    font-size: @fontSize;
+    background-color: #fff;
+
+    border: 1px solid @borderGray;
+    border-bottom: 1px solid #aaa;
+    border-radius: 3px;
+    outline: none;
+}
+
+#help {
+    font-size: @fontSizeSmall;
+    margin-top: 0;
+}
+
+#message {
+    text-align: center;
+    font-weight: 700;
+    font-size: @fontSizeLarge;
+}
+
+#controls {
+    overflow: hidden;
+}
+
+.controlBox {
+    text-align: center;
+    float: left;
+}
+
+.left {
+    margin-left: (@width - 2 * @boxWidth - @boxSpacing) / 2;
+}
+
+.right {
+    margin-left: @boxSpacing;
+}
+
+.sortable {
+    margin: 10px 0 0 0;
+
+    width: @boxWidth;
+    min-height: @boxHeightMin;
+
+    // always leave space for one more transformer
+    padding: @transformerSpacing 0 @transformerHeight 0;
+
+    list-style-type: none;
+
+    border-radius: 5px;
+    border: 1px solid @borderGray;
+}
+
+.transformerStyle() {
+    background-color: @transformerGray;
+    border-bottom: 1px solid darken(@transformerGray, 30);
+    border-radius: 5px;
+}
+
+.transformer {
+    display: inline-block;
+    padding: 1px 4px;
+    margin: 0;
+
+    .transformerStyle;
+}
+
+.sortable li {
+    width: 88%;
+    margin: 0px auto @transformerSpacing auto;
+    padding: 3px @transformerSpacing 3px @transformerSpacing;
+
+    .transformerStyle;
+
+    cursor: move;
+}
+
+li.sortable-ghost {
+    opacity: 0.4;
+}
+
+p.footer {
+    margin-top: 30px;
+    font-size: @fontSizeSmall;
+    text-align: center;
+    color: #444;
+}
+
+a {
+    color: @red;
+}
+
+.github-fork-ribbon {
+    background-color: @red;
+}
+
+.cube {
+    display: inline-block;
+    width: @cubeSize;
+    height: @cubeSize;
+    margin: 0 1px -2px 1px;
+    border: 1px solid #444;
+    border-radius: 3px;
+}
+
+.X      { background-color: #fff; border: 1px dashed #444; }
+.Cyan   { background-color: @cyan; }
+.Brown  { background-color: @brown; }
+.Red    { background-color: @red; }
+.Orange { background-color: @orange; }
+.Yellow { background-color: @yellow; }

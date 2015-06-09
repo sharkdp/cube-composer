@@ -37,16 +37,20 @@ cubeColor Yellow = colorFromRGB 237 201 81
 traverseWithIndex_ :: forall a b m. (Applicative m) => (Number -> a -> m b) -> [a] -> m Unit
 traverseWithIndex_ f xs = sequence_ (zipWith f (0 .. (length xs - 1)) xs)
 
+-- | Spacing between two walls
+spacing :: Number
+spacing = 5.5
+
 -- | Render a single stack of cubes
 renderStack :: forall eff. IsomerInstance -> Number -> Number -> Stack -> Eff (isomer :: Isomer | eff) Unit
 renderStack isomer y x stack =
-    traverseWithIndex_ (renderCube isomer x (-6 * y)) $ map cubeColor stack
+    traverseWithIndex_ (renderCube isomer x (-spacing * y)) $ map cubeColor stack
 
 -- | Render a wall (multiple stacks)
 renderWall :: forall eff. IsomerInstance -> Number -> Wall -> Eff (isomer :: Isomer | eff) Unit
 renderWall isomer y [] =
     -- Render a gray placeholder for the empty wall
-    renderBlock isomer 1 (-6 * y) 0 5 0.9 0.1 (colorFromRGB 100 100 100)
+    renderBlock isomer 1 (-spacing * y) 0 5 0.9 0.1 (colorFromRGB 100 100 100)
 renderWall isomer y wall =
     traverseWithIndex_ (\x -> renderStack isomer y (length wall - x)) (reverse wall)
 
@@ -137,7 +141,7 @@ replaceColors s =
         where replaceColor s c = replace (regex (pattern c) rf) (replacement c) s
               rf = parseFlags "g"
               pattern c = "{" ++ c ++ "}"
-              replacement c = "<div class=\"rect " ++ c ++ "\"> </div>"
+              replacement c = "<div class=\"cube " ++ c ++ "\"> </div>"
 
 -- | Replace transformer names by boxes
 replaceTransformers :: Chapter -> String -> String

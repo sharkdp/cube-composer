@@ -48,17 +48,26 @@ module.exports = function(grunt) {
 
         dotPsci: ["<%=src%>"],
 
+        less: {
+            all: {
+                files: {
+                    "dist/main.css": "css/main.less"
+                }
+            }
+        },
+
         watch: {
-            files: ["Gruntfile.js", "<%=src%>"],
+            files: ["Gruntfile.js", "<%=src%>", "css/main.less"],
             tasks: ["dev"]
         }
     });
 
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-purescript");
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks("grunt-contrib-watch");
 
-    grunt.registerTask("dev", ["psc:all", "dotPsci"]);
-    grunt.registerTask("prod", ["psc", "uglify"]);
+    grunt.registerTask("dev", ["less", "psc:all", "dotPsci"]);
+    grunt.registerTask("prod", ["less", "psc", "uglify"]);
     grunt.registerTask("default", "dev");
 };

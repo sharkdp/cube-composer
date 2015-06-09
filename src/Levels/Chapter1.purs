@@ -48,9 +48,10 @@ chapter1 = {
     levels: SM.fromList [
         "1.1" :> {
             name: "Dismiss",
-            help: Just """In this game, your goal is to create a sequence of transformations such
-                          that the cubes form the desired pattern shown above. To solve this level,
-                          drag the transformer `rejectO` to the program list on the right.""",
+            help: Just """In this game, your goal is to create a sequence of functions which
+                          transforms the stack of cubes into the desired pattern shown above.
+                          To solve this level, add the `rejectO` function to your program by
+                          dragging it to the list on the right side.""",
             difficulty: Easy,
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
