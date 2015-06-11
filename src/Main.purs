@@ -151,6 +151,10 @@ replaceTransformers ch initial = SM.fold replaceT initial ch.transformers
           pattern id = "`" ++ id ++ "`"
           replacement tr = "<span class=\"transformer\">" ++ tr.name ++ "</span>"
 
+-- | Clear all functions for the current level
+resetLevel = modifyGameStateAndRender true mod
+    where mod gs = gs { levelState = SM.insert gs.currentLevel [] gs.levelState }
+
 -- | General key press handler
 keyPress :: forall eff. DOMEvent -> _
 keyPress event = do
@@ -160,9 +164,7 @@ keyPress event = do
          -- 'r': reset lists
          82 -> do
                    ctrlPressed <- ctrlKey event
-                   when (not ctrlPressed) $
-                       modifyGameStateAndRender true $ \gs ->
-                           gs { levelState = SM.insert gs.currentLevel [] gs.levelState }
+                   when (not ctrlPressed) resetLevel
          _ -> return unit
     return unit
 
@@ -259,6 +261,10 @@ main = do
     -- set up 'change' handler for the level selector
     withElementById "levels" doc $ \selectLevel ->
         addChangeEventListener levelChangeHandler selectLevel
+
+    -- Click handlers for buttons
+    withElementById "reset" doc $ \button ->
+        addMouseEventListener MouseClickEvent (const resetLevel :: DOMEvent -> _) button
 
     -- load game state (or set initial one)
     gs <- fromMaybe initialGS <$> loadGameState

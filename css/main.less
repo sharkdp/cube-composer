@@ -178,6 +178,28 @@ li.sortable-ghost {
     opacity: 0.4;
 }
 
+.buttons {
+    margin: 5px 0;
+}
+
+.button {
+    cursor: pointer;
+
+    color: #444;
+    font-size: @fontSizeSmall;
+    text-decoration: none;
+
+    @bgCol: #f0f0f0;
+    background-color: @bgCol;
+    padding: 2px 3px;
+    .border;
+
+    &:hover {
+        border-color: darken(@borderGray, 10);
+        background-color: darken(@bgCol, 10);
+    }
+}
+
 p.footer {
     margin-top: 30px;
     font-size: @fontSizeSmall;
