@@ -1,35 +1,31 @@
 module Levels.Chapter4 where
 
-import Data.Array
+import Prelude
+import Data.List
 import Data.Maybe
-import qualified Data.StrMap as SM
 
 import Helper
 import Transformer
 import Types
 
 cxToX :: Stack -> Stack
-cxToX [] = []
-cxToX [c] = [c]
-cxToX (c:x:cs) = if c == Cyan
-                   then x : cxToX cs
-                   else c : cxToX (x : cs)
+cxToX Nil                     = Nil
+cxToX (Cons Cyan (Cons y xs)) = y : cxToX xs
+cxToX (Cons x xs)             = x : cxToX xs
 
 ooToC :: Stack -> Stack
-ooToC [] = []
-ooToC [c] = [c]
-ooToC (c1:c2:cs) = if c1 == Orange && c2 == Orange
-                   then Cyan : ooToC cs
-                   else c1 : ooToC (c2 : cs)
+ooToC Nil                            = Nil
+ooToC (Cons Orange (Cons Orange xs)) = Cyan : ooToC xs
+ooToC (Cons x cs)                    = x : ooToC cs
 
 chapter4 :: Chapter
 chapter4 = {
     name: "Chapter 4",
 
-    transformers: SM.fromList [
+    transformers: fromArray [
         "mapXtoOX" :> {
             name: "map {X}↦{Orange}{X}",
-            function: map (concatMap (\c -> [Orange, c]))
+            function: map (concatMap (\x -> (Orange : x : Nil)))
         },
         "mapCXtoC" :> {
             name: "map {Cyan}{X}↦{X}",
@@ -49,15 +45,15 @@ chapter4 = {
         }
     ],
 
-    levels: SM.fromList [
-        "4.1" :> {
+    levels: fromArray [
+        "4.1" :-> {
             name: "Brick",
             help: Nothing,
             difficulty: Easy,
             initial: [[Cyan, Orange], [Cyan, Cyan, Orange], [Orange, Orange], [Cyan, Cyan, Orange], [Cyan, Orange]],
             target: [[Cyan], [Cyan, Orange], [Cyan], [Cyan, Orange], [Cyan]]
         },
-        "4.2" :> {
+        "4.2" :-> {
             name: "Fort",
             help: Nothing,
             difficulty: Hard,

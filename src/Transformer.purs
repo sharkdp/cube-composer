@@ -1,6 +1,7 @@
 module Transformer where
 
-import Data.Array
+import Prelude
+import Data.List
 import Data.Foldable
 import Data.Maybe
 import Data.Traversable
@@ -12,16 +13,16 @@ map2d :: (Cube -> Cube) -> Wall -> Wall
 map2d = map <<< map
 
 -- | Opposite of filter, reject all values which satisfy the pattern
-reject :: forall a. (a -> Boolean) -> [a] -> [a]
+reject :: forall a. (a -> Boolean) -> List a -> List a
 reject f = filter (not <<< f)
 
 -- | Successively apply all transformers to the initial wall and return
 -- | all (intermediate) transformation steps
-allSteps :: [Transformer] -> Wall -> [Wall]
+allSteps :: List Transformer -> Wall -> List Wall
 allSteps ts initial = initial : scanl (#) initial ts
 
 -- | Return the final step of the transformation chain
-transformed :: [Transformer] -> Wall -> Wall
+transformed :: List Transformer -> Wall -> Wall
 transformed ts initial = foldl (#) initial ts
 
 -- | Remove emtpy stacks
@@ -34,6 +35,6 @@ replaceSingle a b = map2d replace
     where replace x = if x == a then b else x
 
 -- | Replace all occurences of a certain cube with a list of new cubes
-replaceMultiple :: Cube -> [Cube] -> Transformer
+replaceMultiple :: Cube -> List Cube -> Transformer
 replaceMultiple a bs = map (concatMap replace)
-   where replace x = if x == a then bs else [x]
+    where replace x = if x == a then bs else singleton x

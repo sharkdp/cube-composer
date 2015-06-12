@@ -12,6 +12,11 @@ var sources = [
     "bower_components/purescript-*/src/**/*.purs"
 ];
 
+var foreigns = [
+    "src/**/*.js",
+    "bower_components/purescript-*/src/**/*.js"
+];
+
 var sourcesCli = [
     "bower_components/**/src/**/*.purs",
     "src/Types.purs",
@@ -28,6 +33,7 @@ gulp.task("make", function() {
         .pipe(purescript.psc({
             main: "Main",
             module: ["Main"],
+            ffi: foreigns,
             output: "main.js"
         }))
         .pipe(gulp.dest("dist"));
@@ -38,6 +44,7 @@ gulp.task("cli", function() {
         .pipe(purescript.psc({
             main: "Main",
             module: ["Main"],
+            ffi: foreigns,
             output: "cli.js"
         }))
         .pipe(gulp.dest("dist"));
@@ -45,7 +52,9 @@ gulp.task("cli", function() {
 
 gulp.task("dotpsci", function () {
     return gulp.src(sourcesCli)
-        .pipe(purescript.dotPsci());
+        .pipe(purescript.dotPsci({
+            ffi: foreigns
+        }));
 });
 
 gulp.task("less", function() {

@@ -1,6 +1,7 @@
 module Level where
 
-import Data.Array
+import Prelude
+import Data.List
 import Data.Foldable
 import Data.Maybe
 import qualified Data.StrMap as SM
@@ -14,16 +15,16 @@ import Levels.Chapter3
 import Levels.Chapter4
 
 -- | A simple list of all available chapters
-allChapters :: [Chapter]
-allChapters = [chapter1, chapter2, chapter3, chapter4]
+allChapters :: List Chapter
+allChapters = chapter1 : chapter2 : chapter3 : chapter4 : Nil
 
 -- | A dictionary of all available levels across the chapters
 allLevels :: SM.StrMap Level
 allLevels = SM.unions (map _.levels allChapters)
 
 -- | A list of all level ids across the chapters
-allLevelIds :: [LevelId]
-allLevelIds = allChapters >>= (_.levels >>> SM.keys) >>> sort
+allLevelIds :: List LevelId
+allLevelIds = allChapters >>= (_.levels >>> SM.keys >>> toList) >>> sort
 
 -- | Find a given level by its id
 getLevel :: LevelId -> Level

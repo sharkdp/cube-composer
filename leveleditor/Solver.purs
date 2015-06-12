@@ -3,23 +3,24 @@ module Solver (
     , solve
     ) where
 
-import qualified Data.StrMap as SM
-import Data.Array
+import Prelude
+import Data.List
 import Data.Function
+import qualified Data.StrMap as SM
 
 import Level
 import Transformer
 import Types
 
-type Solution = [TransformerId]
+type Solution = List TransformerId
 
 -- | Takes from a list of lists until the length increases
-takeShortest :: forall a. [[a]] -> [[a]]
-takeShortest [] = []
-takeShortest (x:xs) = x : takeWhile (\y -> length y == length x) xs
+takeShortest :: forall a. List (List a) -> List (List a)
+takeShortest Nil = Nil
+takeShortest (Cons x xs) = x : takeWhile (\y -> length y == length x) xs
 
 -- | Helper function for the solver
-solve' :: Chapter -> Wall -> Wall -> [TransformerId] -> [TransformerId] -> [Solution]
+solve' :: Chapter -> Wall -> Wall -> List TransformerId -> List TransformerId -> List Solution
 solve' ch initial target chain ts =
         if final == target
         then return chain
@@ -28,8 +29,8 @@ solve' ch initial target chain ts =
     where final = transformed (map (getTransformer ch) chain) initial
 
 -- | Brute force solver. Returns a list of all shortest solutions, if any exist
-solve :: LevelId -> [Solution]
-solve lid = solve' chapter level.initial level.target [] (SM.keys chapter.transformers)
+solve :: LevelId -> List Solution
+solve lid = solve' chapter level.initial level.target Nil (toList $ SM.keys chapter.transformers)
     where level = getLevel lid
           chapter = getChapter lid
 

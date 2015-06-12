@@ -1,9 +1,11 @@
 module Main (main) where
 
+import Prelude
+import Control.Apply
 import Control.Monad
 import Control.Monad.Eff
+import Control.Monad.Eff.Console
 import DOM
-import Data.Array
 import Data.DOM.Simple.Document
 import Data.DOM.Simple.Element
 import Data.DOM.Simple.Events
@@ -11,10 +13,11 @@ import Data.DOM.Simple.Types
 import Data.DOM.Simple.Window
 import Data.Enum
 import Data.Foldable
+import Data.Int
+import Data.List
 import Data.Maybe
 import Data.String.Regex (regex, parseFlags, replace)
 import Data.Traversable
-import Debug.Trace
 import qualified Data.StrMap as SM
 
 import DOMHelper
@@ -33,9 +36,11 @@ cubeColor Red = colorFromRGB 204 51 63
 cubeColor Orange = colorFromRGB 235 104 65
 cubeColor Yellow = colorFromRGB 237 201 81
 
--- | Like traverse_, but specialized for arrays with an additional parameter (index of element)
-traverseWithIndex_ :: forall a b m. (Applicative m) => (Number -> a -> m b) -> [a] -> m Unit
-traverseWithIndex_ f xs = sequence_ (zipWith f (0 .. (length xs - 1)) xs)
+-- | Like traverse_, but the function also takes an index parameter
+traverseWithIndex_ :: forall a b m. (Applicative m) => (Int -> a -> m b) -> (List a) -> m Unit
+traverseWithIndex_ f xs = go xs 0
+    where go Nil _ = return unit
+          go (Cons x xs) i = f i x *> go xs (i + 1)
 
 -- | Spacing between two walls
 spacing :: Number
@@ -44,32 +49,32 @@ spacing = 5.5
 -- | Render a single stack of cubes
 renderStack :: forall eff. IsomerInstance -> Number -> Number -> Stack -> Eff (isomer :: Isomer | eff) Unit
 renderStack isomer y x stack =
-    traverseWithIndex_ (renderCube isomer x (-spacing * y)) $ map cubeColor stack
+    traverseWithIndex_ (\z -> renderCube isomer x (-spacing * y) (toNumber z)) $ map cubeColor stack
 
 -- | Render a wall (multiple stacks)
 renderWall :: forall eff. IsomerInstance -> Number -> Wall -> Eff (isomer :: Isomer | eff) Unit
-renderWall isomer y [] =
+renderWall isomer y Nil =
     -- Render a gray placeholder for the empty wall
-    renderBlock isomer 1 (-spacing * y) 0 5 0.9 0.1 (colorFromRGB 100 100 100)
+    renderBlock isomer 1.0 (-spacing * y) 0.0 5.0 0.9 0.1 (colorFromRGB 100 100 100)
 renderWall isomer y wall =
-    traverseWithIndex_ (\x -> renderStack isomer y (length wall - x)) (reverse wall)
+    traverseWithIndex_ (\x -> renderStack isomer y (toNumber (length wall - x))) (reverse wall)
 
 -- | Render a series of walls
-renderWalls :: forall eff. IsomerInstance -> [Wall] -> Eff (isomer :: Isomer | eff) Unit
+renderWalls :: forall eff. IsomerInstance -> (List Wall) -> Eff (isomer :: Isomer | eff) Unit
 renderWalls isomer walls = do
-    setIsomerConfig isomer 40 40 400
-    traverseWithIndex_ (renderWall isomer) walls
+    setIsomerConfig isomer 40.0 40.0 400.0
+    traverseWithIndex_ (\y -> renderWall isomer (toNumber y)) walls
 
 -- | Render the target shape
 renderTarget isomer target = do
-    setIsomerConfig isomer 30 1280 550
-    renderWall isomer 0 target
+    setIsomerConfig isomer 30.0 1280.0 550.0
+    renderWall isomer 0.0 target
 
 -- | Get program (list of transformer ids) of the active level
-getCurrentIds :: GameState -> [TransformerId]
+getCurrentIds :: GameState -> (List TransformerId)
 getCurrentIds gs = case (SM.lookup gs.currentLevel gs.levelState) of
                        Just ids -> ids
-                       Nothing -> []
+                       Nothing -> Nil
 
 -- | Traverse a StrMap while performing monadic side effects
 traverseWithKey_ :: forall a m. (Monad m) => (String -> a -> m Unit) -> SM.StrMap a -> m Unit
@@ -126,18 +131,18 @@ render setupUI gs = do
     withElementById "help" doc (setInnerHTML helpHTML)
 
     -- DEBUG:
-    trace $ "Program: " ++ show tids
-    trace $ "Initial: " ++ show level.initial
-    trace "Steps:"
+    log $ "Program: " ++ show tids
+    log $ "Initial: " ++ show level.initial
+    log "Steps:"
     traverse_ print steps
-    trace "---"
-    trace $ "Target: " ++ show level.target
-    trace ""
+    log "---"
+    log $ "Target: " ++ show level.target
+    log ""
 
 -- | Replace color placeholders in the transformer description by colored rectangular divs
 replaceColors :: String -> String
 replaceColors s =
-    foldl replaceColor s ("X" : map show (Cyan `enumFromTo` Yellow))
+    foldl replaceColor s ("X" : map show (toList $ Cyan `enumFromTo` Yellow))
         where replaceColor s c = replace (regex (pattern c) rf) (replacement c) s
               rf = parseFlags "g"
               pattern c = "{" ++ c ++ "}"
@@ -153,7 +158,7 @@ replaceTransformers ch initial = SM.fold replaceT initial ch.transformers
 
 -- | Clear all functions for the current level
 resetLevel = modifyGameStateAndRender true mod
-    where mod gs = gs { levelState = SM.insert gs.currentLevel [] gs.levelState }
+    where mod gs = gs { levelState = SM.insert gs.currentLevel Nil gs.levelState }
 
 -- | General key press handler
 keyPress :: forall eff. DOMEvent -> _
@@ -171,7 +176,7 @@ keyPress event = do
 -- | Click handler for the <li> elements (transformers)
 clickLi :: forall eff. HTMLElement
         -> DOMEvent
-        -> Eff (dom :: DOM, trace :: Trace, isomer :: Isomer, storage :: Storage | eff) Unit
+        -> Eff (dom :: DOM, console :: CONSOLE, isomer :: Isomer, storage :: Storage | eff) Unit
 clickLi liEl event = do
     newId <- getAttribute "id" liEl
     ulId <- parentElement liEl >>= getAttribute "id"
@@ -188,7 +193,7 @@ clickLi liEl event = do
 appendTransformerElement :: forall eff. HTMLElement -> String -> TransformerRecord -> Eff (dom :: DOM | eff) Unit
 appendTransformerElement ul id t = do
     doc <- document globalWindow
-    li <- createElement doc "li"
+    li <- createElement "li" doc
     setAttribute "id" id li
     setInnerHTML (replaceColors t.name) li
     appendChild ul li
@@ -199,7 +204,7 @@ appendLevelElement select currentId lid = do
     let chapter = getChapter lid
         level = getLevel lid
     doc <- document globalWindow
-    option <- createElement doc "option"
+    option <- createElement "option" doc
     setAttribute "value" lid option
     when (currentId == lid) $
         setAttribute "selected" "selected" option
@@ -213,7 +218,7 @@ initialGS = { currentLevel: "1.1", levelState: SM.empty }
 -- | Load game, modify and store the game state. Render the new state
 modifyGameStateAndRender :: forall eff.  Boolean
                          -> (GameState -> GameState)
-                         -> Eff (storage :: Storage, dom :: DOM, isomer :: Isomer, trace :: Trace | eff) Unit
+                         -> Eff (storage :: Storage, dom :: DOM, isomer :: Isomer, console :: CONSOLE | eff) Unit
 modifyGameStateAndRender setupUI modifyGS = do
     -- Load old game state from local storage
     mgs <- loadGameState
@@ -241,7 +246,7 @@ reprogramHandler = do
     -- Retrieve current 'program'
     Just ulAvailable <- getElementById "program" doc
     lis <- children ulAvailable
-    program <- traverse (getAttribute "id") lis
+    program <- toList <$> traverse (getAttribute "id") lis
 
     modifyGameStateAndRender false $ \gs ->
         gs { levelState = SM.insert gs.currentLevel program gs.levelState }
