@@ -10,8 +10,10 @@
   "homepage": "https://github.com/sharkdp/cube-composer",
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-purescript": "^0.5.0-rc.1",
+    "gulp-concat": "^2.5.2",
     "gulp-less": "^3.0.3",
-    "gulp-uglify": "^1.2.0"
+    "gulp-purescript": "^0.5.0",
+    "gulp-uglify": "^1.2.0",
+    "rimraf": "^2.4.0"
   }
 }
