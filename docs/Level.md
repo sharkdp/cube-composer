@@ -51,13 +51,15 @@ Get the chapter to which a level belongs
 #### `getTransformerRecord`
 
 ``` purescript
-getTransformerRecord :: Chapter -> TransformerId -> TransformerRecord
+getTransformerRecord :: Chapter -> TransformerId -> Maybe TransformerRecord
 ```
+
+Find a specific transformer + metadata by its id
 
 #### `getTransformer`
 
 ``` purescript
-getTransformer :: Chapter -> TransformerId -> Transformer
+getTransformer :: Chapter -> TransformerId -> Maybe Transformer
 ```
 
 Find a specific transformer by its id

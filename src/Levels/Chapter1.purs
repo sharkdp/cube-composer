@@ -9,9 +9,9 @@ import Transformer
 import Types
 
 -- | concat adjacent lists if they are equal
-stackEqual :: Transformer
-stackEqual Nil = Nil
-stackEqual (Cons s ss) = concat (s:split.init) : stackEqual split.rest
+stackEqualColumns :: Transformer
+stackEqualColumns Nil = Nil
+stackEqualColumns (Cons s ss) = concat (s:split.init) : stackEqualColumns split.rest
     where split = span (== s) ss
 
 chapter1 :: Chapter
@@ -35,13 +35,13 @@ chapter1 = {
             name: "map (reject {Orange})",
             function: mapReject Orange
         },
-        "pushY" :> {
+        "stackY" :> {
             name: "map (stack {Yellow})",
             function: mapStack Yellow
         },
-        "stackEqual" :> {
+        "stackEqualColumns" :> {
             name: "stackEqualColumns",
-            function: stackEqual
+            function: stackEqualColumns
         }
     ],
 

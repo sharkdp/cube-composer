@@ -45,12 +45,10 @@ getChapter lid =
          Nothing -> unsafeError $ "Could not find chapter " ++ show lid
     where hasLevel ch = SM.member lid ch.levels
 
-getTransformerRecord :: Chapter -> TransformerId -> TransformerRecord
-getTransformerRecord chapter tid =
-    case (SM.lookup tid chapter.transformers) of
-         Just t -> t
-         Nothing -> unsafeError $ "Could not find transformer " ++ show tid
+-- | Find a specific transformer + metadata by its id
+getTransformerRecord :: Chapter -> TransformerId -> Maybe TransformerRecord
+getTransformerRecord chapter tid = SM.lookup tid chapter.transformers
 
 -- | Find a specific transformer by its id
-getTransformer :: Chapter -> TransformerId -> Transformer
-getTransformer ch tid = _.function $ getTransformerRecord ch tid
+getTransformer :: Chapter -> TransformerId -> Maybe Transformer
+getTransformer ch tid = _.function <$> getTransformerRecord ch tid

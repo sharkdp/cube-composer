@@ -99,7 +99,10 @@ render setupUI gs = do
         setInnerHTML "" ulProgram
 
         let unused = foldl (flip SM.delete) chapter.transformers tids
-        let active = foldl (\sm id -> SM.insert id (getTransformerRecord chapter id) sm) SM.empty tids
+            insert sm id = case (getTransformerRecord chapter id) of
+                               (Just tr) -> SM.insert id tr sm
+                               Nothing ->   sm
+            active = foldl insert SM.empty tids
 
         -- create li elements for transformers
         traverseWithKey_ (appendTransformerElement ulAvailable) unused
@@ -114,7 +117,7 @@ render setupUI gs = do
             setInnerHTML "levels" selectLevel
             traverse_ (appendLevelElement selectLevel gs.currentLevel) allLevelIds
 
-    let transformers = map (getTransformer chapter) tids
+    let transformers = mapMaybe (getTransformer chapter) tids
     let steps = allSteps transformers level.initial
 
     -- On-canvas rendering

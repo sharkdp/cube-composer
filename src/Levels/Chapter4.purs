@@ -27,7 +27,7 @@ chapter4 = {
             name: "map {X}↦{Orange}{X}",
             function: map (concatMap (\x -> (Orange : x : Nil)))
         },
-        "mapCXtoC" :> {
+        "mapCXtoX" :> {
             name: "map {Cyan}{X}↦{X}",
             function: map cxToX
         },

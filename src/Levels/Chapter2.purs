@@ -36,7 +36,7 @@ chapter2 = {
             name: "filter (contains {Red})",
             function: filter (contains Red) >>> clearEmpty
         },
-        "mapPushR" :> {
+        "stackR" :> {
             name: "map (stack {Red})",
             function: map (`snoc` Red)
         },
