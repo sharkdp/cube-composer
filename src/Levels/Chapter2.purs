@@ -26,11 +26,11 @@ chapter2 = {
         },
         "rejectY" :> {
             name: "map (reject {Yellow})",
-            function: map (reject (== Yellow)) >>> clearEmpty
+            function: mapReject Yellow
         },
         "rejectC" :> {
             name: "map (reject {Cyan})",
-            function: map (reject (== Cyan)) >>> clearEmpty
+            function: mapReject Cyan
         },
         "filterContainsR" :> {
             name: "filter (contains {Red})",

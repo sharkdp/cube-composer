@@ -33,11 +33,11 @@ chapter1 = {
         },
         "rejectO" :> {
             name: "map (reject {Orange})",
-            function: map (reject (== Orange)) >>> clearEmpty
+            function: mapReject Orange
         },
         "pushY" :> {
             name: "map (stack {Yellow})",
-            function: map (`snoc` Yellow)
+            function: mapStack Yellow
         },
         "stackEqual" :> {
             name: "stackEqualColumns",
@@ -55,8 +55,7 @@ chapter1 = {
             difficulty: Easy,
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown], [Yellow], [Yellow], [Yellow], [Brown]]
-        }
-        ,
+        },
         "1.2" :-> {
             name: "Gizeh",
             help: Nothing,

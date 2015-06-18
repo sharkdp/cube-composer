@@ -41,6 +41,22 @@ clearEmpty :: Transformer
 
 Remove emtpy stacks
 
+#### `mapReject`
+
+``` purescript
+mapReject :: Cube -> Transformer
+```
+
+Reject all cubes of a certain color
+
+#### `mapStack`
+
+``` purescript
+mapStack :: Cube -> Transformer
+```
+
+Stack a single cube on top of each column
+
 #### `replaceSingle`
 
 ``` purescript

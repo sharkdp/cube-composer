@@ -29,6 +29,14 @@ transformed ts initial = foldl (#) initial ts
 clearEmpty :: Transformer
 clearEmpty = reject null
 
+-- | Reject all cubes of a certain color
+mapReject :: Cube -> Transformer
+mapReject c = map (reject (== c)) >>> clearEmpty
+
+-- | Stack a single cube on top of each column
+mapStack :: Cube -> Transformer
+mapStack c = map (`snoc` c)
+
 -- | Replace all occurences of a certain cube with another
 replaceSingle :: Cube -> Cube -> Transformer
 replaceSingle a b = map2d replace
