@@ -8,72 +8,80 @@ import Helper
 import Transformer
 import Types
 
-contains :: forall a. (Eq a) => a -> List a -> Boolean
-contains x xs = isJust $ elemIndex x xs
+-- | concat adjacent lists if they are equal
+stackEqualColumns :: Transformer
+stackEqualColumns Nil = Nil
+stackEqualColumns (Cons s ss) = concat (s:split.init) : stackEqualColumns split.rest
+    where split = span (== s) ss
 
 chapter2 :: Chapter
 chapter2 = {
     name: "Chapter 2",
 
     transformers: fromArray [
-        "mapYtoYR" :> {
-            name: "map {Yellow}↦{Yellow}{Red}",
-            function: replaceMultiple Yellow (Yellow : Red : Nil)
+        "replaceYbyB" :> {
+            name: "map {Yellow}↦{Brown}",
+            function: replaceSingle Yellow Brown
         },
-        "mapCtoRC" :> {
-            name: "map {Cyan}↦{Red}{Cyan}",
-            function: replaceMultiple Cyan (Red : Cyan : Nil)
+        "replaceYbyBY" :> {
+            name: "map {Yellow}↦{Brown}{Yellow}",
+            function: replaceMultiple Yellow (Brown : Yellow : Nil)
         },
-        "rejectY" :> {
-            name: "map (reject {Yellow})",
-            function: mapReject Yellow
+        "replaceBbyOO" :> {
+            name: "map {Brown}↦{Orange}{Orange}",
+            function: replaceMultiple Brown (Orange : Orange : Nil)
         },
-        "rejectC" :> {
-            name: "map (reject {Cyan})",
-            function: mapReject Cyan
+        "rejectO" :> {
+            name: "map (reject {Orange})",
+            function: mapReject Orange
         },
-        "filterContainsR" :> {
-            name: "filter (contains {Red})",
-            function: filter (contains Red) >>> clearEmpty
+        "stackY" :> {
+            name: "map (stack {Yellow})",
+            function: mapStack Yellow
         },
-        "stackR" :> {
-            name: "map (stack {Red})",
-            function: map (`snoc` Red)
-        },
-        "mapReverse" :> {
-            name: "map reverse",
-            function: map reverse
+        "stackEqualColumns" :> {
+            name: "stackEqualColumns",
+            function: stackEqualColumns
         }
     ],
 
     levels: fromArray [
         "2.1" :-> {
-            name: "Mercury",
-            difficulty: Medium,
-            help: Nothing,
-            initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
-            target: [[Red, Red], [Red, Red], [Red, Red], [Red, Red]]
+            name: "Bricklayer",
+            help: Just """This chapter introduces a new function `stackEqualColumns`. It
+                          takes <i>adjacent equal columns</i> and stacks them on top of
+                          each other. Try it!""",
+            difficulty: Easy,
+            initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
+            target: [[Brown], [Orange, Orange], [Brown, Brown, Brown], [Orange, Orange], [Brown]]
         },
         "2.2" :-> {
-            name: "Venus",
+            name: "Gizeh",
             help: Nothing,
-            difficulty: Easy,
-            initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
-            target: [[Red, Red], [Red, Red]]
+            difficulty: Medium,
+            initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
+            target: [[Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown, Brown, Brown, Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown]]
         },
         "2.3" :-> {
-            name: "Earth",
+            name: "Poseidon",
             help: Nothing,
-            difficulty: Easy,
-            initial: [[Cyan, Cyan, Yellow], [Cyan, Red], [Cyan, Red], [Cyan, Cyan, Yellow]],
-            target: [[Red, Cyan, Cyan], [Red, Cyan], [Red, Cyan], [Red, Cyan, Cyan]]
+            difficulty: Hard,
+            initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
+            target: [[Brown, Brown], [Brown], [Brown, Brown, Brown, Brown], [Brown], [Brown, Brown]]
         },
         "2.4" :-> {
-            name: "Mars",
+            name: "Bowl",
             help: Nothing,
-            difficulty: Easy,
-            initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
-            target: [[Red, Red, Red], [Red, Yellow, Red], [Red, Yellow, Red], [Red, Red, Red]]
+            difficulty: Hard,
+            initial: [[Brown], [Orange], [Orange], [Brown]],
+            target: [[Orange, Orange, Orange, Orange], [Orange, Orange], [Orange, Orange], [Orange, Orange, Orange, Orange]]
+        },
+        "2.5" :-> {
+            name: "Stamp",
+            help: Nothing,
+            difficulty: Hard,
+            initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
+            target: [[Yellow], [Yellow], [Yellow, Yellow, Yellow, Yellow], [Yellow], [Yellow]]
         }
     ]
 }

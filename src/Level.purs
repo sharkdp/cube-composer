@@ -9,6 +9,7 @@ import qualified Data.StrMap as SM
 import Types
 import Unsafe
 
+import Levels.Chapter0
 import Levels.Chapter1
 import Levels.Chapter2
 import Levels.Chapter3
@@ -16,7 +17,7 @@ import Levels.Chapter4
 
 -- | A simple list of all available chapters
 allChapters :: List Chapter
-allChapters = chapter1 : chapter2 : chapter3 : chapter4 : Nil
+allChapters = chapter0 : chapter1 : chapter2 : chapter3 : chapter4 : Nil
 
 -- | A dictionary of all available levels across the chapters
 allLevels :: SM.StrMap Level

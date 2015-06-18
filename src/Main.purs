@@ -216,7 +216,7 @@ appendLevelElement select currentId lid = do
 
 -- | Initial game state for first-time visitors
 initialGS :: GameState
-initialGS = { currentLevel: "1.1", levelState: SM.empty }
+initialGS = { currentLevel: "0.1", levelState: SM.empty }
 
 -- | Load game, modify and store the game state. Render the new state
 modifyGameStateAndRender :: forall eff.  Boolean
