@@ -4,8 +4,9 @@ module Solver (
     ) where
 
 import Prelude
-import Data.List
 import Data.Function
+import Data.List
+import Data.Maybe
 import qualified Data.StrMap as SM
 
 import Level
@@ -26,7 +27,7 @@ solve' ch initial target chain ts =
         then return chain
         else takeShortest $ sortBy (compare `on` length)
                           $ concatMap (\t -> solve' ch initial target (chain `snoc` t) (filter (/= t) ts)) ts
-    where final = transformed (map (getTransformer ch) chain) initial
+    where final = transformed (mapMaybe (getTransformer ch) chain) initial
 
 -- | Brute force solver. Returns a list of all shortest solutions, if any exist
 solve :: LevelId -> List Solution
