@@ -27,7 +27,7 @@
 
 @panelWidth:          200px;
 @panelMargin:         50px;
-@panelPadding:        8px;
+@panelPadding:        7px;
 
 @boxWidth:            240px;
 @boxSpacing:          80px;
@@ -166,8 +166,9 @@ b {
 
 .sortable li {
     width: 88%;
+    line-height: 24px;
     margin: 0px auto @transformerSpacing auto;
-    padding: 3px @transformerSpacing 3px @transformerSpacing;
+    padding: 2px @transformerSpacing 2px @transformerSpacing;
 
     .transformerStyle;
 
@@ -191,7 +192,7 @@ li.sortable-ghost {
 
     @bgCol: #f0f0f0;
     background-color: @bgCol;
-    padding: 2px 3px;
+    padding: 2px 5px;
     .border;
 
     &:hover {
@@ -217,14 +218,33 @@ a {
 
 .cube {
     display: inline-block;
+    vertical-align: middle;
     width: @cubeSize;
     height: @cubeSize;
-    margin: 0 1px -2px 1px;
+    margin: 0 1px;
     border: 1px solid #444;
     border-radius: 3px;
 }
 
-.X      { background-color: #fff; border: 1px dashed #444; }
+.stack {
+    // Set this to 0. They would determine the height, otherwise.
+    font-size: 0;
+
+    // Spacing between the two cubes
+    line-height: 2px;
+
+    display: inline-block;
+    vertical-align: middle;
+    width: @cubeSize + 4px;
+
+    .cube {
+        width: @cubeSize - 2px;
+        height: @cubeSize - 2px;
+        vertical-align: baseline;
+    }
+}
+
+.X      { background-color: #fff; border: 1px dotted #222; }
 .Cyan   { background-color: @cyan; }
 .Brown  { background-color: @brown; }
 .Red    { background-color: @red; }

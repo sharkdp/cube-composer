@@ -23,7 +23,7 @@ chapter0 = {
             function: map (`snoc` Yellow)
         },
         "replaceYbyYR" :> {
-            name: "map {Yellow}↦{Yellow}{Red}",
+            name: "map {Yellow}↦[{Red}{Yellow}]",
             function: replaceMultiple Yellow (Yellow : Red : Nil)
         },
         "rejectY" :> {

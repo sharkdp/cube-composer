@@ -24,15 +24,15 @@ chapter4 = {
 
     transformers: fromArray [
         "mapXtoOX" :> {
-            name: "map {X}↦{Orange}{X}",
+            name: "map {X}↦[{X}{Orange}]",
             function: map (concatMap (\x -> (Orange : x : Nil)))
         },
         "mapCXtoX" :> {
-            name: "map {Cyan}{X}↦{X}",
+            name: "map [{X}{Cyan}]↦{X}",
             function: map cxToX
         },
         "mapOOtoC" :> {
-            name: "map {Orange}{Orange}↦{Cyan}",
+            name: "map [{Orange}{Orange}]↦{Cyan}",
             function: map ooToC
         },
         "mapCtoO" :> {
@@ -48,7 +48,7 @@ chapter4 = {
     levels: fromArray [
         "4.1" :-> {
             name: "Brick",
-            help: Nothing,
+            help: Just """This chapter introduces wildcard cubes: {X}.""",
             difficulty: Easy,
             initial: [[Cyan, Orange], [Cyan, Cyan, Orange], [Orange, Orange], [Cyan, Cyan, Orange], [Cyan, Orange]],
             target: [[Cyan], [Cyan, Orange], [Cyan], [Cyan, Orange], [Cyan]]

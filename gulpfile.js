@@ -108,6 +108,6 @@ gulp.task("docs", ["clean-docs"], function () {
         }));
 });
 
-gulp.task("prod", ["clean", "less", "dotpsci", "make", "concat", "compress", "docs"]);
+gulp.task("prod", ["clean", "less", "dotpsci", "cli", "make", "concat", "compress", "docs"]);
 gulp.task("dev", ["less", "dotpsci", "make", "concat"]);
 gulp.task("default", ["less", "dotpsci", "make", "concat", "docs"]);

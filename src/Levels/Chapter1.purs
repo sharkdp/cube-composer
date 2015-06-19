@@ -17,11 +17,11 @@ chapter1 = {
 
     transformers: fromArray [
         "mapYtoYR" :> {
-            name: "map {Yellow}↦{Yellow}{Red}",
+            name: "map {Yellow}↦[{Red}{Yellow}]",
             function: replaceMultiple Yellow (Yellow : Red : Nil)
         },
         "mapCtoRC" :> {
-            name: "map {Cyan}↦{Red}{Cyan}",
+            name: "map {Cyan}↦[{Cyan}{Red}]",
             function: replaceMultiple Cyan (Red : Cyan : Nil)
         },
         "rejectY" :> {

@@ -130,7 +130,7 @@ render setupUI gs = do
                   then "<span class=\"animated flash\">Solved!</span>"
                   else ""
     withElementById "message" doc (setInnerHTML message)
-    let helpHTML = maybe "" (replaceColors <<< replaceTransformers chapter) level.help
+    let helpHTML = maybe "" (nameToHTML <<< replaceTransformers chapter) level.help
     withElementById "help" doc (setInnerHTML helpHTML)
 
     -- DEBUG:
@@ -142,20 +142,32 @@ render setupUI gs = do
     log $ "Target: " ++ show level.target
     log ""
 
+-- | Replace all occurences of a pattern in a string with a replacement
+replaceAll :: String -> String -> String -> String
+replaceAll pattern replacement = replace (regex pattern flags) replacement
+    where flags = parseFlags "g"
+
 -- | Replace color placeholders in the transformer description by colored rectangular divs
 replaceColors :: String -> String
 replaceColors s =
     foldl replaceColor s ("X" : map show (toList $ Cyan `enumFromTo` Yellow))
-        where replaceColor s c = replace (regex (pattern c) rf) (replacement c) s
-              rf = parseFlags "g"
+        where replaceColor s c = replaceAll (pattern c) (replacement c) s
               pattern c = "{" ++ c ++ "}"
               replacement c = "<div class=\"cube " ++ c ++ "\"> </div>"
+
+-- | Replace stack markers
+replaceStacks :: String -> String
+replaceStacks = replaceAll "\\[" """<div class="stack">""" <<<
+                replaceAll "\\]" "</div>"
+
+-- | Render a transformer name as HTML
+nameToHTML :: String -> String
+nameToHTML = replaceColors <<< replaceStacks
 
 -- | Replace transformer names by boxes
 replaceTransformers :: Chapter -> String -> String
 replaceTransformers ch initial = SM.fold replaceT initial ch.transformers
-    where replaceT text id tr = replace (regex (pattern id) rf) (replacement tr) text
-          rf = parseFlags "g"
+    where replaceT text id tr = replaceAll (pattern id) (replacement tr) text
           pattern id = "`" ++ id ++ "`"
           replacement tr = "<span class=\"transformer\">" ++ tr.name ++ "</span>"
 
@@ -198,7 +210,7 @@ appendTransformerElement ul id t = do
     doc <- document globalWindow
     li <- createElement "li" doc
     setAttribute "id" id li
-    setInnerHTML (replaceColors t.name) li
+    setInnerHTML (nameToHTML t.name) li
     appendChild ul li
 
 -- | Add an option-element corresponding to the given Level

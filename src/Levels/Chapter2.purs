@@ -24,11 +24,11 @@ chapter2 = {
             function: replaceSingle Yellow Brown
         },
         "replaceYbyBY" :> {
-            name: "map {Yellow}↦{Brown}{Yellow}",
+            name: "map {Yellow}↦[{Yellow}{Brown}]",
             function: replaceMultiple Yellow (Brown : Yellow : Nil)
         },
         "replaceBbyOO" :> {
-            name: "map {Brown}↦{Orange}{Orange}",
+            name: "map {Brown}↦[{Orange}{Orange}]",
             function: replaceMultiple Brown (Orange : Orange : Nil)
         },
         "rejectO" :> {
