@@ -23,7 +23,6 @@
     "purescript-simple-dom": "https://github.com/sharkdp/purescript-simple-dom.git#master",
     "Sortable": "RubaXa/Sortable#~1.2.0",
     "isomer": "https://github.com/jdan/isomer.git#a36706dba1869ff3d53eaa23b958b74fc76ca3cc",
-    "github-fork-ribbon-css": "~0.1.1",
-    "animate-css": "~3.3.0"
+    "github-fork-ribbon-css": "~0.1.1"
   }
 }
