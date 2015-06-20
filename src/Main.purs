@@ -113,8 +113,7 @@ render setupUI gs = do
         children ulAvailable >>= traverse_ installClickHandler
         children ulProgram >>=   traverse_ installClickHandler
 
-        withElementById "levels" doc $ \selectLevel -> do
-            setInnerHTML "levels" selectLevel
+        withElementById "levels" doc $ \selectLevel ->
             traverse_ (appendLevelElement selectLevel gs.currentLevel) allLevelIds
 
     let transformers = mapMaybe (getTransformer chapter) tids
