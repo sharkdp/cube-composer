@@ -126,10 +126,13 @@ render setupUI gs = do
     renderTarget isomer level.target
 
     -- DOM 'rendering'
-    let message = if (maybe false (== (level.target)) (last steps))
-                  then "<span class=\"animated flash\">Solved!</span>"
-                  else ""
-    withElementById "message" doc (setInnerHTML message)
+    let solved = maybe false (== (level.target)) (last steps)
+        visibility = if solved then "visible" else "hidden"
+        cssAction = if solved then classAdd "flash" else classRemove "flash"
+
+    withElementById "message" doc (setStyleAttr "visibility" visibility)
+    withElementById "solved" doc cssAction
+
     let helpHTML = maybe "" (nameToHTML <<< replaceTransformers chapter) level.help
     withElementById "help" doc (setInnerHTML helpHTML)
 

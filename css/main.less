@@ -13,7 +13,7 @@
 // Font
 @fontSize:      16px;
 @fontSizeSmall: 14px;
-@fontSizeLarge: 18px;
+@fontSizeLarge: 24px;
 
 // Dimensions
 @width:               800px;
@@ -114,8 +114,18 @@ b {
 }
 
 #message {
-    .bold;
-    text-align: center;
+    visibility: hidden;
+
+    position: absolute;
+    top: 340px;
+    left: 50px;
+
+    padding: 1px;
+
+    #solved {
+        font-size: @fontSizeLarge;
+        .bold;
+    }
 }
 
 #controls {
