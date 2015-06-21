@@ -2,6 +2,7 @@ module Main (main) where
 
 import Prelude
 import Control.Apply
+import Control.Bind
 import Control.Monad
 import Control.Monad.Eff
 import Control.Monad.Eff.Console
@@ -178,17 +179,40 @@ replaceTransformers ch initial = SM.fold replaceT initial ch.transformers
 resetLevel = modifyGameStateAndRender true mod
     where mod gs = gs { levelState = SM.insert gs.currentLevel Nil gs.levelState }
 
+-- | Go to the previous level
+prevLevel = modifyGameStateAndRender true mod
+    where mod gs = gs { currentLevel = prev gs.currentLevel }
+          prev cur = fromMaybe cur $ before cur allLevelIds
+          before _ Nil                   = Nothing
+          before _ (Cons _ Nil)          = Nothing
+          before x (Cons b (Cons x' xs)) = if x == x'
+                                           then Just b
+                                           else before x (x':xs)
+
+-- | Go to the next level
+nextLevel = modifyGameStateAndRender true mod
+    where mod gs = gs { currentLevel = next gs.currentLevel }
+          next cur = fromMaybe cur $ head =<< (tail $ dropWhile (/= cur) allLevelIds)
+
 -- | General key press handler
 keyPress :: forall eff. DOMEvent -> _
 keyPress event = do
     doc <- document globalWindow
     code <- keyCode event
-    case code of
-         -- 'r': reset lists
-         82 -> do
-                   ctrlPressed <- ctrlKey event
-                   when (not ctrlPressed) resetLevel
-         _ -> return unit
+    ctrlPressed <- ctrlKey event
+
+    when (not ctrlPressed) $
+        case code of
+             -- 'r': reset lists
+             82 ->  resetLevel
+             -- '<-', 'p': previous level
+             37 -> prevLevel
+             80 -> prevLevel
+             -- '->', 'n': next level
+             39 -> nextLevel
+             78 -> nextLevel
+             _ -> return unit
+
     return unit
 
 -- | Click handler for the <li> elements (transformers)
@@ -231,10 +255,10 @@ appendLevelElement select currentId lid = do
 
 -- | Initial game state for first-time visitors
 initialGS :: GameState
-initialGS = { currentLevel: "0.1", levelState: SM.empty }
+initialGS = { currentLevel: firstLevel, levelState: SM.empty }
 
--- | Load game, modify and store the game state. Render the new state
-modifyGameStateAndRender :: forall eff.  Boolean
+-- | Load, modify and store the game state. Render the new state
+modifyGameStateAndRender :: forall eff. Boolean
                          -> (GameState -> GameState)
                          -> Eff (storage :: Storage, dom :: DOM, isomer :: Isomer, console :: CONSOLE | eff) Unit
 modifyGameStateAndRender setupUI modifyGS = do
@@ -286,8 +310,11 @@ main = do
         addChangeEventListener levelChangeHandler selectLevel
 
     -- Click handlers for buttons
-    withElementById "reset" doc $ \button ->
-        addMouseEventListener MouseClickEvent (const resetLevel :: DOMEvent -> _) button
+    withElementById "reset" doc $
+        addMouseEventListener MouseClickEvent (const resetLevel :: DOMEvent -> _)
+
+    withElementById "nextlevel" doc $
+        addMouseEventListener MouseClickEvent (const nextLevel :: DOMEvent -> _)
 
     -- load game state (or set initial one)
     gs <- fromMaybe initialGS <$> loadGameState

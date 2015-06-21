@@ -27,6 +27,10 @@ allLevels = SM.unions (map _.levels allChapters)
 allLevelIds :: List LevelId
 allLevelIds = allChapters >>= (_.levels >>> SM.keys >>> toList) >>> sort
 
+-- | ID of the first level
+firstLevel :: LevelId
+firstLevel = fromMaybe "" (head allLevelIds)
+
 -- | Find a given level by its id
 getLevel :: LevelId -> Level
 getLevel lid =

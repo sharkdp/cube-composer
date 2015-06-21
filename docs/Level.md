@@ -24,6 +24,14 @@ allLevelIds :: List LevelId
 
 A list of all level ids across the chapters
 
+#### `firstLevel`
+
+``` purescript
+firstLevel :: LevelId
+```
+
+ID of the first level
+
 #### `getLevel`
 
 ``` purescript
