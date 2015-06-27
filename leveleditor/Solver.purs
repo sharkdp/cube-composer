@@ -9,7 +9,7 @@ import Data.List
 import Data.Maybe
 import qualified Data.StrMap as SM
 
-import Level
+import Levels
 import Transformer
 import Types
 

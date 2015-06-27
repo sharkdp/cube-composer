@@ -73,22 +73,22 @@ instance showDifficulty :: Show Difficulty where
     show Hard = "Hard"
 
 type Level = {
-    name :: String,
-    help :: Maybe String,
+    name       :: String,
+    help       :: Maybe String,
     difficulty :: Difficulty,
-    initial :: Wall,
-    target :: Wall
+    initial    :: Wall,
+    target     :: Wall
 }
 
 type Chapter = {
-    name :: String,
+    name         :: String,
     transformers :: SM.StrMap TransformerRecord,
-    levels :: SM.StrMap Level
+    levels       :: SM.StrMap Level
 }
 
 -- Game state
 
 type GameState = {
     currentLevel :: LevelId,
-    levelState :: SM.StrMap (List TransformerId)
+    levelState   :: SM.StrMap (List TransformerId)
 }

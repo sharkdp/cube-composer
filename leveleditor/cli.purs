@@ -9,7 +9,7 @@ import Data.Traversable
 import Types
 import Transformer
 import Solver
-import Level
+import Levels
 
 ttyColor Yellow = 0
 ttyColor Orange = 1

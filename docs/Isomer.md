@@ -1,9 +1,9 @@
 ## Module Isomer
 
-#### `Isomer`
+#### `ISOMER`
 
 ``` purescript
-data Isomer :: !
+data ISOMER :: !
 ```
 
 #### `IsomerInstance`
@@ -21,7 +21,7 @@ data IsomerColor :: *
 #### `getIsomerInstance`
 
 ``` purescript
-getIsomerInstance :: forall eff. String -> Eff (isomer :: Isomer | eff) IsomerInstance
+getIsomerInstance :: forall eff. String -> Eff (isomer :: ISOMER | eff) IsomerInstance
 ```
 
 (Install and) return the Isomer instance on the canvas with the given id
@@ -29,7 +29,7 @@ getIsomerInstance :: forall eff. String -> Eff (isomer :: Isomer | eff) IsomerIn
 #### `renderBlock`
 
 ``` purescript
-renderBlock :: forall eff. IsomerInstance -> Number -> Number -> Number -> Number -> Number -> Number -> IsomerColor -> Eff (isomer :: Isomer | eff) Unit
+renderBlock :: forall eff. IsomerInstance -> Number -> Number -> Number -> Number -> Number -> Number -> IsomerColor -> Eff (isomer :: ISOMER | eff) Unit
 ```
 
 Render a colored block of size dx, dy, dz at position x, y, z
@@ -37,7 +37,7 @@ Render a colored block of size dx, dy, dz at position x, y, z
 #### `renderCube`
 
 ``` purescript
-renderCube :: forall eff. IsomerInstance -> Number -> Number -> Number -> IsomerColor -> Eff (isomer :: Isomer | eff) Unit
+renderCube :: forall eff. IsomerInstance -> Number -> Number -> Number -> IsomerColor -> Eff (isomer :: ISOMER | eff) Unit
 ```
 
 Render a single colored cube at the given position
@@ -45,7 +45,7 @@ Render a single colored cube at the given position
 #### `clearCanvas`
 
 ``` purescript
-clearCanvas :: forall eff. IsomerInstance -> Eff (isomer :: Isomer | eff) Unit
+clearCanvas :: forall eff. IsomerInstance -> Eff (isomer :: ISOMER | eff) Unit
 ```
 
 Clear the whole canvas that belongs to the Isomer instance
@@ -53,7 +53,7 @@ Clear the whole canvas that belongs to the Isomer instance
 #### `setIsomerConfig`
 
 ``` purescript
-setIsomerConfig :: forall eff. IsomerInstance -> Number -> Number -> Number -> Eff (isomer :: Isomer | eff) Unit
+setIsomerConfig :: forall eff. IsomerInstance -> Number -> Number -> Number -> Eff (isomer :: ISOMER | eff) Unit
 ```
 
 Set Isomer scale factor and origin (X and Y)

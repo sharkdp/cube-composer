@@ -29,11 +29,11 @@ convert = toList <<< map toList
 
 -- | Helper type to create levels from arrays
 type LevelEntry = {
-    name :: String,
-    help :: Maybe String,
+    name       :: String,
+    help       :: Maybe String,
     difficulty :: Difficulty,
-    initial :: AWall,
-    target :: AWall
+    initial    :: AWall,
+    target     :: AWall
 }
 
 infixl 6 :->

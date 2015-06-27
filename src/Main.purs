@@ -1,4 +1,4 @@
-module Main (main) where
+module Main (App(..), main) where
 
 import Prelude
 import Control.Apply
@@ -23,37 +23,46 @@ import qualified Data.StrMap as SM
 
 import DOMHelper
 import Isomer
-import Level
+import Levels
 import Sortable
 import Storage
 import Transformer
 import Types
 
+-- | Type synonyms for different combinations of effects
+type EffIsomer = forall eff. Eff (isomer :: ISOMER | eff) Unit
+type EffDOM    = forall eff. Eff (dom :: DOM | eff) Unit
+type App       = forall eff. Eff (dom :: DOM, console :: CONSOLE, isomer :: ISOMER, storage :: STORAGE | eff) Unit
+
 -- | RGB codes for the abstract colors
 cubeColor :: Cube -> IsomerColor
-cubeColor Cyan = colorFromRGB 0 160 176
-cubeColor Brown = colorFromRGB 106 74 60
-cubeColor Red = colorFromRGB 204 51 63
-cubeColor Orange = colorFromRGB 235 104 65
-cubeColor Yellow = colorFromRGB 237 201 81
-
--- | Like traverse_, but the function also takes an index parameter
-traverseWithIndex_ :: forall a b m. (Applicative m) => (Int -> a -> m b) -> (List a) -> m Unit
-traverseWithIndex_ f xs = go xs 0
-    where go Nil _ = return unit
-          go (Cons x xs) i = f i x *> go xs (i + 1)
+cubeColor Cyan   = colorFromRGB   0 160 176
+cubeColor Brown  = colorFromRGB 106  74  60
+cubeColor Red    = colorFromRGB 204  51  63
+cubeColor Orange = colorFromRGB 235 104  65
+cubeColor Yellow = colorFromRGB 237 201  81
 
 -- | Spacing between two walls
 spacing :: Number
 spacing = 5.5
 
+-- | Like traverse_, but the function also takes an index parameter
+traverseWithIndex_ :: forall a b m. (Applicative m) => (Int -> a -> m b) -> (List a) -> m Unit
+traverseWithIndex_ f xs = go xs 0
+    where go Nil _         = return unit
+          go (Cons x xs) i = f i x *> go xs (i + 1)
+
+-- | Traverse a StrMap while performing monadic side effects
+traverseWithKey_ :: forall a m. (Monad m) => (String -> a -> m Unit) -> SM.StrMap a -> m Unit
+traverseWithKey_ f sm = SM.foldM (const f) unit sm
+
 -- | Render a single stack of cubes
-renderStack :: forall eff. IsomerInstance -> Number -> Number -> Stack -> Eff (isomer :: Isomer | eff) Unit
+renderStack :: IsomerInstance -> Number -> Number -> Stack -> EffIsomer
 renderStack isomer y x stack =
     traverseWithIndex_ (\z -> renderCube isomer x (-spacing * y) (toNumber z)) $ map cubeColor stack
 
 -- | Render a wall (multiple stacks)
-renderWall :: forall eff. IsomerInstance -> Number -> Wall -> Eff (isomer :: Isomer | eff) Unit
+renderWall :: IsomerInstance -> Number -> Wall -> EffIsomer
 renderWall isomer y Nil =
     -- Render a gray placeholder for the empty wall
     renderBlock isomer 1.0 (-spacing * y) 0.0 5.0 0.9 0.1 (colorFromRGB 100 100 100)
@@ -61,12 +70,13 @@ renderWall isomer y wall =
     traverseWithIndex_ (\x -> renderStack isomer y (toNumber (length wall - x))) (reverse wall)
 
 -- | Render a series of walls
-renderWalls :: forall eff. IsomerInstance -> (List Wall) -> Eff (isomer :: Isomer | eff) Unit
+renderWalls :: IsomerInstance -> (List Wall) -> EffIsomer
 renderWalls isomer walls = do
     setIsomerConfig isomer 40.0 40.0 400.0
     traverseWithIndex_ (\y -> renderWall isomer (toNumber y)) walls
 
 -- | Render the target shape
+renderTarget :: IsomerInstance -> Wall -> EffIsomer
 renderTarget isomer target = do
     setIsomerConfig isomer 30.0 1280.0 550.0
     renderWall isomer 0.0 target
@@ -77,33 +87,29 @@ getCurrentIds gs = case (SM.lookup gs.currentLevel gs.levelState) of
                        Just ids -> ids
                        Nothing -> Nil
 
--- | Traverse a StrMap while performing monadic side effects
-traverseWithKey_ :: forall a m. (Monad m) => (String -> a -> m Unit) -> SM.StrMap a -> m Unit
-traverseWithKey_ f sm = SM.foldM (const f) unit sm
-
 -- | Render all UI components, DOM and canvas
-render :: Boolean -> GameState -> _
+render :: Boolean -> GameState -> App
 render setupUI gs = do
     doc <- document globalWindow
     isomer <- getIsomerInstance "canvas"
 
-    let level = getLevel gs.currentLevel
+    let level   = getLevel gs.currentLevel
         chapter = getChapter gs.currentLevel
-        tids = getCurrentIds gs
+        tids    = getCurrentIds gs
 
     -- Set up UI, only if new level is loaded
     when setupUI $ do
         Just ulAvailable <- getElementById "available" doc
-        Just ulProgram <- getElementById "program" doc
+        Just ulProgram   <- getElementById "program" doc
 
         setInnerHTML "" ulAvailable
         setInnerHTML "" ulProgram
 
-        let unused = foldl (flip SM.delete) chapter.transformers tids
+        let unused       = foldl (flip SM.delete) chapter.transformers tids
             insert sm id = case (getTransformerRecord chapter id) of
                                (Just tr) -> SM.insert id tr sm
                                Nothing ->   sm
-            active = foldl insert SM.empty tids
+            active =       foldl insert SM.empty tids
 
         -- create li elements for transformers
         traverseWithKey_ (appendTransformerElement ulAvailable) unused
@@ -181,7 +187,7 @@ resetLevel = modifyGameStateAndRender true mod
 
 -- | Go to the previous level
 prevLevel = modifyGameStateAndRender true mod
-    where mod gs = gs { currentLevel = prev gs.currentLevel }
+    where mod gs   = gs { currentLevel = prev gs.currentLevel }
           prev cur = fromMaybe cur $ before cur allLevelIds
           before _ Nil                   = Nothing
           before _ (Cons _ Nil)          = Nothing
@@ -191,11 +197,11 @@ prevLevel = modifyGameStateAndRender true mod
 
 -- | Go to the next level
 nextLevel = modifyGameStateAndRender true mod
-    where mod gs = gs { currentLevel = next gs.currentLevel }
+    where mod gs   = gs { currentLevel = next gs.currentLevel }
           next cur = fromMaybe cur $ head =<< (tail $ dropWhile (/= cur) allLevelIds)
 
 -- | General key press handler
-keyPress :: forall eff. DOMEvent -> _
+keyPress :: DOMEvent -> App
 keyPress event = do
     doc <- document globalWindow
     code <- keyCode event
@@ -216,9 +222,7 @@ keyPress event = do
     return unit
 
 -- | Click handler for the <li> elements (transformers)
-clickLi :: forall eff. HTMLElement
-        -> DOMEvent
-        -> Eff (dom :: DOM, console :: CONSOLE, isomer :: Isomer, storage :: Storage | eff) Unit
+clickLi :: HTMLElement -> DOMEvent -> App
 clickLi liEl event = do
     newId <- getAttribute "id" liEl
     ulId <- parentElement liEl >>= getAttribute "id"
@@ -232,7 +236,7 @@ clickLi liEl event = do
                           in gs { levelState = SM.insert gs.currentLevel program' gs.levelState }
 
 -- | Add a li-element corresponding to the given Transformer
-appendTransformerElement :: forall eff. HTMLElement -> String -> TransformerRecord -> Eff (dom :: DOM | eff) Unit
+appendTransformerElement :: HTMLElement -> String -> TransformerRecord -> EffDOM
 appendTransformerElement ul id t = do
     doc <- document globalWindow
     li <- createElement "li" doc
@@ -241,7 +245,7 @@ appendTransformerElement ul id t = do
     appendChild ul li
 
 -- | Add an option-element corresponding to the given Level
-appendLevelElement :: forall eff. HTMLElement -> LevelId -> LevelId -> Eff (dom :: DOM | eff) Unit
+appendLevelElement :: HTMLElement -> LevelId -> LevelId -> EffDOM
 appendLevelElement select currentId lid = do
     let chapter = getChapter lid
         level = getLevel lid
@@ -258,9 +262,9 @@ initialGS :: GameState
 initialGS = { currentLevel: firstLevel, levelState: SM.empty }
 
 -- | Load, modify and store the game state. Render the new state
-modifyGameStateAndRender :: forall eff. Boolean
+modifyGameStateAndRender :: Boolean
                          -> (GameState -> GameState)
-                         -> Eff (storage :: Storage, dom :: DOM, isomer :: Isomer, console :: CONSOLE | eff) Unit
+                         -> forall eff. Eff (dom :: DOM, console :: CONSOLE, isomer :: ISOMER, storage :: STORAGE | eff) Unit
 modifyGameStateAndRender setupUI modifyGS = do
     -- Load old game state from local storage
     mgs <- loadGameState
@@ -274,7 +278,7 @@ modifyGameStateAndRender setupUI modifyGS = do
     saveGameState gs'
 
 -- | Event handler for a level change
-levelChangeHandler :: forall eff. HTMLElement -> _
+levelChangeHandler :: HTMLElement -> App
 levelChangeHandler selectLevel = do
     levelId <- getSelectedValue selectLevel
 
@@ -282,6 +286,7 @@ levelChangeHandler selectLevel = do
         gs { currentLevel = levelId }
 
 -- | Event handler for a 'reprogram' (new instruction, re-ordering, ..)
+reprogramHandler :: App
 reprogramHandler = do
     doc <- document globalWindow
 
@@ -293,6 +298,7 @@ reprogramHandler = do
     modifyGameStateAndRender false $ \gs ->
         gs { levelState = SM.insert gs.currentLevel program gs.levelState }
 
+main :: App
 main = do
     doc <- document globalWindow
 

@@ -1,4 +1,4 @@
-module Level where
+module Levels where
 
 import Prelude
 import Data.List
