@@ -15,7 +15,7 @@ var sources = [
 ];
 
 var foreigns = [
-    "src/**/*.js",
+    "src/Foreign/*.js",
     "bower_components/purescript-*/src/**/*.js"
 ];
 

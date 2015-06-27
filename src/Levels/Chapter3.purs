@@ -3,6 +3,7 @@ module Levels.Chapter3 where
 import Prelude
 import Data.Foldable
 import Data.Int (even)
+import Data.Int.Bits ((.&.))
 import Data.List
 import Data.Maybe
 import Math
@@ -23,7 +24,10 @@ toCube 1 = Brown
 toInt :: Stack -> Int
 toInt w = sum $ zipWith (\f c -> f * toDigit c) (1 : 2 : 4 : Nil) w
 
-foreign import digits :: Int -> Array Int
+-- | Get the (first three bits of the) binary representation of a number
+digits :: Int -> Array Int
+digits n = map bit [1, 2, 4]
+    where bit m = if n .&. m == m then 1 else 0
 
 toAStack :: Int -> AStack
 toAStack num = map toCube (digits num)
