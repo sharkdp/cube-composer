@@ -8,14 +8,6 @@ parentElement :: forall eff. HTMLElement -> Eff (dom :: DOM | eff) HTMLElement
 
 Get the parent element in the DOM tree, this should be in purescript-simple-dom
 
-#### `getLocationHash`
-
-``` purescript
-getLocationHash :: forall eff. DOMLocation -> Eff (dom :: DOM | eff) String
-```
-
-Read the URL hash from a given DOM location
-
 #### `withElementById`
 
 ``` purescript

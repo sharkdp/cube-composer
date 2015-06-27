@@ -12,10 +12,6 @@ import Data.Maybe
 foreign import parentElement :: forall eff. HTMLElement
                              -> Eff (dom :: DOM | eff) HTMLElement
 
--- | Read the URL hash from a given DOM location
-foreign import getLocationHash :: forall eff. DOMLocation
-                               -> Eff (dom :: DOM | eff) String
-
 -- | Perform a DOM action with a single element which can be accessed by ID
 withElementById :: forall eff. String
                 -> HTMLDocument

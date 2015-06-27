@@ -6,16 +6,6 @@ exports.parentElement = function (child) {
     };
 };
 
-exports.getLocationHash = function (loc) {
-    return function() {
-        if (loc.hash) {
-            return loc.hash.substring(1);
-        } else {
-            return "";
-        }
-    };
-};
-
 exports.addChangeEventListener = function (cb) {
     return function(src) {
         return function() {

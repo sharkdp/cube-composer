@@ -1,6 +1,3 @@
-/* global exports */
-"use strict";
-
 // module Unsafe
 
 exports.unsafeError = function(msg) {
@@ -8,7 +5,7 @@ exports.unsafeError = function(msg) {
     if (confirm(msg + ". Clear localStorage and reload?")) {
         localStorage.clear();
         location.reload();
-    };
+    }
 
     // Abort execution
     throw new Error(msg);
