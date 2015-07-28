@@ -14,6 +14,8 @@ Create a StrMap from an Array of (key, value) pairs
 (:>) :: forall a b. a -> b -> Tuple a b
 ```
 
+_left-associative / precedence 6_
+
 Operator to create tuples, especially for creating maps with
 `Map.fromList ["key1" :> "value1", "key2" :> "value2"]`
 
@@ -52,6 +54,8 @@ Helper type to create levels from arrays
 ``` purescript
 (:->) :: LevelId -> LevelEntry -> Tuple LevelId Level
 ```
+
+_left-associative / precedence 6_
 
 Helper function to create levels from arrays of cubes (instead of lists)
 

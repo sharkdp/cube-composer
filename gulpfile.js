@@ -20,7 +20,7 @@ var foreigns = [
 ];
 
 var sourcesCli = [
-    "bower_components/**/src/**/*.purs",
+    "bower_components/purescript-*/src/**/*.purs",
     "src/Types.purs",
     "src/Transformer.purs",
     "src/Levels.purs",
@@ -40,33 +40,46 @@ gulp.task("clean-dist", function(cb) {
 
 gulp.task("clean", ["clean-docs", "clean-dist"]);
 
-gulp.task("make", function() {
-    return gulp.src(sources)
-        .pipe(purescript.psc({
-            main: "Main",
-            module: ["Main"],
+gulp.task("psc", function() {
+    return purescript.psc({
+            src: sources,
             ffi: foreigns,
-            output: "main.js"
-        }))
-        .pipe(gulp.dest("dist"));
+            output: "output/main"
+        });
 });
 
-gulp.task("cli", function() {
-    return gulp.src(sourcesCli)
-        .pipe(purescript.psc({
-            main: "Main",
-            module: ["Main"],
-            ffi: foreigns,
-            output: "cli.js"
-        }))
-        .pipe(gulp.dest("dist"));
+gulp.task("bundle", ["psc"], function() {
+    return purescript.pscBundle({
+            src: "output/main/**/*.js",
+            output: "dist/main.js",
+            module: "Main",
+            main: "Main"
+        });
 });
 
-gulp.task("dotpsci", function () {
-    return gulp.src(sourcesCli)
-        .pipe(purescript.dotPsci({
+gulp.task("psc:cli", function() {
+    return purescript.psc({
+            src: sourcesCli,
+            ffi: foreigns,
+            output: "output/cli"
+        });
+});
+
+gulp.task("bundle:cli", ["psc:cli"], function() {
+    return purescript.pscBundle({
+            src: "output/cli/**/*.js",
+            output: "dist/cli.js",
+            module: "Main",
+            main: "Main"
+        });
+});
+
+gulp.task("psci", function () {
+    return purescript.psci({
+            src: sourcesCli,
             ffi: foreigns
-        }));
+        })
+        .pipe(gulp.dest("."));
 });
 
 gulp.task("less", function() {
@@ -75,7 +88,7 @@ gulp.task("less", function() {
         .pipe(gulp.dest("dist"));
 });
 
-gulp.task("concat", ["make"], function() {
+gulp.task("concat", ["bundle"], function() {
     return gulp.src([
             "bower_components/Sortable/Sortable.min.js",
             "bower_components/isomer/dist/isomer.min.js",
@@ -92,8 +105,8 @@ gulp.task("compress", ["concat"], function() {
 });
 
 gulp.task("docs", ["clean-docs"], function () {
-    return gulp.src(sources)
-        .pipe(purescript.pscDocs({
+    return purescript.pscDocs({
+            src: sources,
             docgen: {
                 "DOMHelper": "docs/DOMHelper.md",
                 "Helper": "docs/Helper.md",
@@ -105,9 +118,9 @@ gulp.task("docs", ["clean-docs"], function () {
                 "Types": "docs/Types.md",
                 "Unsafe": "docs/Unsafe.md"
             }
-        }));
+        });
 });
 
-gulp.task("prod", ["clean", "less", "dotpsci", "cli", "make", "concat", "compress", "docs"]);
-gulp.task("dev", ["less", "dotpsci", "make", "concat"]);
-gulp.task("default", ["less", "dotpsci", "make", "concat", "docs"]);
+gulp.task("prod", ["clean", "less", "psci", "bundle:cli", "bundle", "concat", "compress", "docs"]);
+gulp.task("dev", ["less", "psci", "bundle", "concat"]);
+gulp.task("default", ["less", "psci", "bundle", "concat", "docs"]);

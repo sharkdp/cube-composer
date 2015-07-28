@@ -17,10 +17,11 @@
     "purescript-console": "^0.1.0",
     "purescript-enums": "^0.5.0",
     "purescript-foldable-traversable": "^0.4.0",
+    "purescript-integers": "^0.2.0",
     "purescript-maps": "^0.4.0",
     "purescript-math": "^0.2.0",
     "purescript-strings": "^0.5.0",
-    "purescript-simple-dom": "https://github.com/sharkdp/purescript-simple-dom.git#master",
+    "purescript-simple-dom": "master",
     "Sortable": "RubaXa/Sortable#~1.2.0",
     "isomer": "https://github.com/jdan/isomer.git#a36706dba1869ff3d53eaa23b958b74fc76ca3cc",
     "github-fork-ribbon-css": "~0.1.1"
