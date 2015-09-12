@@ -201,7 +201,12 @@ prevLevel = modifyGameStateAndRender true mod
                                            else before x (x':xs)
 
 -- | Go to the next level
-nextLevel = modifyGameStateAndRender true mod
+nextLevel = do
+    mgs <- loadGameState
+    let gs' = fromMaybe initialGS mgs
+    analyticsLevelChanged (next gs'.currentLevel)
+
+    modifyGameStateAndRender true mod
     where mod gs   = gs { currentLevel = next gs.currentLevel }
           next cur = fromMaybe cur $ head =<< (tail $ dropWhile (/= cur) allLevelIds)
 
