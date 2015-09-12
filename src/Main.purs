@@ -25,6 +25,7 @@ import Data.String.Regex (regex, parseFlags, replace)
 import Data.Traversable
 import qualified Data.StrMap as SM
 
+import Analytics
 import DOMHelper
 import Isomer
 import Levels
@@ -289,6 +290,8 @@ modifyGameStateAndRender setupUI modifyGS = do
 levelChangeHandler :: Element -> Event -> App
 levelChangeHandler selectLevel _ = do
     levelId <- getSelectedValue selectLevel
+
+    analyticsLevelChanged levelId
 
     modifyGameStateAndRender true $ \gs ->
         gs { currentLevel = levelId }
