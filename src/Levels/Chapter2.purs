@@ -57,7 +57,7 @@ chapter2 = {
         },
         "2.2" :-> {
             name: "Gizeh",
-            help: Nothing,
+            help: Just """You are on your own now...""",
             difficulty: Medium,
             initial: [[Brown], [Orange], [Orange], [Yellow], [Yellow], [Yellow], [Orange], [Orange], [Brown]],
             target: [[Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown, Brown, Brown, Brown, Brown], [Orange, Brown, Orange, Brown], [Brown, Brown]]

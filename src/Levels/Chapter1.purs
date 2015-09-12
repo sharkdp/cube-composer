@@ -49,29 +49,30 @@ chapter1 = {
     levels: fromArray [
         "1.1" :-> {
             name: "Mercury",
-            help: Just """There are a few new functions in this chapter. You will be able to
-                          figure out what they do by playing around.""",
+            help: Just """There are some new types of functions in this chapter. We will
+                          introduce them when they are needed.""",
             difficulty: Easy,
             initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red, Red], [Red, Yellow, Red], [Red, Yellow, Red], [Red, Red, Red]]
         },
         "1.2" :-> {
             name: "Venus",
-            help: Nothing,
+            help: Just """The function `filterContainsR` removes colums without a red cube.""",
             difficulty: Medium,
             initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red], [Red, Red]]
         },
         "1.3" :-> {
             name: "Earth",
-            help: Nothing,
+            help: Just """You can flip each column vertically with `mapReverse`.""",
             difficulty: Easy,
             initial: [[Cyan, Cyan, Yellow], [Cyan, Red], [Cyan, Red], [Cyan, Cyan, Yellow]],
             target: [[Red, Cyan, Cyan], [Red, Cyan], [Red, Cyan], [Red, Cyan, Cyan]]
         },
         "1.4" :-> {
             name: "Mars",
-            help: Just """In case you were wondering: The level names are pretty arbitrary.""",
+            help: Just """In case you were wondering: the level names <s>have a rather deep
+                          philosophical meaning</s> are chosen randomly.""",
             difficulty: Medium,
             initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red], [Red, Red], [Red, Red], [Red, Red]]
