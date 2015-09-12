@@ -1,5 +1,3 @@
-@import (inline) "bower_components/github-fork-ribbon-css/gh-fork-ribbon.css";
-
 // Ocean Five palette (http://www.colourlovers.com/palette/1473/Ocean_Five)
 @cyan:    #00A0B0;
 @brown:   #6A4A3C;
@@ -195,17 +193,19 @@ li.sortable-ghost {
 .button {
     cursor: pointer;
 
-    color: #444;
+    color: #000;
     font-size: @fontSizeSmall;
     text-decoration: none;
 
     @bgCol: #f0f0f0;
     background-color: @bgCol;
     padding: 2px 5px;
-    .border;
+
+    border: 1px solid #666;
+    border-bottom: 1px solid #000;
+    border-radius: 3px;
 
     &:hover {
-        border-color: darken(@borderGray, 10);
         background-color: darken(@bgCol, 10);
     }
 }
@@ -219,10 +219,6 @@ p.footer {
 
 a {
     color: @red;
-}
-
-.github-fork-ribbon {
-    background-color: @red;
 }
 
 .cube {
@@ -291,4 +287,8 @@ a {
 .flash {
     -webkit-animation-name: flash;
     animation-name: flash;
+}
+
+#ghstars {
+    margin-top: 8px;
 }
