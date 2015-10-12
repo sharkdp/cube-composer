@@ -27,7 +27,7 @@ var sourcesCli = [
     "src/Helper.purs",
     "src/Unsafe.purs",
     "src/Levels/*.purs",
-    "leveleditor/*.purs"
+    "cli/*.purs"
 ];
 
 gulp.task("clean-docs", function(cb) {
