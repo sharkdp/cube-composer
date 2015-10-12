@@ -38,10 +38,6 @@ chapter4 = {
         "mapCtoO" :> {
             name: "map {Cyan}↦{Orange}",
             function: replaceSingle Cyan Orange
-        },
-        "rejectSizeG2" :> {
-            name: "reject (size > 2)",
-            function: reject (\x -> length x > 2)
         }
     ],
 
@@ -55,13 +51,19 @@ chapter4 = {
         },
         "4.2" :-> {
             name: "Fort",
-            help: Just """This is the last level ... for now. You can help to create new puzzles!
-                          Send a pull request on
-                          <a href="https://github.com/sharkdp/cube-composer">Github</a>. Either way,
-                          I hope you enjoyed the game.""",
+            help: Nothing,
             difficulty: Hard,
             initial: [[Cyan, Orange], [Cyan, Cyan, Orange], [Orange, Orange], [Cyan, Cyan, Orange], [Cyan, Orange]],
             target: [[Orange, Cyan], [Orange, Orange], [Orange, Cyan], [Orange, Orange], [Orange, Cyan]]
+        },
+        "4.3" :-> {
+            name: "Castle",
+            help: Just """This is the last level ... for now. But you can design your own puzzles!
+                          See the <a href="https://github.com/sharkdp/cube-composer">Github repository</a>
+                                           for more information. I hope you enjoyed the game.""",
+            difficulty: Medium,
+            initial: [[Orange], [Orange, Orange], [Orange, Orange, Orange], [Orange, Orange, Orange, Orange], [Orange, Orange, Orange], [Orange, Orange], [Orange]],
+            target: [[Orange, Orange], [Orange, Cyan], [Orange, Orange], [Orange, Cyan], [Orange, Orange], [Orange, Cyan], [Orange, Orange]]
         }
     ]
 }

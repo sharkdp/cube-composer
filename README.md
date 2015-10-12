@@ -44,5 +44,7 @@ Each level is given by a record like
 ```
 where `0.2` is the `Chapter.Level` ID of the level, `name` is the title of the puzzle, `help` is the help text shown in the right panel, difficulty is `Easy`, `Medium` or `Hard` and `initial :: Wall` and `target :: Wall` are the inital and target 2D arrays of cubes.
 
+Please send a pull request if you would like to add your puzzles to the game.
+
 ## CI status
 [![Build Status](https://img.shields.io/travis/sharkdp/cube-composer.svg?style=flat)](https://travis-ci.org/sharkdp/cube-composer)
