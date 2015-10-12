@@ -148,13 +148,13 @@ render setupUI gs = do
     let helpHTML = maybe "" (nameToHTML <<< replaceTransformers chapter) level.help
     withElementById "help" doc (setInnerHTML helpHTML)
 
-    -- DEBUG:
-    log $ "Program: " ++ show tids
-    log $ "Initial: " ++ show level.initial
+    -- Debug output:
+    let toArray = fromList :: forall a. List a -> Array a
+        toArrays = toArray <<< map toArray
+    log $ "Program: " ++ show (toArray tids)
+    log $ "Target: " ++ show (toArrays level.target)
     log "Steps:"
-    traverse_ print steps
-    log "---"
-    log $ "Target: " ++ show level.target
+    traverse_ (print <<< toArrays) steps
     log ""
 
 -- | Replace all occurences of a pattern in a string with a replacement
