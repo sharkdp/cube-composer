@@ -68,7 +68,8 @@ chapter3 = {
     levels: fromArray [
         "3.1" :-> {
             name: "0b0 .. 0b111",
-            help: Just """What could be the meaning of the title <code>0b0 .. 0b111</code>? Calculate modulo eight.""",
+            help: Just """What could be the meaning of the title <code>0b0 .. 0b111</code>?
+                          Read from top to bottom. Calculate modulo eight.""",
             difficulty: Medium,
             initial: map toAStack [0, 1, 2, 3, 4, 5, 6, 7],
             target: map toAStack [1, 3, 5, 7, 1, 3, 5, 7]
