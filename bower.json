@@ -23,7 +23,7 @@
     "purescript-math": "^0.2.0",
     "purescript-nullable": "^0.2.1",
     "purescript-strings": "^0.7.0",
-    "Sortable": "RubaXa/Sortable#~1.2.0",
+    "Sortable": "RubaXa/Sortable#~1.3.0",
     "isomer": "https://github.com/jdan/isomer.git#fbd7b9e86e542f482f94718d8fbf7f597c14a14d"
   }
 }
