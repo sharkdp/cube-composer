@@ -50,7 +50,8 @@ chapter1 = {
         "1.1" :-> {
             name: "Mercury",
             help: Just """There are some new types of functions in this chapter. We will
-                          introduce them when they are needed.""",
+                          introduce them when they are needed. Note that you can always
+                          skip levels and come back later.""",
             difficulty: Easy,
             initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red, Red], [Red, Yellow, Red], [Red, Yellow, Red], [Red, Red, Red]]
