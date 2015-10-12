@@ -77,13 +77,13 @@ renderWall isomer y wall =
 -- | Render a series of walls
 renderWalls :: IsomerInstance -> (List Wall) -> EffIsomer
 renderWalls isomer walls = do
-    setIsomerConfig isomer 40.0 40.0 400.0
+    setIsomerConfig isomer 40.0 10.0 320.0
     traverseWithIndex_ (\y -> renderWall isomer (toNumber y)) walls
 
 -- | Render the target shape
 renderTarget :: IsomerInstance -> Wall -> EffIsomer
 renderTarget isomer target = do
-    setIsomerConfig isomer 30.0 1280.0 550.0
+    setIsomerConfig isomer 28.0 1280.0 410.0
     renderWall isomer 0.0 target
 
 -- | Get program (list of transformer ids) of the active level

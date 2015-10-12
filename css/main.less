@@ -17,21 +17,19 @@
 @width:               800px;
 
 @canvasWidth:         @width;
-@canvasHeight:        500px;
+@canvasHeight:        430px;
 
 @logoWidth:           216px;
 @logoMargin:          10px;
 
 @panelWidth:          200px;
-@panelMargin:         50px;
-@panelPadding:        7px;
 
 @boxWidth:            240px;
 @boxSpacing:          80px;
 @boxHeightMin:        100px;
 
 @transformerHeight:   30px;
-@transformerSpacing:  @panelPadding;
+@transformerSpacing:  7px;
 
 @cubeSize:            11px;
 
@@ -81,14 +79,14 @@ b {
 #panel {
     position: absolute;
     width: @panelWidth;
-    top: @panelMargin;
+    top: 10px;
     right: 0px;
 
-    padding: @panelPadding;
+    padding: 0px;
 }
 
 #goal {
-    height: 140px;
+    height: 120px;
     width: 100%;
 }
 
@@ -115,7 +113,7 @@ b {
     visibility: hidden;
 
     position: absolute;
-    top: 340px;
+    top: 310px;
     left: 50px;
 
     padding: 1px;
@@ -144,7 +142,7 @@ b {
 }
 
 .sortable {
-    margin: 10px 0 0 0;
+    margin: 0;
 
     width: @boxWidth;
     min-height: @boxHeightMin;
@@ -155,6 +153,18 @@ b {
     list-style-type: none;
 
     .border;
+}
+
+#program:empty::after {
+    content: "Drop functions here";
+    font-weight: bold;
+    color: #ccc;
+}
+
+#available:empty::after {
+    content: "No functions available";
+    font-weight: bold;
+    color: #ccc;
 }
 
 .transformerStyle() {
