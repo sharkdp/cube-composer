@@ -15,7 +15,7 @@
   "dependencies": {
     "purescript-arrays": "^0.4.0",
     "purescript-console": "^0.1.0",
-    "purescript-dom": "https://github.com/purescript-contrib/purescript-dom.git#e125fa26136adf10f35883f4caa134e502c1e5b9",
+    "purescript-dom": "^0.2.7",
     "purescript-enums": "^0.7.0",
     "purescript-foldable-traversable": "^0.4.0",
     "purescript-integers": "^0.2.0",
