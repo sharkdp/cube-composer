@@ -1,10 +1,10 @@
 module Analytics where
 
-import Prelude
-import Control.Monad.Eff
-import DOM
+import Prelude (Unit)
+import Control.Monad.Eff (Eff)
+import DOM (DOM)
 
-import Types
+import Types (LevelId)
 
 foreign import analyticsEvent :: forall eff. String
                               -> String

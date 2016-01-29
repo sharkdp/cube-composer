@@ -1,12 +1,10 @@
 module Transformer where
 
 import Prelude
-import Data.List
-import Data.Foldable
-import Data.Maybe
-import Data.Traversable
+import Data.List (List, concatMap, singleton, snoc, null, (:), filter)
+import Data.Foldable (foldl)
+import Data.Traversable (scanl)
 import Types
-import qualified Data.StrMap as SM
 
 -- | Map a function over the two dimensional array (= wall)
 map2d :: (Cube -> Cube) -> Wall -> Wall

@@ -1,10 +1,10 @@
 module Helper where
 
 import Prelude
-import Data.List
-import Data.Maybe
-import Data.Tuple
-import qualified Data.StrMap as SM
+import Data.List (toList)
+import Data.Maybe (Maybe)
+import Data.Tuple (Tuple(..))
+import Data.StrMap as SM
 
 import Types
 
@@ -12,12 +12,12 @@ import Types
 fromArray :: forall a. Array (Tuple String a) -> SM.StrMap a
 fromArray = SM.fromList <<< toList
 
-infixl 6 :>
-
 -- | Operator to create tuples, especially for creating maps with
 -- | `Map.fromList ["key1" :> "value1", "key2" :> "value2"]`
-(:>) :: forall a b. a -> b -> Tuple a b
-(:>) a b = Tuple a b
+tuple :: forall a b. a -> b -> Tuple a b
+tuple a b = Tuple a b
+
+infixl 6 tuple as :>
 
 -- | Array analogs of the Stack and Wall types
 type AStack = Array Cube
@@ -36,13 +36,11 @@ type LevelEntry = {
     target     :: AWall
 }
 
-infixl 6 :->
-
 -- | Helper function to create levels from arrays of cubes (instead of lists)
-(:->) :: LevelId
+level :: LevelId
       -> LevelEntry
       -> Tuple LevelId Level
-(:->) lid entry =
+level lid entry =
     lid :> {
         name: entry.name,
         help: entry.help,
@@ -50,3 +48,5 @@ infixl 6 :->
         initial: convert entry.initial,
         target: convert entry.target
     }
+
+infixl 6 level as :->

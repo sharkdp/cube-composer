@@ -11,8 +11,8 @@ module Isomer
     ) where
 
 import Prelude
-import Control.Monad.Eff
-import Data.Function
+import Control.Monad.Eff (Eff)
+import Data.Function (Fn3, Fn4, Fn8, runFn3, runFn4, runFn8)
 
 foreign import data ISOMER :: !
 

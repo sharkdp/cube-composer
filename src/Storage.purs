@@ -1,11 +1,11 @@
 module Storage where
 
 import Prelude
-import Control.Monad.Eff
-import Data.List
-import Data.Maybe
+import Control.Monad.Eff (Eff)
+import Data.List (toList, fromList)
+import Data.Maybe (Maybe(..))
 
-import qualified Data.StrMap as SM
+import Data.StrMap as SM
 
 import Types
 

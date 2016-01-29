@@ -1,10 +1,22 @@
-module Types where
+module Types
+  ( Cube(..)
+  , GameState(..)
+  , LevelId(..)
+  , TransformerRecord(..)
+  , Chapter(..)
+  , TransformerId(..)
+  , Wall(..)
+  , Stack(..)
+  , Transformer(..)
+  , Level(..)
+  , Difficulty(..)
+  ) where
 
 import Prelude
-import Data.List
-import Data.Enum
-import Data.Maybe
-import qualified Data.StrMap as SM
+import Data.List (List)
+import Data.Enum (class Enum, Cardinality(..), defaultSucc, defaultPred, fromEnum)
+import Data.Maybe (Maybe(..))
+import Data.StrMap as SM
 
 -- Cube, Stack, Wall
 
@@ -34,12 +46,14 @@ instance enumCube :: Enum Cube where
     toEnum = cubeToEnum
     fromEnum = cubeFromEnum
 
+cubeFromEnum :: Cube -> Int
 cubeFromEnum Cyan   = 0
 cubeFromEnum Brown  = 1
 cubeFromEnum Red    = 2
 cubeFromEnum Orange = 3
 cubeFromEnum Yellow = 4
 
+cubeToEnum :: Int -> Maybe Cube
 cubeToEnum 0 = Just Cyan
 cubeToEnum 1 = Just Brown
 cubeToEnum 2 = Just Red

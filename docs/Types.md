@@ -13,11 +13,11 @@ data Cube
 
 ##### Instances
 ``` purescript
-instance showCube :: Show Cube
-instance eqCube :: Eq Cube
-instance ordCube :: Ord Cube
-instance boundedCube :: Bounded Cube
-instance enumCube :: Enum Cube
+Show Cube
+Eq Cube
+Ord Cube
+Bounded Cube
+Enum Cube
 ```
 
 #### `Stack`
@@ -67,7 +67,7 @@ data Difficulty
 
 ##### Instances
 ``` purescript
-instance showDifficulty :: Show Difficulty
+Show Difficulty
 ```
 
 #### `Level`

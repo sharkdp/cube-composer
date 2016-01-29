@@ -1,8 +1,8 @@
 module Levels.Chapter1 where
 
 import Prelude
-import Data.List
-import Data.Maybe
+import Data.List (List(..), reverse, snoc, filter, (:), elemIndex)
+import Data.Maybe (Maybe(..), isJust)
 
 import Helper
 import Transformer

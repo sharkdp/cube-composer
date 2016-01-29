@@ -11,9 +11,8 @@ import DOM.HTML.Window (document)
 import DOM.Node.Element (getAttribute)
 import DOM.Node.NonElementParentNode (getElementById)
 import DOM.Node.ParentNode (children)
-import DOM.Node.Types (HTMLCollection(), NonElementParentNode(), Element(),
-                       Document(), ElementId(..), documentToNonElementParentNode,
-                       elementToParentNode)
+import DOM.Node.Types (HTMLCollection(), Element(), Document(), ElementId(..),
+                       documentToNonElementParentNode, elementToParentNode)
 import Data.Either.Unsafe (fromRight)
 import Data.Foreign (toForeign)
 import Data.Maybe (Maybe(), maybe)

@@ -1,8 +1,8 @@
 module Levels.Chapter4 where
 
 import Prelude
-import Data.List
-import Data.Maybe
+import Data.List (List(..), (:), concatMap)
+import Data.Maybe (Maybe(..))
 
 import Helper
 import Transformer

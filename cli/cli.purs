@@ -1,16 +1,16 @@
 module Main (main) where
 
 import Prelude
-import Control.Monad.Eff.Console
-import Data.List
-import Data.Foldable
-import Data.Traversable
+import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Console (CONSOLE, log)
+import Data.List (List, fromList)
+import Data.Traversable (for)
 
 import Types
-import Transformer
-import Solver
+import Solver (solve)
 import Levels
 
+ttyColor :: Cube -> Int
 ttyColor Yellow = 0
 ttyColor Orange = 1
 ttyColor Brown = 2
@@ -23,7 +23,8 @@ showList xs = show (fromList xs :: Array a)
 showList2 :: forall a. (Show a) => List (List a) -> String
 showList2 xss = show ((fromList <<< map fromList) xss :: Array (Array a))
 
-main =
+main :: forall eff. Eff (console :: CONSOLE | eff) Unit
+main = do
     for allLevelIds $ \lid -> do
         let chapter = getChapter lid
             level = getLevel lid
@@ -36,3 +37,4 @@ main =
         for solutions $ \sol ->
             log $ "    " ++ showList sol
         log ""
+    return unit

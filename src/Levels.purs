@@ -1,10 +1,10 @@
 module Levels where
 
 import Prelude
-import Data.List
-import Data.Foldable
-import Data.Maybe
-import qualified Data.StrMap as SM
+import Data.List  (List(..), head, sort, toList, (:))
+import Data.Foldable (find)
+import Data.Maybe (Maybe(..), fromMaybe)
+import Data.StrMap as SM
 
 import Types
 import Unsafe

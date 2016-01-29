@@ -4,10 +4,10 @@ module Solver (
     ) where
 
 import Prelude
-import Data.Function
-import Data.List
-import Data.Maybe
-import qualified Data.StrMap as SM
+import Data.Function (on)
+import Data.List (List(..), toList, filter, snoc, concatMap, length, sortBy,
+                  mapMaybe, takeWhile, (:))
+import Data.StrMap as SM
 
 import Levels
 import Transformer

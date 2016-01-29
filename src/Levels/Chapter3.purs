@@ -1,25 +1,22 @@
 module Levels.Chapter3 where
 
 import Prelude
-import Data.Foldable
+import Data.Foldable (sum)
 import Data.Int (even)
 import Data.Int.Bits ((.&.))
-import Data.List
-import Data.Maybe
-import Math
-import qualified Data.StrMap as SM
+import Data.List (List(..), filter, toList, (:), zipWith)
+import Data.Maybe (Maybe(..))
 
 import Helper
-import Transformer
 import Types
 
 toDigit :: Cube -> Int
 toDigit Orange = 0
-toDigit Brown  = 1
+toDigit _      = 1
 
 toCube :: Int -> Cube
 toCube 0 = Orange
-toCube 1 = Brown
+toCube _ = Brown
 
 toInt :: Stack -> Int
 toInt w = sum $ zipWith (\f c -> f * toDigit c) (1 : 2 : 4 : Nil) w

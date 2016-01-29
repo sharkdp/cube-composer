@@ -1,12 +1,12 @@
 module Main (App(..), main) where
 
 import Prelude
-import Control.Apply
-import Control.Bind
-import Control.Monad
-import Control.Monad.Eff
-import Control.Monad.Eff.Console
-import DOM
+import Control.Apply ((*>))
+import Control.Bind ((=<<))
+import Control.Monad (when)
+import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Console (CONSOLE, log, print)
+import DOM (DOM)
 import DOM.Event.EventTypes (change, click, keydown)
 import DOM.Event.Types (Event())
 import DOM.HTML (window)
@@ -14,16 +14,17 @@ import DOM.HTML.Types (windowToEventTarget, htmlElementToEventTarget, htmlElemen
 import DOM.Node.Document (createElement)
 import DOM.Node.Element (setAttribute)
 import DOM.Node.Node (appendChild, setTextContent, parentElement)
-import DOM.Node.Types (Element(), Node(), elementToNode, elementToEventTarget)
-import Data.Enum
-import Data.Foldable
-import Data.Int
-import Data.List
-import Data.Maybe
+import DOM.Node.Types (Element(), elementToNode, elementToEventTarget)
+import Data.Enum (enumFromTo)
+import Data.Foldable (foldl, traverse_)
+import Data.Int (toNumber)
+import Data.List (List(..), toList, filter, snoc, dropWhile, tail, head, (:),
+                  fromList, last, mapMaybe, reverse, length)
+import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Nullable (toMaybe)
 import Data.String.Regex (regex, parseFlags, replace)
-import Data.Traversable
-import qualified Data.StrMap as SM
+import Data.Traversable (traverse)
+import Data.StrMap as SM
 
 import Analytics
 import DOMHelper
@@ -187,10 +188,12 @@ replaceTransformers ch initial = SM.fold replaceT initial ch.transformers
           replacement tr = "<span class=\"transformer\">" ++ tr.name ++ "</span>"
 
 -- | Clear all functions for the current level
+resetLevel :: App
 resetLevel = modifyGameStateAndRender true mod
     where mod gs = gs { levelState = SM.insert gs.currentLevel Nil gs.levelState }
 
 -- | Go to the previous level
+prevLevel :: App
 prevLevel = modifyGameStateAndRender true mod
     where mod gs   = gs { currentLevel = prev gs.currentLevel }
           prev cur = fromMaybe cur $ before cur allLevelIds
@@ -201,6 +204,7 @@ prevLevel = modifyGameStateAndRender true mod
                                            else before x (x':xs)
 
 -- | Go to the next level
+nextLevel :: App
 nextLevel = do
     mgs <- loadGameState
     let gs' = fromMaybe initialGS mgs
