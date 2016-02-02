@@ -1,9 +1,10 @@
 language: node_js
+sudo: false
 node_js:
-  - 0.10
+  - stable
 install:
-  - npm install purescript bower gulp -g
-  - npm install
+  - npm install purescript gulp bower -g
   - bower install
+  - npm install
 script:
   - gulp
