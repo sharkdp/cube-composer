@@ -58,9 +58,7 @@ chapter3 = {
         },
         "3.3" :-> {
             name: "Castle",
-            help: Just """This is the last level ... for now. But you can design your own puzzles!
-                          See the <a href="https://github.com/sharkdp/cube-composer">Github repository</a>
-                                           for more information. I hope you enjoyed the game.""",
+            help: Nothing,
             difficulty: Medium,
             initial: [[Orange], [Orange, Orange], [Orange, Orange, Orange], [Orange, Orange, Orange, Orange], [Orange, Orange, Orange], [Orange, Orange], [Orange]],
             target: [[Orange, Orange], [Orange, Cyan], [Orange, Orange], [Orange, Cyan], [Orange, Orange], [Orange, Cyan], [Orange, Orange]]
