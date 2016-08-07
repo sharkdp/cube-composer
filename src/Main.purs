@@ -19,7 +19,7 @@ import Data.Enum (enumFromTo)
 import Data.Either (fromRight)
 import Data.Foldable (foldl, traverse_)
 import Data.Int (toNumber)
-import Data.List (List(..), fromFoldable, filter, snoc, dropWhile, tail, head, (:), last, mapMaybe, reverse)
+import Data.List (List(..), fromFoldable, filter, snoc, dropWhile, tail, head, (:), last, mapMaybe, reverse, length)
 import Data.Maybe (Maybe(..), fromMaybe, maybe, fromJust)
 import Data.Monoid (class Monoid, mempty)
 import Data.Nullable (toMaybe)
@@ -67,13 +67,13 @@ traverseWithKey_ f sm = SM.foldM (const f) unit sm
 
 renderCube :: Int -> Int -> Int -> Cube -> Scene
 renderCube x y z c = filled (cubeColor c) $ cube point 0.9
-  where point = { x: toNumber x
+  where point = { x: toNumber (-x)
                 , y: spacing * toNumber y
                 , z: toNumber z }
 
 -- | Render a single stack of cubes
-renderStack :: Int -> Int -> Stack -> Scene
-renderStack y x stack = foldMapIndexed (renderCube x y) stack
+renderStack :: Int -> Int -> Int -> Stack -> Scene
+renderStack len y x stack = foldMapIndexed (renderCube (len - x) y) stack
 
 -- | Render a wall (multiple stacks)
 renderWall :: Int -> Wall -> Scene
@@ -81,7 +81,8 @@ renderWall y Nil =
     -- Render a gray placeholder for the empty wall
     filled gray $ prism { x: 1.0, y: -spacing * toNumber y, z: 0.0 } 5.0 0.9 0.1
       where gray = graytone 0.4
-renderWall y wall = foldMapIndexed (renderStack y) (reverse wall)
+renderWall y wall = foldMapIndexed (renderStack len y) (reverse wall)
+  where len = length wall
 
 -- | Render a series of walls
 renderWalls :: List Wall -> Scene
@@ -147,8 +148,8 @@ render setupUI gs = do
 
     let renderCanvas x y s scene = D.render ctx $ D.translate x y $
             renderScene lightPos (scale s scene)
-    renderCanvas 226.0 162.0 50.0 (renderWalls steps)
-    renderCanvas 1400.0 250.0 30.0 (renderTarget level.target)
+    renderCanvas    2.0 284.0 49.0 (renderWalls steps)
+    renderCanvas 1280.0 380.0 35.0 (renderTarget level.target)
 
     -- DOM 'rendering'
     let solved = maybe false (_ == (level.target)) (last steps)
