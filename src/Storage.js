@@ -1,5 +1,3 @@
-// module Storage
-
 exports.unsafeLoadGameState = function (just) {
     return function(nothing) {
         return function() {

@@ -4,7 +4,7 @@ import Prelude
 import Data.List (List, concatMap, singleton, snoc, null, (:), filter)
 import Data.Foldable (foldl)
 import Data.Traversable (scanl)
-import Types
+import Types (Transformer, Cube, Wall)
 
 -- | Map a function over the two dimensional array (= wall)
 map2d :: (Cube -> Cube) -> Wall -> Wall
@@ -29,11 +29,11 @@ clearEmpty = reject null
 
 -- | Reject all cubes of a certain color
 mapReject :: Cube -> Transformer
-mapReject c = map (reject (== c)) >>> clearEmpty
+mapReject c = map (reject (_ == c)) >>> clearEmpty
 
 -- | Stack a single cube on top of each column
 mapStack :: Cube -> Transformer
-mapStack c = map (`snoc` c)
+mapStack c = map (_ `snoc` c)
 
 -- | Replace all occurences of a certain cube with another
 replaceSingle :: Cube -> Cube -> Transformer

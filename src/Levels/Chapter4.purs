@@ -4,9 +4,9 @@ import Prelude
 import Data.List (List(..), (:), concatMap)
 import Data.Maybe (Maybe(..))
 
-import Helper
-import Transformer
-import Types
+import Helper (fromArray, (:->), (:>))
+import Transformer (replaceSingle)
+import Types (Chapter, Stack, Cube(..), Difficulty(..))
 
 cxToX :: Stack -> Stack
 cxToX Nil                     = Nil

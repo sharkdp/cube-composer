@@ -4,15 +4,15 @@ import Prelude
 import Data.List (List(..), (:), concat, span)
 import Data.Maybe (Maybe(..))
 
-import Helper
-import Transformer
-import Types
+import Helper (fromArray, (:->), (:>))
+import Transformer (mapStack, mapReject, replaceMultiple, replaceSingle)
+import Types (Chapter, Transformer, Cube(..), Difficulty(..))
 
 -- | concat adjacent lists if they are equal
 stackEqualColumns :: Transformer
 stackEqualColumns Nil = Nil
 stackEqualColumns (Cons s ss) = concat (s:split.init) : stackEqualColumns split.rest
-    where split = span (== s) ss
+    where split = span (_ == s) ss
 
 chapter2 :: Chapter
 chapter2 = {

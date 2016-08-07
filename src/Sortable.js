@@ -1,5 +1,3 @@
-// module Sortable
-
 exports.installSortable = function (el) {
   return function(sortHandler) {
     return function() {

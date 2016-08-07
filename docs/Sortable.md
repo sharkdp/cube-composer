@@ -3,7 +3,7 @@
 #### `installSortable`
 
 ``` purescript
-installSortable :: forall eff. Element -> Eff (dom :: DOM | eff) Unit -> Eff (dom :: DOM | eff) Unit
+installSortable :: forall eff. Element -> (Eff (dom :: DOM | eff) Unit) -> Eff (dom :: DOM | eff) Unit
 ```
 
 Install 'Sortable' on the given DOM element. The second argument is

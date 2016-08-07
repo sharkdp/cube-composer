@@ -1,16 +1,16 @@
 module Helper where
 
 import Prelude
-import Data.List (toList)
+import Data.List (fromFoldable)
 import Data.Maybe (Maybe)
 import Data.Tuple (Tuple(..))
 import Data.StrMap as SM
 
-import Types
+import Types (Level, LevelId, Difficulty, Wall, Cube)
 
 -- | Create a StrMap from an Array of (key, value) pairs
 fromArray :: forall a. Array (Tuple String a) -> SM.StrMap a
-fromArray = SM.fromList <<< toList
+fromArray = SM.fromList <<< fromFoldable
 
 -- | Operator to create tuples, especially for creating maps with
 -- | `Map.fromList ["key1" :> "value1", "key2" :> "value2"]`
@@ -25,7 +25,7 @@ type AWall = Array AStack
 
 -- | Convert 2D Array to List
 convert :: AWall -> Wall
-convert = toList <<< map toList
+convert = fromFoldable <<< map fromFoldable
 
 -- | Helper type to create levels from arrays
 type LevelEntry = {

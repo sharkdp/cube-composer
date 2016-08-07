@@ -23,8 +23,6 @@ Operator to create tuples, especially for creating maps with
 infixl 6 tuple as :>
 ```
 
-_left-associative / precedence 6_
-
 #### `AStack`
 
 ``` purescript
@@ -68,7 +66,5 @@ Helper function to create levels from arrays of cubes (instead of lists)
 ``` purescript
 infixl 6 level as :->
 ```
-
-_left-associative / precedence 6_
 
 

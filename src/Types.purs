@@ -14,7 +14,8 @@ module Types
 
 import Prelude
 import Data.List (List)
-import Data.Enum (class Enum, Cardinality(..), defaultSucc, defaultPred, fromEnum)
+import Data.Enum (class Enum, class BoundedEnum, Cardinality(..), defaultSucc,
+                  defaultPred, fromEnum)
 import Data.Maybe (Maybe(..))
 import Data.StrMap as SM
 
@@ -40,9 +41,11 @@ instance boundedCube :: Bounded Cube where
     bottom = Cyan
 
 instance enumCube :: Enum Cube where
-    cardinality = Cardinality 5
     succ = defaultSucc cubeToEnum cubeFromEnum
     pred = defaultPred cubeToEnum cubeFromEnum
+
+instance boundedEnumCube :: BoundedEnum Cube where
+    cardinality = Cardinality 5
     toEnum = cubeToEnum
     fromEnum = cubeFromEnum
 

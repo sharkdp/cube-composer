@@ -4,10 +4,9 @@ import Prelude
 import Data.List (List(..), (:), snoc)
 import Data.Maybe (Maybe(..))
 
-import Helper
-import Transformer
-import Types
-
+import Helper (fromArray, (:->), (:>))
+import Transformer (mapReject, replaceMultiple, replaceSingle)
+import Types (Chapter, Cube(..), Difficulty(..))
 
 chapter0 :: Chapter
 chapter0 = {
@@ -20,7 +19,7 @@ chapter0 = {
         },
         "stackY" :> {
             name: "map (stack {Yellow})",
-            function: map (`snoc` Yellow)
+            function: map (_ `snoc` Yellow)
         },
         "replaceYbyYR" :> {
             name: "map {Yellow}↦[{Red}{Yellow}]",

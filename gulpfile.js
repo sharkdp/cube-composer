@@ -91,7 +91,6 @@ gulp.task("less", function() {
 gulp.task("concat", ["bundle"], function() {
     return gulp.src([
             "bower_components/Sortable/Sortable.min.js",
-            "bower_components/isomer/dist/isomer.min.js",
             "dist/main.js"
         ])
         .pipe(concat("main.js"))
@@ -110,7 +109,6 @@ gulp.task("docs", ["clean-docs"], function () {
             docgen: {
                 "DOMHelper": "docs/DOMHelper.md",
                 "Helper": "docs/Helper.md",
-                "Isomer": "docs/Isomer.md",
                 "Levels": "docs/Levels.md",
                 "Sortable": "docs/Sortable.md",
                 "Storage": "docs/Storage.md",

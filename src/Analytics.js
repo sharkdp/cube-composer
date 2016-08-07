@@ -1,5 +1,3 @@
-// module Analytics
-
 exports.analyticsEvent = function(category) {
   return function(action) {
     return function(label) {

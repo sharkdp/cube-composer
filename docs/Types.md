@@ -18,6 +18,7 @@ Eq Cube
 Ord Cube
 Bounded Cube
 Enum Cube
+BoundedEnum Cube
 ```
 
 #### `Stack`

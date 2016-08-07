@@ -27,7 +27,7 @@ fromSaveable :: SaveableGameState -> GameState
 #### `unsafeLoadGameState`
 
 ``` purescript
-unsafeLoadGameState :: forall a eff. (a -> Maybe a) -> Maybe a -> Eff (storage :: STORAGE | eff) (Maybe SaveableGameState)
+unsafeLoadGameState :: forall a eff. (a -> Maybe a) -> (Maybe a) -> Eff (storage :: STORAGE | eff) (Maybe SaveableGameState)
 ```
 
 Retrieve the current game state from local storage (FFI, needs 'Just' and 'Nothing' as input)

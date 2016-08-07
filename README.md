@@ -1,7 +1,7 @@
 ![cube composer](https://raw.githubusercontent.com/sharkdp/cube-composer/master/img/cube-composer.png)
 
-A puzzle game inspired by functional programming.
-It is written in [PureScript](https://github.com/purescript/purescript) and uses [Isomer.js](https://github.com/jdan/isomer) for the canvas rendering.
+A puzzle game inspired by functional programming,
+written in [PureScript](https://github.com/purescript/purescript).
 
 [**Play it online!**](http://david-peter.de/cube-composer)
 

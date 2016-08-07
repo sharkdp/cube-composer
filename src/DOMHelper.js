@@ -1,5 +1,3 @@
-// module DOMHelper
-
 exports.getSelectedValue = function (src) {
     return function() {
         return src.options[src.selectedIndex].value;

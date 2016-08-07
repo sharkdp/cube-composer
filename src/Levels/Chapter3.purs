@@ -4,11 +4,11 @@ import Prelude
 import Data.Foldable (sum)
 import Data.Int (even)
 import Data.Int.Bits ((.&.))
-import Data.List (List(..), filter, toList, (:), zipWith)
+import Data.List (List(..), filter, fromFoldable, (:), zipWith)
 import Data.Maybe (Maybe(..))
 
-import Helper
-import Types
+import Helper (AStack, fromArray, (:->), (:>))
+import Types (Chapter, Transformer, Stack, Cube(..), Difficulty(..))
 
 toDigit :: Cube -> Int
 toDigit Orange = 0
@@ -30,7 +30,7 @@ toAStack :: Int -> AStack
 toAStack num = map toCube (digits num)
 
 toStack :: Int -> Stack
-toStack = toList <<< toAStack
+toStack = fromFoldable <<< toAStack
 
 mapNumbers :: (Int -> Int) -> Transformer
 mapNumbers f = map (toInt >>> f >>> toStack)
@@ -42,15 +42,15 @@ chapter3 = {
     transformers: fromArray [
         "mapAdd1" :> {
             name: "map (+1)",
-            function: mapNumbers (+1)
+            function: mapNumbers (_ + 1)
         },
         "mapSub1" :> {
             name: "map (-1)",
-            function: mapNumbers (\x -> x - 1)
+            function: mapNumbers (_ - 1)
         },
         "mapMul2" :> {
             name: "map (×2)",
-            function: mapNumbers (*2)
+            function: mapNumbers (_ * 2)
         },
         "mapPow2" :> {
             name: "map (^2)",

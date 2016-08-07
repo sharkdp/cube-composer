@@ -4,9 +4,9 @@ import Prelude
 import Data.List (List(..), reverse, snoc, filter, (:), elemIndex)
 import Data.Maybe (Maybe(..), isJust)
 
-import Helper
-import Transformer
-import Types
+import Helper (fromArray, (:->), (:>))
+import Transformer (clearEmpty, mapReject, replaceMultiple)
+import Types (Chapter, Cube(..), Difficulty(..))
 
 contains :: forall a. (Eq a) => a -> List a -> Boolean
 contains x xs = isJust $ elemIndex x xs
@@ -38,7 +38,7 @@ chapter1 = {
         },
         "stackR" :> {
             name: "map (stack {Red})",
-            function: map (`snoc` Red)
+            function: map (_ `snoc` Red)
         },
         "mapReverse" :> {
             name: "map reverse",
