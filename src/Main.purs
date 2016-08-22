@@ -79,7 +79,7 @@ renderStack len y x stack = foldMapIndexed (renderCube (len - x) y) stack
 renderWall :: Int -> Wall -> Scene
 renderWall y Nil =
     -- Render a gray placeholder for the empty wall
-    filled gray $ prism { x: 1.0, y: -spacing * toNumber y, z: 0.0 } 5.0 0.9 0.1
+    filled gray $ prism { x: -8.0, y: spacing * toNumber y, z: 0.0 } 8.0 0.9 0.1
       where gray = graytone 0.4
 renderWall y wall = foldMapIndexed (renderStack len y) (reverse wall)
   where len = length wall
