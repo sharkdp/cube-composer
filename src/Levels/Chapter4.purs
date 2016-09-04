@@ -88,7 +88,7 @@ chapter4 = {
         "4.4" :-> {
             name: "Don't panic",
             help: Just """This is the last level ... for now. But you can design your own puzzles!
-                          See the <a href="https://github.com/sharkdp/cube-composer">Github repository</a>
+                          See the <a href="https://github.com/sharkdp/cube-composer">GitHub repository</a>
                           for more information. I hope you enjoyed the game.""",
             difficulty: Hard,
             initial: map toAStack [0, 1, 2, 3, 4, 5, 6, 7],
