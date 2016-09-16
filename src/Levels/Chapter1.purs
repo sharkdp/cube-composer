@@ -58,7 +58,7 @@ chapter1 = {
         },
         "1.2" :-> {
             name: "Venus",
-            help: Just """The function `filterContainsR` removes colums without a red cube.""",
+            help: Just """The function `filterContainsR` removes columns without a red cube.""",
             difficulty: Medium,
             initial: [[Red, Red], [Red, Yellow], [Cyan, Yellow], [Cyan, Cyan]],
             target: [[Red, Red], [Red, Red]]
