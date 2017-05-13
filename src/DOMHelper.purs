@@ -16,8 +16,8 @@ import DOM.Node.Types (HTMLCollection(), Element(), Document(), ElementId(..),
 import Data.Either (fromRight)
 import Data.Foreign (toForeign)
 import Data.Maybe (Maybe(), maybe, fromJust)
-import Data.Nullable (toMaybe)
 import Partial.Unsafe (unsafePartial)
+import Control.Monad.Except (runExcept)
 
 getDocument :: forall eff. Eff (dom :: DOM | eff) Document
 getDocument = window >>= document <#> htmlDocumentToDocument
@@ -27,8 +27,7 @@ getElementById' :: forall eff. String
                 -> Eff (dom :: DOM | eff) (Maybe Element)
 getElementById' id doc = do
   let docNode = documentToNonElementParentNode doc
-  nullableEl <- getElementById (ElementId id) docNode
-  pure $ toMaybe nullableEl
+  getElementById (ElementId id) docNode
 
 -- | Perform a DOM action with a single element which can be accessed by ID
 withElementById :: forall eff. String
@@ -45,13 +44,13 @@ addEventListener' etype listener target =
   addEventListener etype (eventListener listener) true target
 
 unsafeElementToHTMLElement :: Element -> HTMLElement
-unsafeElementToHTMLElement = unsafePartial (fromRight <<< readHTMLElement <<< toForeign)
+unsafeElementToHTMLElement = unsafePartial (fromRight <<< runExcept <<< readHTMLElement <<< toForeign)
 
 unsafeEventToKeyboardEvent :: Event -> KeyboardEvent
-unsafeEventToKeyboardEvent = unsafePartial (fromRight <<< readKeyboardEvent <<< toForeign)
+unsafeEventToKeyboardEvent = unsafePartial (fromRight <<< runExcept <<< readKeyboardEvent <<< toForeign)
 
 unsafeGetAttribute :: forall eff. String -> Element -> Eff (dom :: DOM | eff) String
-unsafeGetAttribute key el = unsafePartial (fromJust <<< toMaybe) <$> getAttribute key el
+unsafeGetAttribute key el = unsafePartial fromJust <$> getAttribute key el
 
 foreign import getSelectedValue :: forall eff. Element
                                 -> Eff (dom :: DOM | eff) String
