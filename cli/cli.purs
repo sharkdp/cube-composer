@@ -5,7 +5,7 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.Array as A
 import Data.List (List)
-import Data.Traversable (for)
+import Data.Traversable (for, for_)
 
 import Types (Cube(..))
 import Solver (solve)
@@ -35,6 +35,6 @@ main = void do
         log $ "  Initial: " <> showList2 (map (map ttyColor) level.initial)
         log $ "  Target:  " <> showList2 (map (map ttyColor) level.target)
         log $ "  Solutions: "
-        for solutions $ \sol ->
+        for_ solutions $ \sol ->
             log $ "    " <> showList sol
         log ""
