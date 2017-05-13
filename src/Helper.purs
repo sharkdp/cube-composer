@@ -10,7 +10,7 @@ import Types (Level, LevelId, Difficulty, Wall, Cube)
 
 -- | Create a StrMap from an Array of (key, value) pairs
 fromArray :: forall a. Array (Tuple String a) -> SM.StrMap a
-fromArray = SM.fromList <<< fromFoldable
+fromArray = SM.fromFoldable
 
 -- | Operator to create tuples, especially for creating maps with
 -- | `Map.fromList ["key1" :> "value1", "key2" :> "value2"]`

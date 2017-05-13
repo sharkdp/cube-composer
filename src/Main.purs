@@ -2,7 +2,6 @@ module Main (App(..), main) where
 
 import Prelude
 import Color (rgb, graytone)
-import Control.Bind ((=<<))
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log, logShow)
 import DOM (DOM)
@@ -22,7 +21,6 @@ import Data.Int (toNumber)
 import Data.List (List(..), fromFoldable, filter, snoc, dropWhile, tail, head, (:), last, mapMaybe, reverse, length)
 import Data.Maybe (Maybe(..), fromMaybe, maybe, fromJust)
 import Data.Monoid (class Monoid, mempty)
-import Data.Nullable (toMaybe)
 import Data.StrMap as SM
 import Data.String.Regex (regex, parseFlags, replace)
 import Data.Traversable (traverse)
@@ -57,7 +55,7 @@ spacing = 5.5
 
 -- | Like `foldMap` on `List`, but the function also takes an index parameter
 foldMapIndexed :: forall a m. (Monoid m) => (Int -> a -> m) -> List a -> m
-foldMapIndexed f xs = go 0 xs
+foldMapIndexed f xs' = go 0 xs'
     where go _ Nil         = mempty
           go i (Cons x xs) = f i x <> go (i + 1) xs
 
@@ -144,7 +142,7 @@ render setupUI gs = do
 
     -- On-canvas rendering
     let lightPos = { x: -2.0, y: 1.0, z: 3.0 }
-    clearRect ctx { x: 0.0, y: 0.0, w, h }
+    _ <- clearRect ctx { x: 0.0, y: 0.0, w, h }
 
     let renderCanvas x y s scene = D.render ctx $ D.translate x y $
             renderScene lightPos (scale s scene)
@@ -180,8 +178,8 @@ replaceAll regexString replacement = replace pattern replacement
 
 -- | Replace color placeholders in the transformer description by colored rectangular divs
 replaceColors :: String -> String
-replaceColors s =
-    foldl replaceColor s ("X" : map show (Cyan `enumFromTo` Yellow))
+replaceColors s' =
+    foldl replaceColor s' ("X" : map show (Cyan `enumFromTo` Yellow))
         where replaceColor s c = replaceAll (pattern c) (replacement c) s
               pattern c = "{" <> c <> "}"
               replacement c = "<div class=\"cube " <> c <> "\"> </div>"
@@ -253,7 +251,7 @@ keyPress event = void do
 clickLi :: Element -> Event -> App
 clickLi liEl event = do
     newId <- unsafeGetAttribute "id" liEl
-    ul <- unsafeFromJust <$> toMaybe <$> parentElement (elementToNode liEl)
+    ul <- unsafeFromJust <$> parentElement (elementToNode liEl)
     ulId <- unsafeGetAttribute "id" ul
     modifyGameStateAndRender true (modify ulId newId)
 

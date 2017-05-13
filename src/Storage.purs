@@ -1,7 +1,7 @@
 module Storage where
 
 import Prelude
-import Control.Monad.Eff (Eff)
+import Control.Monad.Eff (kind Effect, Eff)
 import Data.Array as A
 import Data.List (fromFoldable)
 import Data.Maybe (Maybe(..))
@@ -10,7 +10,7 @@ import Data.StrMap as SM
 
 import Types (GameState, TransformerId, LevelId)
 
-foreign import data STORAGE :: !
+foreign import data STORAGE :: Effect
 
 type SaveableGameState = {
     currentLevel :: LevelId,

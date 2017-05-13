@@ -41,7 +41,7 @@ gulp.task("clean-dist", function(cb) {
 gulp.task("clean", ["clean-docs", "clean-dist"]);
 
 gulp.task("psc", function() {
-    return purescript.psc({
+    return purescript.compile({
             src: sources,
             ffi: foreigns,
             output: "output/main"
@@ -49,7 +49,7 @@ gulp.task("psc", function() {
 });
 
 gulp.task("bundle", ["psc"], function() {
-    return purescript.pscBundle({
+    return purescript.bundle({
             src: "output/main/**/*.js",
             output: "dist/main.js",
             module: "Main",
@@ -58,7 +58,7 @@ gulp.task("bundle", ["psc"], function() {
 });
 
 gulp.task("psc:cli", function() {
-    return purescript.psc({
+    return purescript.compile({
             src: sourcesCli,
             ffi: foreigns,
             output: "output/cli"
@@ -66,7 +66,7 @@ gulp.task("psc:cli", function() {
 });
 
 gulp.task("bundle:cli", ["psc:cli"], function() {
-    return purescript.pscBundle({
+    return purescript.bundle({
             src: "output/cli/**/*.js",
             output: "dist/cli.js",
             module: "Main",
@@ -104,7 +104,7 @@ gulp.task("compress", ["concat"], function() {
 });
 
 gulp.task("docs", ["clean-docs"], function () {
-    return purescript.pscDocs({
+    return purescript.docs({
             src: sources,
             docgen: {
                 "DOMHelper": "docs/DOMHelper.md",
