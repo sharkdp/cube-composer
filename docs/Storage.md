@@ -3,7 +3,7 @@
 #### `STORAGE`
 
 ``` purescript
-data STORAGE :: !
+data STORAGE :: Effect
 ```
 
 #### `SaveableGameState`
