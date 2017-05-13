@@ -12,17 +12,17 @@
     "bower_components"
   ],
   "dependencies": {
-    "purescript-arrays": "^1.1.0",
-    "purescript-console": "^1.0.0",
-    "purescript-dom": "^2.0.0",
-    "purescript-enums": "^1.0.0",
-    "purescript-foldable-traversable": "^1.0.0",
-    "purescript-integers": "^1.1.0",
-    "purescript-maps": "^1.1.0",
+    "purescript-arrays": "^4.0.1",
+    "purescript-console": "^3.0.0",
+    "purescript-dom": "^4.3.1",
+    "purescript-enums": "^3.0.0",
+    "purescript-foldable-traversable": "^3.0.0",
+    "purescript-integers": "^3.0.0",
+    "purescript-maps": "^3.0.0",
     "purescript-math": "^2.0.0",
-    "purescript-nullable": "^1.0.0",
-    "purescript-strings": "^1.1.0",
-    "purescript-isometric": "^1.0.0",
-    "Sortable": "RubaXa/Sortable#~1.4.0"
+    "purescript-nullable": "^3.0.0",
+    "purescript-strings": "^3.1.0",
+    "purescript-isometric": "^3.0.0",
+    "Sortable": "^1.5.1"
   }
 }
