@@ -3,7 +3,7 @@
 A puzzle game inspired by functional programming,
 written in [PureScript](https://github.com/purescript/purescript).
 
-[**Play it online!**](http://david-peter.de/cube-composer)
+[**Play it online!**](https://david-peter.de/cube-composer)
 
 ## Local install
 
