@@ -38,7 +38,7 @@ gulp.task("clean-dist", function(cb) {
     rimraf("dist", cb);
 });
 
-gulp.task("clean", ["clean-docs", "clean-dist"]);
+gulp.task("clean", gulp.series("clean-docs", "clean-dist"));
 
 gulp.task("psc", function() {
     return purescript.compile({
@@ -48,14 +48,14 @@ gulp.task("psc", function() {
         });
 });
 
-gulp.task("bundle", ["psc"], function() {
+gulp.task("bundle", gulp.series("psc", function() {
     return purescript.bundle({
             src: "output/main/**/*.js",
             output: "dist/main.js",
             module: "Main",
             main: "Main"
         });
-});
+}));
 
 gulp.task("psc:cli", function() {
     return purescript.compile({
@@ -65,14 +65,14 @@ gulp.task("psc:cli", function() {
         });
 });
 
-gulp.task("bundle:cli", ["psc:cli"], function() {
+gulp.task("bundle:cli", gulp.series("psc:cli", function() {
     return purescript.bundle({
             src: "output/cli/**/*.js",
             output: "dist/cli.js",
             module: "Main",
             main: "Main"
         });
-});
+}));
 
 gulp.task("psci", function () {
     return purescript.psci({
@@ -88,22 +88,22 @@ gulp.task("less", function() {
         .pipe(gulp.dest("dist"));
 });
 
-gulp.task("concat", ["bundle"], function() {
+gulp.task("concat", gulp.series("bundle", function() {
     return gulp.src([
             "bower_components/Sortable/Sortable.min.js",
             "dist/main.js"
         ])
         .pipe(concat("main.js"))
         .pipe(gulp.dest("dist"));
-});
+}));
 
-gulp.task("compress", ["concat"], function() {
+gulp.task("compress", gulp.series("concat", function() {
     return gulp.src("dist/main.js")
         .pipe(uglify())
         .pipe(gulp.dest("dist"));
-});
+}));
 
-gulp.task("docs", ["clean-docs"], function () {
+gulp.task("docs", gulp.series("clean-docs", function () {
     return purescript.docs({
             src: sources,
             docgen: {
@@ -117,8 +117,8 @@ gulp.task("docs", ["clean-docs"], function () {
                 "Unsafe": "docs/Unsafe.md"
             }
         });
-});
+}));
 
-gulp.task("prod", ["clean", "less", "psci", "bundle:cli", "bundle", "concat", "compress", "docs"]);
-gulp.task("dev", ["less", "psci", "bundle", "concat"]);
-gulp.task("default", ["less", "psci", "bundle", "concat", "docs"]);
+gulp.task("prod", gulp.series("clean", "less", "psci", "bundle:cli", "bundle", "concat", "compress", "docs"));
+gulp.task("dev", gulp.series("less", "psci", "bundle", "concat"));
+gulp.task("default", gulp.series("less", "psci", "bundle", "concat", "docs"));

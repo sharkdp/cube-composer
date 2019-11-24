@@ -9,11 +9,11 @@
   "license": "MIT",
   "homepage": "https://github.com/sharkdp/cube-composer",
   "devDependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
-    "gulp-less": "^3.3.0",
+    "gulp-less": "^3.5.0",
     "gulp-purescript": "^2.0.0",
     "gulp-uglify": "^2.1.2",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.7.1"
   }
 }
