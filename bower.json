@@ -23,6 +23,6 @@
     "purescript-nullable": "^3.0.0",
     "purescript-strings": "^3.1.0",
     "purescript-isometric": "^3.0.0",
-    "Sortable": "^1.5.1"
+    "Sortable": "^1.10.1"
   }
 }
