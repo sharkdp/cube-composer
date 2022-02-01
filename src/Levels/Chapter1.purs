@@ -1,15 +1,13 @@
 module Levels.Chapter1 where
 
 import Prelude
-import Data.List (List(..), reverse, snoc, filter, (:), elemIndex)
-import Data.Maybe (Maybe(..), isJust)
+import Data.List (List(..), reverse, snoc, filter, (:))
+import Data.Maybe (Maybe(..))
 
 import Helper (fromArray, (:->), (:>))
+import ListHelper (contains)
 import Transformer (clearEmpty, mapReject, replaceMultiple)
 import Types (Chapter, Cube(..), Difficulty(..))
-
-contains :: forall a. (Eq a) => a -> List a -> Boolean
-contains x xs = isJust $ elemIndex x xs
 
 chapter1 :: Chapter
 chapter1 = {
