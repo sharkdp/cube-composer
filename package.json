@@ -14,6 +14,7 @@
     "gulp-less": "^3.5.0",
     "gulp-purescript": "^2.0.0",
     "gulp-uglify": "^2.1.2",
+    "purescript": "0.11.6",
     "rimraf": "^2.7.1"
   }
 }
