@@ -21,6 +21,7 @@ var foreigns = [
 
 var sourcesCli = [
     "bower_components/purescript-*/src/**/*.purs",
+    "src/ListHelper.purs",
     "src/Types.purs",
     "src/Transformer.purs",
     "src/Levels.purs",
