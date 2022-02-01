@@ -1,4 +1,4 @@
-module Levels.Chapter4 where
+module Levels.Chapter5 where
 
 import Prelude
 import Data.Foldable (sum)
@@ -35,9 +35,9 @@ toStack = fromFoldable <<< toAStack
 mapNumbers :: (Int -> Int) -> Transformer
 mapNumbers f = map (toInt >>> f >>> toStack)
 
-chapter4 :: Chapter
-chapter4 = {
-    name: "Chapter 4",
+chapter5 :: Chapter
+chapter5 = {
+    name: "Chapter 5",
 
     transformers: fromArray [
         "mapAdd1" :> {
@@ -63,7 +63,7 @@ chapter4 = {
     ],
 
     levels: fromArray [
-        "4.1" :-> {
+        "5.1" :-> {
             name: "0b0 .. 0b111",
             help: Just """What could be the meaning of the title <code>0b0 .. 0b111</code>?
                           Read from top to bottom. Calculate modulo eight.""",
@@ -71,21 +71,21 @@ chapter4 = {
             initial: map toAStack [0, 1, 2, 3, 4, 5, 6, 7],
             target: map toAStack [1, 3, 5, 7, 1, 3, 5, 7]
         },
-        "4.2" :-> {
+        "5.2" :-> {
             name: "Odd..",
             help: Nothing,
             difficulty: Easy,
             initial: map toAStack [0, 1, 2, 3, 4, 5, 6, 7],
             target: map toAStack [1, 3, 5, 7]
         },
-        "4.3" :-> {
+        "5.3" :-> {
             name: "Zero",
             help: Nothing,
             difficulty: Hard,
             initial: map toAStack [0, 1, 2, 3, 4, 5, 6, 7],
             target: map toAStack [0, 0, 0, 0, 0, 0, 0, 0]
         },
-        "4.4" :-> {
+        "5.4" :-> {
             name: "Don't panic",
             help: Just """This is the last level ... for now. But you can design your own puzzles!
                           See the <a href="https://github.com/sharkdp/cube-composer">GitHub repository</a>

@@ -13,11 +13,11 @@ import Levels.Chapter0 (chapter0)
 import Levels.Chapter1 (chapter1)
 import Levels.Chapter2 (chapter2)
 import Levels.Chapter3 (chapter3)
-import Levels.Chapter4 (chapter4)
+import Levels.Chapter5 (chapter5)
 
 -- | A simple list of all available chapters
 allChapters :: List Chapter
-allChapters = chapter0 : chapter1 : chapter2 : chapter3 : chapter4 : Nil
+allChapters = chapter0 : chapter1 : chapter2 : chapter3 : chapter5 : Nil
 
 -- | A dictionary of all available levels across the chapters
 allLevels :: SM.StrMap Level
