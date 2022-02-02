@@ -14,6 +14,7 @@ npm install
 bower install
 gulp
 ```
+If no errors occur, the game can now be played on a browser by opening `index.html`.
 
 ## Creating new levels
 
