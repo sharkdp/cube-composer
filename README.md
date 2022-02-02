@@ -45,6 +45,12 @@ Each level is given by a record like
 ```
 where `0.2` is the `Chapter.Level` ID of the level, `name` is the title of the puzzle, `help` is the help text shown in the right panel, difficulty is `Easy`, `Medium` or `Hard` and `initial :: Wall` and `target :: Wall` are the inital and target 2D arrays of cubes.
 
+To view all levels with all shortest solutions for each (can be useful, among other things, to verify newly introduced levels can be solved as planned – and cannot be solved in another way which undermines their point):
+```sh
+gulp prod
+node dist/cli.js
+```
+
 Please send a pull request if you would like to add your puzzles to the game.
 
 ## CI status
