@@ -1,4 +1,0 @@
-AddOutputFilterByType DEFLATE text/html
-AddOutputFilterByType DEFLATE application/javascript
-AddOutputFilterByType DEFLATE text/css
-AddOutputFilterByType DEFLATE image/svg+xml
